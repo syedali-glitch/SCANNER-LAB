@@ -71,6 +71,8 @@ dependencies {
     
     // ML Kit Barcode Scanning
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    // ML Kit Text Recognition
+    implementation("com.google.mlkit:text-recognition:16.0.0")
     
     // Room Database
     val roomVersion = "2.6.1"
@@ -80,6 +82,12 @@ dependencies {
     
     // PDF Library - Using iTextG (open source fork)
     implementation("com.itextpdf:itext7-core:7.2.5")
+    
+    // PowerPoint Support
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+    
+    // HTML Conversion
+    implementation("com.itextpdf:html2pdf:4.0.5")
     
     // Image processing for PDF scanner
     implementation("com.github.bumptech.glide:glide:4.16.0")
