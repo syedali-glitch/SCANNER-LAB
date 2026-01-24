@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.plainlabs.qrpdftools"
-        minSdk = 21  // Android 5.0 - 99.3% device coverage (lowered from 24)
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -22,11 +22,15 @@ android {
         
         // Vector drawables support for older Android versions
         vectorDrawables.useSupportLibrary = true
+        
+        // Resource optimization: Only keep English resources and high-density assets
+        resourceConfigurations.addAll(listOf("en", "xxhdpi", "xxxhdpi"))
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

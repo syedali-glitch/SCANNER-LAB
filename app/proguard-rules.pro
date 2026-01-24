@@ -1,27 +1,33 @@
 # Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# You can edit the include path and order by changing the proguardFiles
+# directive in build.gradle.
 
-# Keep data classes
--keep class com.plainlabs.qrpdftools.data.** { *; }
--keep class com.plainlabs.qrpdftools.domain.** { *; }
+# Preserve all annotated classes (e.g. Room entities)
+-keep @androidx.room.Entity class *
+-keep @androidx.room.Database class *
+-keep @androidx.room.Dao class *
 
-# Keep Room entities
--keep @androidx.room.Entity class * { *; }
+# Preserve coroutines
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+-keepclassmembers class kotlinx.coroutines.CoroutineExceptionHandler {
+    <init>(...);
+}
 
-# Keep Google services
--keep class com.google.android.gms.** { *; }
+# Preserve ML Kit
 -keep class com.google.mlkit.** { *; }
+-keep class com.google.android.gms.** { *; }
 
-# Keep billing classes
--keep class com.android.billingclient.** { *; }
+# Preserve Apache POI (Critical for XML/OOXML reflection)
+-keep class org.apache.poi.** { *; }
+-keep class org.apache.xmlbeans.** { *; }
+-dontwarn org.apache.poi.**
+-dontwarn java.awt.**
 
-# iText PDF
+# Preserve iText
 -keep class com.itextpdf.** { *; }
 -dontwarn com.itextpdf.**
 
-# CameraX
--keep class androidx.camera.** { *; }
+# Retrofit/OkHttp (if used later)
+-dontwarn okhttp3.**
+-dontwarn retrofit2.**
