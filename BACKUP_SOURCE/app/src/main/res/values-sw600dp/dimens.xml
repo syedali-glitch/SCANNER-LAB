@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tablet dimensions (7-inch and larger) -->
+    
+    <!-- Text Sizes - Larger for better readability -->
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_body">16sp</dimen>
+    <dimen name="text_size_title">18sp</dimen>
+    <dimen name="text_size_heading">22sp</dimen>
+    <dimen name="text_size_large_heading">28sp</dimen>
+    
+    <!-- Spacing - More generous -->
+    <dimen name="spacing_tiny">6dp</dimen>
+    <dimen name="spacing_small">12dp</dimen>
+    <dimen name="spacing_medium">20dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+    <dimen name="spacing_xlarge">48dp</dimen>
+    
+    <!-- Component Sizes -->
+    <dimen name="fab_size">64dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+    <dimen name="icon_size_small">32dp</dimen>
+    <dimen name="icon_size_medium">40dp</dimen>
+    <dimen name="icon_size_large">56dp</dimen>
+    
+    <!-- Scanning Rectangle - Larger for tablets -->
+    <dimen name="scanning_rectangle_size">350dp</dimen>
+    <dimen name="scanning_corner_radius">16dp</dimen>
+    
+    <!-- Card/List Items -->
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_margin">12dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    
+    <!-- Bottom Sheet -->
+    <dimen name="bottom_sheet_peek_height">300dp</dimen>
+</resources>

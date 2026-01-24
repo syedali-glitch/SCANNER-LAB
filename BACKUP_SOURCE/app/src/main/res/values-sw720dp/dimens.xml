@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Large tablet/Chromebook dimensions (10-inch and larger) -->
+    
+    <!-- Text Sizes -->
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_body">18sp</dimen>
+    <dimen name="text_size_title">20sp</dimen>
+    <dimen name="text_size_heading">24sp</dimen>
+    <dimen name="text_size_large_heading">32sp</dimen>
+    
+    <!-- Spacing -->
+    <dimen name="spacing_tiny">8dp</dimen>
+    <dimen name="spacing_small">16dp</dimen>
+    <dimen name="spacing_medium">24dp</dimen>
+    <dimen name="spacing_large">40dp</dimen>
+    <dimen name="spacing_xlarge">56dp</dimen>
+    
+    <!-- Component Sizes -->
+    <dimen name="fab_size">72dp</dimen>
+    <dimen name="fab_margin">32dp</dimen>
+    
+    <!-- Scanning Rectangle -->
+    <dimen name="scanning_rectangle_size">400dp</dimen>
+    
+    <!-- Card/List Items -->
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+</resources>
