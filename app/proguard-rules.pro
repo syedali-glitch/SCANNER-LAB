@@ -23,6 +23,8 @@
 -keep class org.apache.xmlbeans.** { *; }
 -dontwarn org.apache.poi.**
 -dontwarn java.awt.**
+-dontwarn org.apache.logging.log4j.**
+-dontwarn javax.xml.stream.**
 
 # Preserve iText
 -keep class com.itextpdf.** { *; }

@@ -22,6 +22,8 @@ android {
         
         // Resource optimization: Only keep English resources and high-density assets
         resourceConfigurations.addAll(listOf("en", "xxhdpi", "xxxhdpi"))
+        
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -36,6 +38,7 @@ android {
     }
     
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -85,7 +88,10 @@ dependencies {
     implementation("com.itextpdf:itext7-core:7.2.5")
     
     // PowerPoint Support
-    implementation("org.apache.poi:poi-ooxml:5.2.5")
+    // PowerPoint Support
+    implementation("org.apache.poi:poi-ooxml:5.2.5") {
+        exclude(group = "org.apache.logging.log4j")
+    }
     
     // HTML Conversion
     implementation("com.itextpdf:html2pdf:4.0.5")
@@ -110,4 +116,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
