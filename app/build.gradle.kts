@@ -20,8 +20,8 @@ android {
         // Vector drawables support for older Android versions
         vectorDrawables.useSupportLibrary = true
         
-        // Resource optimization: Only keep English resources and high-density assets
-        resourceConfigurations.addAll(listOf("en", "xxhdpi", "xxxhdpi"))
+        // Resource optimization: Only keep English resources
+        resourceConfigurations.add("en")
         
         multiDexEnabled = true
     }
