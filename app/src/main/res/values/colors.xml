@@ -4,6 +4,21 @@
     <color name="primary_blue">#1E90FF</color>
     <color name="primary_blue_dark">#1873CC</color>
     
+    <!-- Mapped Colors -->
+    <color name="primary">@color/primary_blue</color>
+    <color name="primary_dark">@color/primary_blue_dark</color>
+    <color name="primary_light">#64B5F6</color>
+    
+    <color name="secondary">@color/favorite_yellow</color>
+    <color name="secondary_dark">#FFC107</color>
+    <color name="secondary_light">#FFE57F</color>
+    
+    <color name="gradient_middle">#44AADD</color>
+    
+    <!-- Glassmorphism -->
+    <color name="glass_light">#40FFFFFF</color>
+    <color name="glass_border_light">#80FFFFFF</color>
+    
     <!-- Background Colors -->
     <color name="white">#FFFFFF</color>
     <color name="background_gray">#F0F0F0</color>
