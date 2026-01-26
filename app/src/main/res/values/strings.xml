@@ -89,7 +89,7 @@
     <string name="loading">Loading…</string>
     
     <!-- History & Navigation -->
-    <string name="history">History</string>
+
     <string name="search_history">Search History</string>
     <string name="swipe_left_delete">Swipe left to delete</string>
     <string name="no_history">No history found</string>
