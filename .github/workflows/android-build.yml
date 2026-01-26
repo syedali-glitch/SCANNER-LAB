@@ -1,0 +1,75 @@
+name: Android CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: Fix gradlew line endings
+      run: |
+        # Convert CRLF to LF if needed
+        sed -i 's/\r$//' gradlew || true
+        # Ensure gradlew is executable
+        chmod +x gradlew
+        # Verify it's a shell script
+        file gradlew
+        head -n 1 gradlew
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Cache Gradle packages
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug --stacktrace
+      
+    - name: Build Release APK
+      run: ./gradlew assembleRelease --stacktrace
+      
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: scanner-lab-debug
+        path: app/build/outputs/apk/debug/*.apk
+        
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: scanner-lab-release
+        path: app/build/outputs/apk/release/*.apk
+        
+    - name: Run Lint
+      run: ./gradlew lint
+      continue-on-error: true
+      
+    - name: Upload Lint Report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: lint-report
+        path: app/build/reports/lint-results*.html

@@ -1,0 +1,70 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: Fix gradlew line endings
+      run: |
+        # Convert CRLF to LF if needed
+        sed -i 's/\r$//' gradlew || true
+        # Ensure gradlew is executable
+        chmod +x gradlew
+        # Verify it's a shell script
+        file gradlew
+        head -n 1 gradlew
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build Release APK
+      run: ./gradlew assembleRelease --stacktrace
+      
+    - name: Sign APK
+      uses: r0adkll/sign-android-release@v1
+      if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+      id: sign_app
+      with:
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.ALIAS }}
+        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
+      env:
+        BUILD_TOOLS_VERSION: "34.0.0"
+        
+    - name: Create Release
+      if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          app/build/outputs/apk/release/*.apk
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Upload Unsigned APK
+      if: ${{ github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/v') }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: scanner-lab-release-unsigned
+        path: app/build/outputs/apk/release/*.apk
