@@ -90,9 +90,7 @@
     
     <!-- History & Navigation -->
 
-    <string name="search_history">Search History</string>
-    <string name="swipe_left_delete">Swipe left to delete</string>
-    <string name="no_history">No history found</string>
+
     <string name="nav_home">Home</string>
     <string name="nav_tools">Tools</string>
     <string name="nav_files">Files</string>
