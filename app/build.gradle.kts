@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         // Multi-window and ChromeOS support
-        resizeableActivity = true
+        resizableActivity = true
         
         // Vector drawables support for older Android versions
         vectorDrawables.useSupportLibrary = true
