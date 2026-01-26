@@ -34,18 +34,16 @@
                 </shape>
             </item>
             
-            <!-- Light Reflection (Top half) -->
-            <item android:bottom="50%">
+            <!-- Light Reflection (Top half gradient) -->
+            <item>
                 <shape android:shape="rectangle">
-                    <corners
-                        android:topLeftRadius="24dp"
-                        android:topRightRadius="24dp"
-                        android:bottomLeftRadius="0dp"
-                        android:bottomRightRadius="0dp" />
+                    <corners android:radius="24dp" />
                     <gradient
                         android:startColor="#30FFFFFF"
+                        android:centerColor="#10FFFFFF"
                         android:endColor="#00FFFFFF"
-                        android:angle="90" />
+                        android:angle="90"
+                        android:type="linear" />
                 </shape>
             </item>
             
