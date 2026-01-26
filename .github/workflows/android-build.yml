@@ -35,15 +35,13 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     
-    - name: Validate Gradle Wrapper
-      run: |
-        echo "Checking gradle-wrapper.jar..."
-        ls -la gradle/wrapper/
-        if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
-          echo "ERROR: gradle-wrapper.jar not found!"
-          exit 1
-        fi
-        echo "gradle-wrapper.jar found ($(stat -c%s gradle/wrapper/gradle-wrapper.jar) bytes)"
+    - name: Setup Gradle Wrapper
+      uses: gradle/actions/wrapper-validation@v3
+    
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: wrapper
       
     - name: Cache Gradle packages
       uses: actions/cache@v4
