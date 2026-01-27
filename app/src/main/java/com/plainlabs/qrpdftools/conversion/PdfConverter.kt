@@ -58,7 +58,7 @@ object PdfConverter {
 
     fun imageToPdf(imagePaths: List<String>, outputPath: String): Boolean {
          return try {
-            val pdfWriter = PdfWriter(outputPath)
+            val pdfWriter = PdfWriter(FileOutputStream(outputPath))
             val pdfDoc = PdfDocument(pdfWriter)
             val document = Document(pdfDoc)
             
