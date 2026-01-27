@@ -29,7 +29,7 @@ import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     
-    private lateinit  binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var adManager: AdManager
     private val viewModel: MainViewModel by viewModels {
