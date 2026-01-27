@@ -6,7 +6,7 @@ import java.io.StringWriter
 
 object ErrorHandler {
     
-    private const val TAG = "ErrorHandler"
+    internal const val TAG = "ErrorHandler"
     
     /**
      * Handle error with logging and user-friendly message

@@ -13,6 +13,7 @@ import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.properties.TextAlignment
 import com.itextpdf.layout.properties.VerticalAlignment
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 object PdfUtilityTools {
@@ -27,7 +28,7 @@ object PdfUtilityTools {
             }
             
             val pdfReader = PdfReader(inputPath)
-            val pdfWriter = PdfWriter(outputPath, writerProperties)
+            val pdfWriter = PdfWriter(FileOutputStream(outputPath), writerProperties)
             val pdfDoc = PdfDocument(pdfReader, pdfWriter)
             
             if (removeMetadata) {
@@ -52,7 +53,7 @@ object PdfUtilityTools {
 
     fun watermarkPdf(inputPath: File, outputPath: File, watermarkText: String, opacity: Float = 0.3f, diagonal: Boolean = true) {
         try {
-            val pdfDoc = PdfDocument(PdfReader(inputPath), PdfWriter(outputPath))
+            val pdfDoc = PdfDocument(PdfReader(inputPath), PdfWriter(FileOutputStream(outputPath)))
             val n = pdfDoc.numberOfPages
             val font = com.itextpdf.kernel.font.PdfFontFactory.createFont(com.itextpdf.io.font.constants.StandardFonts.HELVETICA_BOLD)
             val gs1 = PdfExtGState().setFillOpacity(opacity)
@@ -107,7 +108,7 @@ object PdfUtilityTools {
                 com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_128
             )
             
-            val pdfDoc = PdfDocument(PdfReader(inputPath), PdfWriter(outputPath, props))
+            val pdfDoc = PdfDocument(PdfReader(inputPath), PdfWriter(FileOutputStream(outputPath), props))
             pdfDoc.close()
         } catch (e: Exception) {
              throw IOException("Password protection failed: ${e.message}")
