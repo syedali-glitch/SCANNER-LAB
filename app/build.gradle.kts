@@ -80,10 +80,10 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
     
-    // ML Kit Barcode Scanning (GMS - Thin Client)
-    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
-    // ML Kit Text Recognition (GMS - Thin Client)
-    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
+    // ML Kit Barcode Scanning (Bundled - One Go, works offline)
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    // ML Kit Text Recognition (Bundled - One Go, works offline)
+    implementation("com.google.mlkit:text-recognition:16.0.0")
     
     // Room Database
     val roomVersion = "2.6.1"

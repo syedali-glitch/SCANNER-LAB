@@ -18,25 +18,42 @@
 -keep class com.google.mlkit.** { *; }
 -keep class com.google.android.gms.** { *; }
 
--keep class org.apache.poi.** { *; }
+# Strict R8 Rules for Maximum Shrinking
+
+# 1. Apache POI: Keep only what is absolutely necessary
+# Allow R8 to strip most of POI, but warn about missing classes (we don't use 90% of it)
+-keep class org.apache.poi.xwpf.usermodel.** { *; }
+-keep class org.apache.poi.xssf.usermodel.** { *; }
+-keep class org.apache.poi.ss.usermodel.** { *; }
+-keep class org.apache.poi.ooxml.** { *; }
 -keep class org.apache.xmlbeans.** { *; }
 -dontwarn org.apache.poi.**
 -dontwarn org.apache.xmlbeans.**
 -dontwarn java.awt.**
--dontwarn org.apache.logging.log4j.**
--dontwarn javax.xml.stream.**
--dontwarn com.github.javaparser.**
--dontwarn net.sf.saxon.**
--dontwarn org.apache.maven.**
--dontwarn org.apache.tools.ant.**
--dontwarn org.slf4j.**
--dontwarn com.sun.org.apache.xml.internal.**
--dontwarn org.w3c.dom.**
--dontwarn org.xml.sax.**
+-dontwarn javax.xml.**
 
-# Preserve iText
--keep class com.itextpdf.** { *; }
+# 2. iText: Aggressive stripping
+-keep class com.itextpdf.kernel.** { *; }
+-keep class com.itextpdf.layout.** { *; }
 -dontwarn com.itextpdf.**
+
+# 3. Coroutines (Release mode optimizations)
+-assumenosideeffects class kotlinx.coroutines.DebugKt {
+    boolean getASSERTIONS_ENABLED() return false;
+}
+
+# 4. Remove logging in release
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int d(...);
+    public static int i(...);
+    public static int w(...);
+}
+
+# 5. General Optimization
+-optimizationpasses 5
+-allowaccessmodification
 
 # Retrofit/OkHttp (if used later)
 -dontwarn okhttp3.**
