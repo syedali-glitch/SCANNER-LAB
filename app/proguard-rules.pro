@@ -31,6 +31,8 @@
 -dontwarn org.apache.xmlbeans.**
 -dontwarn org.openxmlformats.**
 -dontwarn schemaorg_apache_xmlbeans.**
+-dontwarn com.microsoft.schemas.**
+-dontwarn org.slf4j.**
 -dontwarn java.awt.**
 -dontwarn javax.xml.**
 
