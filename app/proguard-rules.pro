@@ -25,7 +25,7 @@
 -keep class org.apache.xmlbeans.** { *; }
 -keep class org.openxmlformats.** { *; }
 -keep class schemaorg_apache_xmlbeans.** { *; }
--keep class com.microsoft.schemas.** { *; }
+# -keep class com.microsoft.schemas.** { *; } # Removed to allow stripping of missing classes
 
 -dontwarn org.apache.poi.**
 -dontwarn org.apache.xmlbeans.**
