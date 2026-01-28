@@ -18,13 +18,21 @@
 -keep class com.google.mlkit.** { *; }
 -keep class com.google.android.gms.** { *; }
 
-# Preserve Apache POI (Critical for XML/OOXML reflection)
 -keep class org.apache.poi.** { *; }
 -keep class org.apache.xmlbeans.** { *; }
 -dontwarn org.apache.poi.**
+-dontwarn org.apache.xmlbeans.**
 -dontwarn java.awt.**
 -dontwarn org.apache.logging.log4j.**
 -dontwarn javax.xml.stream.**
+-dontwarn com.github.javaparser.**
+-dontwarn net.sf.saxon.**
+-dontwarn org.apache.maven.**
+-dontwarn org.apache.tools.ant.**
+-dontwarn org.slf4j.**
+-dontwarn com.sun.org.apache.xml.internal.**
+-dontwarn org.w3c.dom.**
+-dontwarn org.xml.sax.**
 
 # Preserve iText
 -keep class com.itextpdf.** { *; }
