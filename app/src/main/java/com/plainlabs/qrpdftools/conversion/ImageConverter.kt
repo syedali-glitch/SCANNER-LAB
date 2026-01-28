@@ -48,7 +48,14 @@ class ImageConverter(private val context: Context) {
                     val compressFormat = when(format) {
                         ImageFormat.PNG -> Bitmap.CompressFormat.PNG
                         ImageFormat.JPG -> Bitmap.CompressFormat.JPEG
-                        ImageFormat.WEBP -> if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) Bitmap.CompressFormat.WEBP_LOSSY else Bitmap.CompressFormat.WEBP
+                        ImageFormat.WEBP -> {
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                                Bitmap.CompressFormat.WEBP_LOSSY
+                            } else {
+                                @Suppress("DEPRECATION")
+                                Bitmap.CompressFormat.WEBP
+                            }
+                        }
                     }
                     bitmap.compress(compressFormat, quality, out)
                 }
@@ -119,7 +126,14 @@ class ImageConverter(private val context: Context) {
              val compressFormat = when(format) {
                 ImageFormat.PNG -> Bitmap.CompressFormat.PNG
                 ImageFormat.JPG -> Bitmap.CompressFormat.JPEG
-                ImageFormat.WEBP -> if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) Bitmap.CompressFormat.WEBP_LOSSY else Bitmap.CompressFormat.WEBP
+                ImageFormat.WEBP -> {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                        Bitmap.CompressFormat.WEBP_LOSSY
+                    } else {
+                        @Suppress("DEPRECATION")
+                        Bitmap.CompressFormat.WEBP
+                    }
+                }
             }
             bitmap.compress(compressFormat, quality, out)
          }
