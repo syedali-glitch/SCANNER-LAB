@@ -20,12 +20,8 @@
 
 # Strict R8 Rules for Maximum Shrinking
 
-# 1. Apache POI: Keep only what is absolutely necessary
-# Allow R8 to strip most of POI, but warn about missing classes (we don't use 90% of it)
--keep class org.apache.poi.xwpf.usermodel.** { *; }
--keep class org.apache.poi.xssf.usermodel.** { *; }
--keep class org.apache.poi.ss.usermodel.** { *; }
--keep class org.apache.poi.ooxml.** { *; }
+# 1. Apache POI & XMLBeans: Keep required classes for Excel/Word
+-keep class org.apache.poi.** { *; }
 -keep class org.apache.xmlbeans.** { *; }
 -keep class org.openxmlformats.** { *; }
 -keep class schemaorg_apache_xmlbeans.** { *; }
