@@ -27,8 +27,14 @@
 -keep class org.apache.poi.ss.usermodel.** { *; }
 -keep class org.apache.poi.ooxml.** { *; }
 -keep class org.apache.xmlbeans.** { *; }
+-keep class org.openxmlformats.** { *; }
+-keep class schemaorg_apache_xmlbeans.** { *; }
+-keep class com.microsoft.schemas.** { *; }
+
 -dontwarn org.apache.poi.**
 -dontwarn org.apache.xmlbeans.**
+-dontwarn org.openxmlformats.**
+-dontwarn schemaorg_apache_xmlbeans.**
 -dontwarn java.awt.**
 -dontwarn javax.xml.**
 
