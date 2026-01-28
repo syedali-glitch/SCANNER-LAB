@@ -23,6 +23,16 @@
         <!-- Text colors -->
         <item name="android:textColorPrimary">@color/text_dark</item>
         <item name="android:textColorSecondary">@color/text_gray</item>
+        
+         <!-- Premium Window Animations -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+    </style>
+    
+    <style name="WindowAnimationTransition">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
     </style>
     
     <!-- FAB Style -->
