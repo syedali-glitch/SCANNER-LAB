@@ -63,7 +63,8 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("com.google.guava:guava:31.1-android")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    // implementation("com.google.guava:guava:31.1-android") // Removed for size optimization
     
     // Lifecycle & ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
@@ -79,10 +80,10 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
     
-    // ML Kit Barcode Scanning
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
-    // ML Kit Text Recognition
-    implementation("com.google.mlkit:text-recognition:16.0.0")
+    // ML Kit Barcode Scanning (GMS - Thin Client)
+    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
+    // ML Kit Text Recognition (GMS - Thin Client)
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
     
     // Room Database
     val roomVersion = "2.6.1"
