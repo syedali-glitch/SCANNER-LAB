@@ -14,7 +14,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-// import com.google.common.util.concurrent.ListenableFuture unused
+import com.google.common.util.concurrent.ListenableFuture
 import com.plainlabs.qrpdftools.databinding.FragmentDocumentScannerBinding
 import com.plainlabs.qrpdftools.util.ErrorHandler
 import com.plainlabs.qrpdftools.util.PermissionHelper

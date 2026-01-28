@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.google.guava:listenablefuture:1.0") // Required for CameraX (Tiny, not full Guava)
     // implementation("com.google.guava:guava:31.1-android") // Removed for size optimization
     
     // Lifecycle & ViewModel
