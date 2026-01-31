@@ -1,3 +1,5 @@
+package com.plainlabs.qrpdftools.ui
+
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +16,7 @@ import com.plainlabs.qrpdftools.util.ErrorHandler
 import com.plainlabs.qrpdftools.util.ScreenUtil
 import androidx.activity.viewModels
 import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
     
