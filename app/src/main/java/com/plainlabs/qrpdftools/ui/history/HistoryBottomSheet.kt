@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.plainlabs.qrpdftools.R
 import com.plainlabs.qrpdftools.databinding.BottomSheetHistoryBinding
 import com.plainlabs.qrpdftools.domain.model.ScanResult
 import kotlinx.coroutines.launch
