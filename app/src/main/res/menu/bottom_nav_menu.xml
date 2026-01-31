@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="Home" />
+    <item
+        android:id="@+id/qrScannerFragment"
+        android:icon="@drawable/ic_qr_code"
+        android:title="QR Scan" />
+    <item
+        android:id="@+id/documentScannerFragment"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="Doc Scan" />
+    <item
+        android:id="@+id/historyFragment"
+        android:icon="@drawable/ic_history"
+        android:title="@string/history" />
+</menu>
