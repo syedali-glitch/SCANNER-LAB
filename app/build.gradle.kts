@@ -30,25 +30,9 @@ android {
     // Advanced Optimization: ABI Splits (Reverted per user request for single APK)
     // splits { ... }
 
-    signingConfigs {
-        create("debug") {
-            // Use default debug keystore
-            storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
-            
-            // Enable both signing versions for maximum compatibility
-            enableV1Signing = true
-            enableV2Signing = true
-            enableV3Signing = true
-            enableV4Signing = true
-        }
-    }
-
     buildTypes {
+        // Debug uses default Android debug signing (works out of the box)
         debug {
-            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             isShrinkResources = false
             isDebuggable = true
@@ -102,10 +86,29 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
     
-    // ML Kit Barcode Scanning (Bundled - One Go, works offline)
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
-    // ML Kit Text Recognition (Bundled - One Go, works offline)
-    implementation("com.google.mlkit:text-recognition:16.0.0")
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ML KIT - FULLY BUNDLED (NO RUNTIME DOWNLOADS REQUIRED)
+    // ═══════════════════════════════════════════════════════════════════════════
+    // These are "BUNDLED" ML Kit libraries - all AI models are compiled directly
+    // into the APK. The app works 100% offline with NO additional downloads needed
+    // after installation. The user does NOT need to install any packages.
+    //
+    // Bundled vs Unbundled:
+    // - ✅ BUNDLED (what we use): Models included in APK (~5-10MB larger APK)
+    // - ❌ UNBUNDLED: Models download at runtime (requires internet on first use)
+    //
+    // Package names confirm bundled versions:
+    // - com.google.mlkit:barcode-scanning (BUNDLED)
+    // - com.google.mlkit:text-recognition (BUNDLED)
+    //
+    // Alternative unbundled versions we DON'T use:
+    // - com.google.android.gms:play-services-mlkit-barcode-scanning (UNBUNDLED)
+    // - com.google.android.gms:play-services-mlkit-text-recognition (UNBUNDLED)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")        // Bundled models
+    implementation("com.google.mlkit:text-recognition:16.0.0")        // Bundled models
     
     // Room Database
     val roomVersion = "2.6.1"
