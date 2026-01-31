@@ -30,7 +30,30 @@ android {
     // Advanced Optimization: ABI Splits (Reverted per user request for single APK)
     // splits { ... }
 
+    signingConfigs {
+        create("debug") {
+            // Use default debug keystore
+            storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            
+            // Enable both signing versions for maximum compatibility
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+            isShrinkResources = false
+            isDebuggable = true
+        }
+        
         release {
             isMinifyEnabled = true
             isShrinkResources = true
