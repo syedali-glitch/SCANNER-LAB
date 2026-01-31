@@ -118,6 +118,11 @@ dependencies {
     
     // DataStore (for preferences)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Navigation Component
+    val navVersion = "2.7.6"
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     
     // Testing
     testImplementation("junit:junit:4.13.2")

@@ -63,4 +63,13 @@
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
     </style>
+
+    <!-- Transparent Bottom Sheet Dialog -->
+    <style name="Theme.QRPDFTools.BottomSheetDialog" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.QRPDFTools.BottomSheet</item>
+    </style>
+
+    <style name="Widget.QRPDFTools.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>

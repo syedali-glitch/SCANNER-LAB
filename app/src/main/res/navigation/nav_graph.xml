@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.plainlabs.qrpdftools.ui.home.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_home_to_qr_scanner"
+            app:destination="@id/qrScannerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_home_to_doc_scanner"
+            app:destination="@id/documentScannerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_home_to_history"
+            app:destination="@id/historyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_home_to_settings"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/qrScannerFragment"
+        android:name="com.plainlabs.qrpdftools.ui.scanner.QRScannerFragment"
+        android:label="QR Scanner" />
+
+    <fragment
+        android:id="@+id/documentScannerFragment"
+        android:name="com.plainlabs.qrpdftools.ui.scanner.DocumentScannerFragment"
+        android:label="Document Scanner" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.plainlabs.qrpdftools.ui.history.HistoryFragment"
+        android:label="@string/history" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.plainlabs.qrpdftools.ui.settings.SettingsFragment"
+        android:label="@string/settings" />
+
+</navigation>

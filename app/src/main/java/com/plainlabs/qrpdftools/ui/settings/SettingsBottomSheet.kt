@@ -17,6 +17,8 @@ import kotlinx.coroutines.launch
 class SettingsBottomSheet(
     private val onAdsRemoved: () -> Unit = {}
 ) : BottomSheetDialogFragment() {
+
+    override fun getTheme(): Int = R.style.Theme_QRPDFTools_BottomSheetDialog
     
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!

@@ -16,6 +16,8 @@ import com.plainlabs.qrpdftools.domain.model.ScanResult
 import kotlinx.coroutines.launch
 
 class HistoryBottomSheet : BottomSheetDialogFragment() {
+
+    override fun getTheme(): Int = R.style.Theme_QRPDFTools_BottomSheetDialog
     
     private var _binding: BottomSheetHistoryBinding? = null
     private val binding get() = _binding!!
