@@ -56,6 +56,16 @@ class DocumentScannerFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.scanOverlay.startScanning()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.scanOverlay.stopScanning()
+    }
+
     private fun setupUI() {
         binding.btnCapture.setOnClickListener {
             takePhoto()
@@ -150,6 +160,10 @@ class DocumentScannerFragment : Fragment() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
+                    // Premium Feedback
+                    binding.root.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM)
+                    android.media.MediaActionSound().play(android.media.MediaActionSound.SHUTTER_CLICK)
+                    
                     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
                     binding.progressLoading.visibility = View.GONE

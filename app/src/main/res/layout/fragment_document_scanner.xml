@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="?attr/colorPrimaryContainer"
+        app:cardBackgroundColor="@drawable/glass_card_background"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -60,11 +60,10 @@
         app:scaleType="fillCenter" />
 
     <!-- Overlay for edge detection visualization -->
-    <View
+    <com.plainlabs.qrpdftools.ui.views.ScanningOverlayView
         android:id="@+id/scanOverlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/transparent"
         app:layout_constraintTop_toTopOf="@id/cameraPreview"
         app:layout_constraintBottom_toBottomOf="@id/cameraPreview"
         app:layout_constraintStart_toStartOf="@id/cameraPreview"
