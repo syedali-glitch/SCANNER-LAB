@@ -48,6 +48,12 @@ android {
         }
     }
     
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+    
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
