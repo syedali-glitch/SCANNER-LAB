@@ -30,24 +30,51 @@ class MainActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         
-        // Enable high refresh rate for smooth animations
-        ErrorHandler.safe("MainActivity", Unit, "Refresh rate optimization failed") {
-            ScreenUtil.enableHighRefreshRate(this)
+        try {
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            
+            // Enable high refresh rate for smooth animations
+            try {
+                ScreenUtil.enableHighRefreshRate(this)
+            } catch (e: Exception) {
+                Log.w("MainActivity", "High refresh rate not supported: ${e.message}")
+            }
+            
+            try {
+                logScreenInfo()
+            } catch (e: Exception) {
+                Log.w("MainActivity", "Screen info logging failed: ${e.message}")
+            }
+            
+            adManager = AdManager(this)
+            
+            setupNavigation()
+            observeViewModel()
+            
+            // Preload ads
+            try {
+                adManager.preloadInterstitialAd()
+                adManager.preloadRewardedAd()
+            } catch (e: Exception) {
+                Log.w("MainActivity", "Ad preloading failed: ${e.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Critical error in onCreate", e)
+            e.printStackTrace()
+            // Don't crash, try to show error to user
+            try {
+                android.widget.Toast.makeText(
+                    this,
+                    "App initialization failed: ${e.message}",
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
+            } catch (toastError: Exception) {
+                // Even toast failed, just log
+                Log.e("MainActivity", "Toast also failed", toastError)
+            }
         }
-        
-        logScreenInfo()
-        
-        adManager = AdManager(this)
-        
-        setupNavigation()
-        observeViewModel()
-        
-        // Preload ads
-        adManager.preloadInterstitialAd()
-        adManager.preloadRewardedAd()
     }
     
     private fun logScreenInfo() {
@@ -64,12 +91,25 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun setupNavigation() {
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        
-        // Setup bottom navigation (if exists)
-        binding.bottomNavigation?.setupWithNavController(navController)
+        try {
+            val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+            
+            if (navHostFragment == null) {
+                Log.e("MainActivity", "NavHostFragment not found!")
+                return
+            }
+            
+            navController = navHostFragment.navController
+            
+            // Setup bottom navigation
+            binding.bottomNavigation.setupWithNavController(navController)
+            
+            Log.d("MainActivity", "Navigation setup complete")
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Navigation setup failed", e)
+            e.printStackTrace()
+        }
     }
     
     private fun observeViewModel() {
