@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme -->
-    <style name="Theme.QRPDFTools" parent="Theme.Material3.Light.NoActionBar">
+    <!-- Base application theme - Using AppCompat for maximum compatibility -->
+    <style name="Theme.QRPDFTools" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/primary_blue</item>
-        <item name="colorPrimaryVariant">@color/primary_blue_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        
-        <!-- Secondary brand color -->
-        <item name="colorSecondary">@color/favorite_yellow</item>
-        <item name="colorOnSecondary">@color/text_dark</item>
+        <item name="colorPrimaryDark">@color/primary_blue_dark</item>
+        <item name="colorAccent">@color/favorite_yellow</item>
         
         <!-- Status bar and navigation bar -->
         <item name="android:statusBarColor">@color/status_bar</item>
         <item name="android:navigationBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">true</item>
         
         <!-- Background color -->
         <item name="android:windowBackground">@color/white</item>
@@ -36,40 +30,34 @@
     </style>
     
     <!-- FAB Style -->
-    <style name="Widget.QRPDFTools.FAB" parent="Widget.Material3.FloatingActionButton.Primary">
+    <style name="Widget.QRPDFTools.FAB" parent="Widget.Design.FloatingActionButton">
         <item name="tint">@color/white</item>
         <item name="backgroundTint">@color/primary_blue</item>
         <item name="elevation">8dp</item>
-        <item name="android:layout_width">64dp</item>
-        <item name="android:layout_height">64dp</item>
     </style>
     
     <!-- Button Styles -->
-    <style name="Widget.QRPDFTools.Button" parent="Widget.Material3.Button">
+    <style name="Widget.QRPDFTools.Button" parent="Widget.AppCompat.Button">
         <item name="backgroundTint">@color/primary_blue</item>
         <item name="android:textColor">@color/white</item>
-        <item name="cornerRadius">8dp</item>
     </style>
     
-    <style name="Widget.QRPDFTools.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="strokeColor">@color/primary_blue</item>
+    <style name="Widget.QRPDFTools.Button.Outlined" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/primary_blue</item>
-        <item name="cornerRadius">8dp</item>
     </style>
     
     <!-- Toolbar Button Style -->
-    <style name="Widget.QRPDFTools.IconButton" parent="Widget.Material3.Button.TextButton">
-        <item name="iconTint">@color/text_dark</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
+    <style name="Widget.QRPDFTools.IconButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:tint">@color/text_dark</item>
     </style>
 
-    <!-- Transparent Bottom Sheet Dialog -->
-    <style name="Theme.QRPDFTools.BottomSheetDialog" parent="Theme.Material3.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/Widget.QRPDFTools.BottomSheet</item>
+    <!-- Bottom Sheet Dialog -->
+    <style name="Theme.QRPDFTools.BottomSheetDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="Widget.QRPDFTools.BottomSheet" parent="Widget.Material3.BottomSheet">
+    <style name="Widget.QRPDFTools.BottomSheet" parent="">
         <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>
