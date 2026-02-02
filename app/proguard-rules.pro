@@ -18,6 +18,19 @@
 -keep class com.google.mlkit.** { *; }
 -keep class com.google.android.gms.** { *; }
 
+# Navigation Component - Critical for runtime
+-keep class androidx.navigation.fragment.** { *; }
+-keep class * extends androidx.fragment.app.Fragment { *; }
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable
+
+# ViewBinding - Prevent stripping
+-keep class **.databinding.** { *; }
+-keep class * implements androidx.viewbinding.ViewBinding {
+    public static *** bind(android.view.View);
+    public static *** inflate(android.view.LayoutInflater);
+}
+
 # Strict R8 Rules for Maximum Shrinking
 
 # 1. Apache POI & XMLBeans: Keep required classes for Excel/Word
