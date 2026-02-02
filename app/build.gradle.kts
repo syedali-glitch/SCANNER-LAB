@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.plainlabs.qrpdftools"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.plainlabs.qrpdftools"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 34  // Target Android 14, but works up to Android 16
         versionCode = 2
         versionName = "1.0"
 
