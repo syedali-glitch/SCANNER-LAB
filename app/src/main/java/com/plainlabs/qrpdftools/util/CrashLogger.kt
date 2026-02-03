@@ -58,6 +58,10 @@ object CrashLogger {
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             try {
                 logCrash(thread, throwable)
+                
+                // AUTOMATIC REMOTE REPORTING
+                AutomaticErrorReporter.reportCrash(context, thread, throwable)
+                
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to log crash", e)
             } finally {
