@@ -1,10 +1,10 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    // Firebase Crashlytics for automatic crash reporting
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
     id("com.google.devtools.ksp")
+    // Firebase plugins - must be AFTER other plugins
+    id("com.google.firebase.crashlytics")
+    id("com.google.gms.google-services")  // MUST BE LAST
 }
 
 android {
