@@ -161,8 +161,18 @@ object CrashLogger {
      */
     private fun getAppVersion(context: Context): String {
         return try {
-            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-            "${pInfo.versionName} (${pInfo.versionCode})"
+            val pInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getPackageInfo(context.packageName, android.content.pm.PackageManager.PackageInfoFlags.of(0))
+            } else {
+                context.packageManager.getPackageInfo(context.packageName, 0)
+            }
+            val vCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                pInfo.longVersionCode
+            } else {
+                @Suppress("DEPRECATION")
+                pInfo.versionCode.toLong()
+            }
+            "${pInfo.versionName} ($vCode)"
         } catch (e: Exception) {
             "Unknown"
         }

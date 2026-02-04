@@ -72,7 +72,7 @@ class BatchOperationsManager(private val context: Context) {
                  // Or we zip it? 
                  // For now, let's assume standard behavior of mapping 1 file -> 1 file (e.g. zip) OR 1 page image.
                  // Simplification: Output to directory named same as file.
-                 val outDir = op.outputFile.parentFile // or specific folder
+                 val outDir = op.outputFile.parentFile ?: op.outputFile
                  imageConverter.convertPdfToImages(op.inputFile, outDir, ImageConverter.ImageFormat.PNG, 100) { }
             }
             ConversionType.IMAGE_TO_PDF -> {

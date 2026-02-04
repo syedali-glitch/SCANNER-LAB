@@ -19,6 +19,7 @@ class HistoryViewModel(application: Application) : ViewModel() {
     
     val scans: StateFlow<List<ScanResult>>
     
+    @OptIn(kotlinx.coroutines.FlowPreview::class, kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     init {
         val scanDao = AppDatabase.getDatabase(application).scanDao()
         scanRepository = ScanRepository(scanDao)
