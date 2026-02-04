@@ -149,7 +149,7 @@ class SettingsFragment : Fragment() {
         // Navigate to About (Legal Shield)
         binding.textVersion.parent.let { parent ->
             (parent as? View)?.setOnClickListener {
-                findNavController()
+                androidx.navigation.fragment.NavHostFragment.findNavController(this)
                     .navigate(com.plainlabs.qrpdftools.R.id.action_settings_to_about)
             }
         }

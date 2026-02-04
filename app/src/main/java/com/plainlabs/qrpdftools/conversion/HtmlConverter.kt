@@ -93,7 +93,7 @@ class HtmlConverter(private val context: Context) {
                                 webView.draw(page.canvas)
                                 pdfDocument.finishPage(page)
                                 
-                                FileOutputStream(outputPdf).use { out ->
+                                java.io.FileOutputStream(outputPdf).use { out ->
                                     pdfDocument.writeTo(out)
                                 }
                                 pdfDocument.close()
