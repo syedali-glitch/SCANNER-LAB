@@ -12,6 +12,7 @@ import com.plainlabs.qrpdftools.util.ShareUtil
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+@OptIn(kotlinx.coroutines.FlowPreview::class, kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class HistoryViewModel(application: Application) : ViewModel() {
     
     private val scanRepository: ScanRepository
@@ -19,7 +20,6 @@ class HistoryViewModel(application: Application) : ViewModel() {
     
     val scans: StateFlow<List<ScanResult>>
     
-    @OptIn(kotlinx.coroutines.FlowPreview::class, kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     init {
         val scanDao = AppDatabase.getDatabase(application).scanDao()
         scanRepository = ScanRepository(scanDao)
