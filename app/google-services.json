@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "193505959029",
+    "project_id": "qr-pdf-tools",
+    "storage_bucket": "qr-pdf-tools.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193505959029:android:2f90acd5ff2e7bb44e2c3c",
+        "android_client_info": {
+          "package_name": "com.plainlabs.qrpdftools"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHeVkAws2RaPmPY9scwgIWGOjXHUAxUiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
