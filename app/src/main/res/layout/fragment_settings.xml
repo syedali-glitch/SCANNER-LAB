@@ -577,6 +577,17 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- DEBUG: Test Crash Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/settingTestCrash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="Test Crash (Verify Firebase)"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/error_red"
+            app:cornerRadius="12dp" />
+
         <!-- Bottom Spacing -->
         <View
             android:layout_width="match_parent"

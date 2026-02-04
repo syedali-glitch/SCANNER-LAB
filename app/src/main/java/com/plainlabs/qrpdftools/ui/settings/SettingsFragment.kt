@@ -101,6 +101,18 @@ class SettingsFragment : Fragment() {
         binding.settingClearHistory.setOnClickListener {
             showClearHistoryDialog()
         }
+
+        // Test Crash
+        binding.settingTestCrash.setOnClickListener {
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Test Crashlytics")
+                .setMessage("This will intentionally crash the app to test Firebase reporting. The app will close immediately.")
+                .setPositiveButton("CRASH!") { _, _ ->
+                    throw RuntimeException("Test Crash from Settings: verifying Firebase Crashlytics")
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
     }
 
     private fun applyTheme(darkMode: Boolean) {
