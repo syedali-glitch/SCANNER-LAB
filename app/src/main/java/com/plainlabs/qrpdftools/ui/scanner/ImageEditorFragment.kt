@@ -125,7 +125,7 @@ class ImageEditorFragment : Fragment() {
                 val mappedPoints = points.map { android.graphics.PointF(it.x * scaleX, it.y * scaleY) }
                 
                 val result = withContext(Dispatchers.Default) {
-                    PerspectiveTransformation.rectifyDocument(bitmapToRectify, mappedPoints)
+                    PerspectiveTransformation.transform(bitmapToRectify, mappedPoints)
                 }
                 
                 originalBitmap = result

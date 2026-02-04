@@ -63,7 +63,7 @@ object PdfUtilityTools {
                 
                 over.beginText()
                 over.setFontAndSize(font, 50f)
-                over.setColorFill(java.awt.Color.LIGHT_GRAY)
+                over.setRGBColorFill(211, 211, 211) // Light Gray
                 
                 val pageSize = reader.getPageSizeWithRotation(i)
                 val x = pageSize.width / 2
