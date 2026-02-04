@@ -24,7 +24,7 @@ class ImageConverter(private val context: Context) {
     /**
      * PDF to Image conversion using native PdfRenderer.
      */
-    fun convertPdfToImages(pdfFile: File, outputDir: File, format: ImageFormat, quality: Int, callback: (Float) -> Unit) {
+    fun convertPdfToImages(pdfFile: File, outputDir: File, format: ImageFormat, @Suppress("UNUSED_PARAMETER") quality: Int, callback: (Float) -> Unit) {
         // ... (Existing native PdfRenderer logic is fine)
         try {
             val fileDescriptor = android.os.ParcelFileDescriptor.open(pdfFile, android.os.ParcelFileDescriptor.MODE_READ_ONLY)
@@ -76,7 +76,7 @@ class ImageConverter(private val context: Context) {
      * Images to PDF conversion using memory-safe NativePdfGenerator.
      * Mandate: Offloaded to Dispatchers.IO.
      */
-    suspend fun convertImagesToPdf(imageFiles: List<File>, outputPdf: File, quality: Int, callback: (Float) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun convertImagesToPdf(imageFiles: List<File>, outputPdf: File, @Suppress("UNUSED_PARAMETER") quality: Int, callback: (Float) -> Unit) = withContext(Dispatchers.IO) {
         try {
             val result = NativePdfGenerator.generatePdfFromImages(imageFiles, outputPdf)
             if (result.isSuccess) {
@@ -89,7 +89,7 @@ class ImageConverter(private val context: Context) {
         }
     }
     
-    fun convertImageFormat(inputFile: File, outputFile: File, format: ImageFormat, quality: Int) {
+    fun convertImageFormat(inputFile: File, outputFile: File, format: ImageFormat, @Suppress("UNUSED_PARAMETER") quality: Int) {
         val bitmap = BitmapFactory.decodeFile(inputFile.absolutePath)
         FileOutputStream(outputFile).use { out ->
             val compressFormat = when(format) {

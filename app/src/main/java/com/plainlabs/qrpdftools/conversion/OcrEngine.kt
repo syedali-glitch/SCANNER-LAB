@@ -85,7 +85,7 @@ class OcrEngine(private val context: Context) {
             //Ideally this should use the instance method but for static call compatibility:
             val bitmap = android.graphics.BitmapFactory.decodeFile(imagePath) ?: return OcrResult("")
             val instance = OcrEngine(context)
-            var resultText = ""
+            val resultText: String
             
             // Blocking wait for the suspend function
             kotlinx.coroutines.runBlocking {
