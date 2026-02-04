@@ -1,7 +1,6 @@
 package com.plainlabs.qrpdftools.conversion
 
 import android.content.Context
-import android.content.Context
 import com.lowagie.text.Document
 import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.PdfReader

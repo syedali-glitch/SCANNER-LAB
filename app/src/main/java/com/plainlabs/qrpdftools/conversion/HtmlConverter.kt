@@ -3,6 +3,7 @@ package com.plainlabs.qrpdftools.conversion
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
 import android.print.PrintManager
@@ -28,12 +29,13 @@ class HtmlConverter(private val context: Context) {
              val extractor = com.lowagie.text.pdf.parser.PdfTextExtractor(reader)
              val sb = StringBuilder()
              for (i in 1..reader.numberOfPages) {
-                 sb.append(extractor.getTextFromPage(i)).append("\n\n")
+                 val text = extractor.getTextFromPage(i)
+                 sb.append(text).append("\n\n")
              }
              reader.close()
              
              val text = sb.toString()
-             // Create Premium HTML Template (Same as before)
+             // Create Premium HTML Template
              val htmlContent = """
                  <!DOCTYPE html>
                  <html>
@@ -62,8 +64,8 @@ class HtmlConverter(private val context: Context) {
     }
 
     /**
-     * HTML to PDF - Native WebView Print Implementation.
-     * Architect Rule: UI Thread for instantiation.
+     * HTML to PDF - Robust PdfDocument Implementation.
+     * Uses WebView to render and draws it to a PDF canvas.
      */
     fun convertHtmlToPdf(htmlFile: File, outputPdf: File, callback: (Float) -> Unit) {
         Handler(Looper.getMainLooper()).post {
@@ -71,37 +73,36 @@ class HtmlConverter(private val context: Context) {
                 val webView = WebView(context)
                 webView.webViewClient = object : WebViewClient() {
                     override fun onPageFinished(view: WebView?, url: String?) {
-                        val printAttributes = PrintAttributes.Builder()
-                            .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
-                            .setResolution(PrintAttributes.Resolution("pdf", "pdf", 300, 300))
-                            .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
-                            .build()
-
-                        val adapter = webView.createPrintDocumentAdapter("PlainLabs_Scan")
-                        
-                        // Headless Print Execution
-                        val descriptor = android.os.ParcelFileDescriptor.open(outputPdf, android.os.ParcelFileDescriptor.MODE_READ_WRITE or android.os.ParcelFileDescriptor.MODE_CREATE or android.os.ParcelFileDescriptor.MODE_TRUNCATE)
-                        
-                        adapter.onLayout(null, printAttributes, null, object : PrintDocumentAdapter.LayoutResultCallback() {
-                            override fun onLayoutFinished(info: android.print.PrintDocumentInfo?, changed: Boolean) {
-                                adapter.onWrite(arrayOf(android.print.PageRange.ALL_PAGES), descriptor, null, object : PrintDocumentAdapter.WriteResultCallback() {
-                                    override fun onWriteFinished(pages: Array<out android.print.PageRange>?) {
-                                        try {
-                                            descriptor.close()
-                                            webView.destroy()
-                                            callback(1.0f)
-                                        } catch (e: Exception) {
-                                            e.printStackTrace()
-                                        }
-                                    }
-
-                                    override fun onWriteFailed(error: CharSequence?) {
-                                        try { descriptor.close() } catch (e: Exception) {}
-                                        webView.destroy()
-                                    }
-                                })
+                        // Allow some time for rendering
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            try {
+                                val width = 595 // A4 standard width in points
+                                val height = (webView.contentHeight * context.resources.displayMetrics.density).toInt().coerceAtLeast(842)
+                                
+                                webView.measure(
+                                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+                                )
+                                webView.layout(0, 0, webView.measuredWidth, webView.measuredHeight)
+                                
+                                val pdfDocument = android.graphics.pdf.PdfDocument()
+                                val pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(webView.measuredWidth, webView.measuredHeight, 1).create()
+                                val page = pdfDocument.startPage(pageInfo)
+                                
+                                webView.draw(page.canvas)
+                                pdfDocument.finishPage(page)
+                                
+                                FileOutputStream(outputPdf).use { out ->
+                                    pdfDocument.writeTo(out)
+                                }
+                                pdfDocument.close()
+                                webView.destroy()
+                                callback(1.0f)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                callback(0f)
                             }
-                        }, null)
+                        }, 500)
                     }
                 }
                 webView.loadUrl("file://${htmlFile.absolutePath}")

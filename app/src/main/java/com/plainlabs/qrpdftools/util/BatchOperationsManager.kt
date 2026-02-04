@@ -61,7 +61,7 @@ class BatchOperationsManager(private val context: Context) {
         deferredResults.awaitAll()
     }
 
-    private fun processOperation(op: BatchOperation) {
+    private suspend fun processOperation(op: BatchOperation) {
         when (op.type) {
             ConversionType.PDF_TO_PPTX -> pptxConverter.convertPdfToPptx(op.inputFile, op.outputFile) { }
             ConversionType.PPTX_TO_PDF -> pptxConverter.convertPptxToPdf(op.inputFile, op.outputFile) { }

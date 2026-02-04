@@ -28,7 +28,7 @@ object PdfUtilityTools {
             stamper.setFullCompression()
             
             if (removeMetadata) {
-                val info = reader.info
+                val info = HashMap<String, String>(reader.info)
                 info.clear()
                 stamper.moreInfo = info
             }
@@ -58,7 +58,7 @@ object PdfUtilityTools {
                 val over = stamper.getOverContent(i)
                 over.saveState()
                 val gState = PdfGState()
-                gState.fillOpacity = opacity
+                gState.setFillOpacity(opacity)
                 over.setGState(gState)
                 
                 over.beginText()

@@ -1,6 +1,7 @@
 package com.plainlabs.qrpdftools.ui.scanner
 
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,6 +23,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import androidx.camera.core.Camera
 import com.plainlabs.qrpdftools.R
+import com.plainlabs.qrpdftools.util.ErrorHandler
+import com.plainlabs.qrpdftools.util.PermissionHelper
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DocumentScannerFragment : Fragment() {
 
@@ -140,7 +145,7 @@ class DocumentScannerFragment : Fragment() {
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name as String)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
                 put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")

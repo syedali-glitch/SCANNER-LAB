@@ -4,6 +4,7 @@ import android.content.Context
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
 import org.apache.poi.xwpf.usermodel.XWPFDocument
+import com.plainlabs.qrpdftools.util.NativePdfGenerator
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

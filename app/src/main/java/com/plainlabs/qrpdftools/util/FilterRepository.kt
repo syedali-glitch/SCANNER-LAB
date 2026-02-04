@@ -16,7 +16,7 @@ object FilterRepository {
      * Magic Color: Enhances contrast and saturation to make text pop.
      */
     suspend fun applyMagicColor(bitmap: Bitmap): Bitmap = withContext(Dispatchers.Default) {
-        val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         
@@ -47,7 +47,7 @@ object FilterRepository {
      * B&W: High-contrast black and white for document scanning.
      */
     suspend fun applyBlackAndWhite(bitmap: Bitmap): Bitmap = withContext(Dispatchers.Default) {
-        val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         
@@ -75,7 +75,7 @@ object FilterRepository {
      * Grayscale: Standard 8-bit gray look.
      */
     suspend fun applyGrayscale(bitmap: Bitmap): Bitmap = withContext(Dispatchers.Default) {
-        val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config ?: Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         val paint = Paint()
         
