@@ -69,11 +69,11 @@ class HomeFragment : Fragment() {
         }
 
         // ═══════════════════════════════════════════════════════════════════
-        // PDF TOOLS SECTION
+        // FILE VIEWER/EDITOR SECTION
         // ═══════════════════════════════════════════════════════════════════
         
-        binding.cardPdfTools.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_pdf_tools)
+        binding.cardFileViewer.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_file_viewer)
         }
 
         // ═══════════════════════════════════════════════════════════════════

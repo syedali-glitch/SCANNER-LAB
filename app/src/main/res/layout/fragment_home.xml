@@ -442,20 +442,20 @@
         </com.google.android.material.card.MaterialCardView>
 
         <!-- ═══════════════════════════════════════════════════════════════════ -->
-        <!-- SECTION 3: PDF TOOLS -->
+        <!-- SECTION 3: FILE VIEWER / EDITOR -->
         <!-- ═══════════════════════════════════════════════════════════════════ -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:text="📄  PDF Tools"
+            android:text="👁️  View &amp; Edit Files"
             android:textSize="18sp"
             android:textColor="@color/text_primary"
             android:textStyle="bold" />
 
-        <!-- PDF Tools Card -->
+        <!-- File Viewer/Editor Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardPdfTools"
+            android:id="@+id/cardFileViewer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -485,7 +485,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_edit"
+                        android:src="@android:drawable/ic_menu_agenda"
                         app:tint="@color/tertiary" />
 
                 </FrameLayout>
@@ -500,7 +500,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="PDF Utilities"
+                        android:text="File Viewer"
                         android:textSize="20sp"
                         android:textColor="@color/text_primary"
                         android:textStyle="bold" />
@@ -509,9 +509,61 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Merge • Split • Compress • Protect"
+                        android:text="View &amp; Edit • E-Sign • Annotate"
                         android:textSize="14sp"
                         android:textColor="@color/text_secondary" />
+
+                    <!-- Format Chips -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/chip_background_tertiary"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:text="PDF"
+                            android:textSize="12sp"
+                            android:textColor="@color/tertiary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/chip_background_tertiary"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:text="DOC"
+                            android:textSize="12sp"
+                            android:textColor="@color/tertiary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/chip_background_tertiary"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:text="XLS"
+                            android:textSize="12sp"
+                            android:textColor="@color/tertiary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/chip_background_tertiary"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:text="+"
+                            android:textSize="12sp"
+                            android:textColor="@color/tertiary" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

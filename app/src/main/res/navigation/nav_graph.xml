@@ -38,10 +38,10 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
             
-        <!-- PDF Tools Navigation -->
+        <!-- File Viewer Navigation -->
         <action
-            android:id="@+id/action_home_to_pdf_tools"
-            app:destination="@id/pdfToolsFragment"
+            android:id="@+id/action_home_to_file_viewer"
+            app:destination="@id/fileViewerFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -87,9 +87,9 @@
         android:label="File Converter" />
         
     <fragment
-        android:id="@+id/pdfToolsFragment"
-        android:name="com.plainlabs.qrpdftools.ui.pdftools.PdfToolsFragment"
-        android:label="PDF Tools" />
+        android:id="@+id/fileViewerFragment"
+        android:name="com.plainlabs.qrpdftools.ui.viewer.FileViewerFragment"
+        android:label="File Viewer" />
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!-- UTILITY FRAGMENTS -->
