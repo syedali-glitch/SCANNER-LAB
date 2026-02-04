@@ -13,8 +13,9 @@ import java.util.*
 import org.json.JSONObject
 
 object AutomaticErrorReporter {
-    
-    // Webhook URL for posting crash reports private const val WEBHOOK_URL = "https://webhook.site/unique-url-here" // TODO: Replace with actual webhook
+    // Webhook URL for posting crash reports
+    // TODO: Replace with actual webhook URL to receive crash reports
+    private const val WEBHOOK_URL = "https://webhook.site/unique-url-here"
     
     /**
      * Report crash automatically to remote server
