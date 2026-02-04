@@ -42,22 +42,22 @@ class HomeFragment : Fragment() {
         
         // Main Scanner Hub card (opens QR scanner by default)
         binding.cardScannerHub.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_qr_scanner)
+            safeNavigate(R.id.action_home_to_qr_scanner)
         }
         
         // Quick access: QR Code scanner
         binding.cardQrScanner.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_qr_scanner)
+            safeNavigate(R.id.action_home_to_qr_scanner)
         }
 
         // Quick access: Document scanner
         binding.cardDocScanner.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_doc_scanner)
+            safeNavigate(R.id.action_home_to_doc_scanner)
         }
         
         // Quick access: Barcode scanner (uses same QR scanner - ML Kit handles both)
         binding.cardBarcodeScanner.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_qr_scanner)
+            safeNavigate(R.id.action_home_to_qr_scanner)
         }
 
         // ═══════════════════════════════════════════════════════════════════
@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
         // ═══════════════════════════════════════════════════════════════════
         
         binding.cardFileConverter.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_file_converter)
+            safeNavigate(R.id.action_home_to_file_converter)
         }
 
         // ═══════════════════════════════════════════════════════════════════
@@ -73,7 +73,7 @@ class HomeFragment : Fragment() {
         // ═══════════════════════════════════════════════════════════════════
         
         binding.cardFileViewer.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_file_viewer)
+            safeNavigate(R.id.action_home_to_file_viewer)
         }
 
         // ═══════════════════════════════════════════════════════════════════
@@ -81,11 +81,31 @@ class HomeFragment : Fragment() {
         // ═══════════════════════════════════════════════════════════════════
         
         binding.cardHistory.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_history)
+            safeNavigate(R.id.action_home_to_history)
         }
 
         binding.cardSettings.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_settings)
+            safeNavigate(R.id.action_home_to_settings)
+        }
+    }
+
+    /**
+     * Safely navigates to a destination to prevent crashes if navigation is already in progress
+     * or if the destination is invalid from the current state (double-click prevention).
+     */
+    private fun safeNavigate(actionId: Int) {
+        val navController = findNavController()
+        val currentDestination = navController.currentDestination
+        
+        // Check if we are currently on the HomeFragment (source destination)
+        // This prevents double navigation if the user taps quickly
+        if (currentDestination?.id == R.id.homeFragment) {
+            try {
+                navController.navigate(actionId)
+            } catch (e: Exception) {
+                // Log the error but don't crash
+                android.util.Log.e("HomeFragment", "Navigation failed: ${e.message}")
+            }
         }
     }
 
