@@ -58,20 +58,6 @@
                 android:value="maximize" />
         </activity>
         
-        <!-- PDF Merge Activity -->
-        <activity
-            android:name=".ui.pdf.PdfMergeActivity"
-            android:screenOrientation="unspecified"
-            android:resizeableActivity="true"
-            android:parentActivityName=".ui.MainActivity" />
-        
-        <!-- PDF Split Activity -->
-        <activity
-            android:name=".ui.pdf.PdfSplitActivity"
-            android:screenOrientation="unspecified"
-            android:resizeableActivity="true"
-            android:parentActivityName=".ui.MainActivity" />
-        
         <!-- FileProvider for sharing PDFs -->
         <provider
             android:name="androidx.core.content.FileProvider"
