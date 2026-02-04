@@ -73,7 +73,6 @@ class HomeFragment : Fragment() {
         // ═══════════════════════════════════════════════════════════════════
         
         binding.cardFileViewer.setOnClickListener {
-        binding.cardFileViewer.setOnClickListener {
             safeNavigate(R.id.action_home_to_file_viewer)
         }
 

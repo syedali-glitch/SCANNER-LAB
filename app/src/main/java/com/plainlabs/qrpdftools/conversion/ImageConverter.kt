@@ -1,6 +1,10 @@
 package com.plainlabs.qrpdftools.conversion
 
-import android.view.View
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -85,10 +89,9 @@ class ImageConverter(private val context: Context) {
     }
     
     fun convertImageFormat(inputFile: File, outputFile: File, format: ImageFormat, quality: Int) {
-         // ... (Existing bitmap logic is fine)
-         val bitmap = BitmapFactory.decodeFile(inputFile.absolutePath)
-         FileOutputStream(outputFile).use { out ->
-             val compressFormat = when(format) {
+        val bitmap = BitmapFactory.decodeFile(inputFile.absolutePath)
+        FileOutputStream(outputFile).use { out ->
+            val compressFormat = when(format) {
                 ImageFormat.PNG -> Bitmap.CompressFormat.PNG
                 ImageFormat.JPG -> Bitmap.CompressFormat.JPEG
                 ImageFormat.WEBP -> {
@@ -101,26 +104,6 @@ class ImageConverter(private val context: Context) {
                 }
             }
             bitmap.compress(compressFormat, quality, out)
-         }
-    }
-}
-    
-    fun convertImageFormat(inputFile: File, outputFile: File, format: ImageFormat, quality: Int) {
-         val bitmap = BitmapFactory.decodeFile(inputFile.absolutePath)
-         FileOutputStream(outputFile).use { out ->
-             val compressFormat = when(format) {
-                ImageFormat.PNG -> Bitmap.CompressFormat.PNG
-                ImageFormat.JPG -> Bitmap.CompressFormat.JPEG
-                ImageFormat.WEBP -> {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-                        Bitmap.CompressFormat.WEBP_LOSSY
-                    } else {
-                        @Suppress("DEPRECATION")
-                        Bitmap.CompressFormat.WEBP
-                    }
-                }
-            }
-            bitmap.compress(compressFormat, quality, out)
-         }
+        }
     }
 }
