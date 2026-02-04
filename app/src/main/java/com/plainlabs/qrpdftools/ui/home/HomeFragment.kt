@@ -73,7 +73,16 @@ class HomeFragment : Fragment() {
         // ═══════════════════════════════════════════════════════════════════
         
         binding.cardFileViewer.setOnClickListener {
+        binding.cardFileViewer.setOnClickListener {
             safeNavigate(R.id.action_home_to_file_viewer)
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
+        // PDF TOOLS SECTION
+        // ═══════════════════════════════════════════════════════════════════
+        
+        binding.cardPdfTools.setOnClickListener {
+            safeNavigate(R.id.action_home_to_pdf_tools)
         }
 
         // ═══════════════════════════════════════════════════════════════════

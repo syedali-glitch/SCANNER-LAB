@@ -46,6 +46,15 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+        <!-- PDF Tools Navigation -->
+        <action
+            android:id="@+id/action_home_to_pdf_tools"
+            app:destination="@id/pdfToolsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
             
         <!-- Utility Navigation -->
         <action
@@ -103,5 +112,11 @@
         android:id="@+id/settingsFragment"
         android:name="com.plainlabs.qrpdftools.ui.settings.SettingsFragment"
         android:label="@string/settings" />
+
+    <fragment
+        android:id="@+id/pdfToolsFragment"
+        android:name="com.plainlabs.qrpdftools.ui.pdftools.PdfToolsFragment"
+        android:label="PDF Tools"
+        tools:layout="@layout/fragment_pdf_tools" />
 
 </navigation>
