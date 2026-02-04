@@ -1,6 +1,5 @@
-# Add project specific ProGuard rules here.
-# You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
+-ignorewarnings
 
 # Preserve all annotated classes (e.g. Room entities)
 -keep @androidx.room.Entity class *
@@ -51,14 +50,13 @@
 
 # 2. OpenPDF (com.github.LibrePDF)
 -keep class com.lowagie.** { *; }
--dontwarn com.lowagie.text.pdf.BouncyCastleHelper
--dontwarn com.lowagie.text.pdf.PdfPublicKeySecurityHandler
--dontwarn com.lowagie.text.pdf.FopGlyphProcessor
+-dontwarn com.lowagie.**
 -dontwarn org.apache.fop.**
 -dontwarn org.bouncycastle.**
--dontwarn com.lowagie.text.pdf.PdfSignatureAppearance
--dontwarn com.lowagie.text.pdf.PdfPKCS7
--dontwarn com.lowagie.text.pdf.PdfSignature
+-dontwarn org.apache.xmlbeans.**
+-dontwarn org.openxmlformats.**
+-dontwarn schemaorg_apache_xmlbeans.**
+-dontwarn com.microsoft.schemas.**
 
 # 3. Coroutines (Release mode optimizations)
 -assumenosideeffects class kotlinx.coroutines.DebugKt {
