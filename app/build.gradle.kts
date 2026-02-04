@@ -41,15 +41,33 @@ android {
             // Located at: ~/.android/debug.keystore
         }
         
-        // Release signing - using debug keystore for now
-        // TODO: Replace with production keystore before publishing to Play Store
+        // Release signing configuration
+        // Uses environment variables for CI/CD, falls back to debug for local builds
         create("release") {
-            // For now, use debug keystore so release builds can install
-            // Before production: Replace with your production keystore
-            storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
+            // Check for CI environment variables first (GitHub Actions, etc.)
+            val keystorePath = System.getenv("KEYSTORE_PATH")
+            val keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+            val keyAliasValue = System.getenv("KEY_ALIAS")
+            val keyPasswordValue = System.getenv("KEY_PASSWORD")
+            
+            if (keystorePath != null && File(keystorePath).exists()) {
+                // Production signing from environment (CI/CD)
+                storeFile = File(keystorePath)
+                storePassword = keystorePassword
+                keyAlias = keyAliasValue
+                keyPassword = keyPasswordValue
+            } else {
+                // Local development: use debug keystore if available
+                val debugKeystore = File(System.getProperty("user.home"), ".android/debug.keystore")
+                if (debugKeystore.exists()) {
+                    storeFile = debugKeystore
+                    storePassword = "android"
+                    keyAlias = "androiddebugkey"
+                    keyPassword = "android"
+                }
+                // If neither exists, signingConfig will be null and build won't sign
+                // This is intentional - CI should use debug build or provide keystore
+            }
             
             // Enable all signature versions for maximum compatibility
             enableV1Signing = true  // JAR signing (Android 7.0 and below)
@@ -58,6 +76,7 @@ android {
             enableV4Signing = true  // APK Signature Scheme v4 (Android 11.0+)
         }
     }
+
 
     buildTypes {
         // Debug uses default Android debug signing (works out of the box)
@@ -69,7 +88,16 @@ android {
         }
         
         release {
-            signingConfig = signingConfigs.getByName("release")
+            // Use release signing if configured, otherwise fall back to debug
+            // This ensures APKs are ALWAYS signed (never unsigned)
+            val releaseConfig = signingConfigs.getByName("release")
+            signingConfig = if (releaseConfig.storeFile?.exists() == true) {
+                releaseConfig
+            } else {
+                // Fallback to debug signing for CI/local builds without keystore
+                signingConfigs.getByName("debug")
+            }
+            
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -78,6 +106,7 @@ android {
             )
         }
     }
+
     
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
