@@ -84,4 +84,8 @@
     <color name="primary_blue_dark">#006060</color>
     <color name="text_dark">#212121</color>
     <color name="text_gray">#757575</color>
+
+    <!-- PlainLabs Premium Palette -->
+    <color name="plain_deep_charcoal">#121212</color>
+    <color name="plain_muted_cyan">#008B8B</color>
 </resources>
