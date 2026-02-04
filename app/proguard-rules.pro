@@ -49,6 +49,17 @@
 -dontwarn java.awt.**
 -dontwarn javax.xml.**
 
+# 2. OpenPDF (com.github.LibrePDF)
+-keep class com.lowagie.** { *; }
+-dontwarn com.lowagie.text.pdf.BouncyCastleHelper
+-dontwarn com.lowagie.text.pdf.PdfPublicKeySecurityHandler
+-dontwarn com.lowagie.text.pdf.FopGlyphProcessor
+-dontwarn org.apache.fop.**
+-dontwarn org.bouncycastle.**
+-dontwarn com.lowagie.text.pdf.PdfSignatureAppearance
+-dontwarn com.lowagie.text.pdf.PdfPKCS7
+-dontwarn com.lowagie.text.pdf.PdfSignature
+
 # 3. Coroutines (Release mode optimizations)
 -assumenosideeffects class kotlinx.coroutines.DebugKt {
     boolean getASSERTIONS_ENABLED() return false;
