@@ -193,12 +193,9 @@ dependencies {
     // FIREBASE - Automatic Crash Reporting
     // ═══════════════════════════════════════════════════════════════════════════
     
-    // Firebase BOM (Bill of Materials) for version management
-    implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
+    // Firebase Crashlytics - Automatic crash reporting (explicit version)
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.0")
     
-    // Firebase Crashlytics - Automatic crash reporting
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    
-    // Firebase Analytics - Required for Crashlytics
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    // Firebase Analytics - Required for Crashlytics (explicit version)
+    implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
 }
