@@ -119,13 +119,22 @@
             android:layout_height="match_parent"
             android:background="@color/surface_dark" />
 
-        <!-- Image viewer -->
         <ImageView
             android:id="@+id/imageViewFile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
             android:visibility="gone" />
+
+        <!-- Loading Indicator -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorColor="?attr/colorPrimary"/>
 
     </FrameLayout>
 

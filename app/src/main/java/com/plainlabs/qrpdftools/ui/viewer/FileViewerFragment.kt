@@ -12,7 +12,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.plainlabs.qrpdftools.databinding.FragmentFileViewerBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
@@ -140,77 +144,97 @@ class FileViewerFragment : Fragment() {
     }
 
     private fun loadFile(uri: Uri) {
-        try {
-            currentFileUri = uri
-            
-            // Get file info
-            requireContext().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
-                    val sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE)
-                    
-                    if (nameIndex >= 0) {
-                        currentFileName = cursor.getString(nameIndex) ?: "Unknown"
-                    }
-                    if (sizeIndex >= 0) {
-                        currentFileSize = cursor.getLong(sizeIndex)
+        lifecycleScope.launch {
+            try {
+                // Show loading state
+                binding.cardSelectFile.visibility = View.GONE
+                binding.filePreviewContainer.visibility = View.VISIBLE
+                binding.loadingIndicator.visibility = View.VISIBLE
+                binding.webViewFile.visibility = View.INVISIBLE
+                binding.imageViewFile.visibility = View.INVISIBLE
+                
+                currentFileUri = uri
+                
+                // Get file info (IO operation)
+                withContext(Dispatchers.IO) {
+                    requireContext().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                        if (cursor.moveToFirst()) {
+                            val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                            val sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE)
+                            
+                            if (nameIndex >= 0) {
+                                currentFileName = cursor.getString(nameIndex) ?: "Unknown"
+                            }
+                            if (sizeIndex >= 0) {
+                                currentFileSize = cursor.getLong(sizeIndex)
+                            }
+                        }
                     }
                 }
+                
+                // Update UI with file info
+                binding.textFileName.text = currentFileName
+                binding.textFileSize.text = formatFileSize(currentFileSize) + " • " + getFileTypeLabel(currentFileName)
+                
+                // Show file info card
+                binding.cardFileInfo.visibility = View.VISIBLE
+                binding.textSupportedFormats.visibility = View.GONE
+                
+                // Display file content
+                displayFile(uri, currentFileName)
+                
+            } catch (e: Exception) {
+                binding.loadingIndicator.visibility = View.GONE
+                binding.cardSelectFile.visibility = View.VISIBLE
+                binding.filePreviewContainer.visibility = View.GONE
+                Toast.makeText(context, "Error loading file: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-            
-            // Update UI
-            binding.textFileName.text = currentFileName
-            binding.textFileSize.text = formatFileSize(currentFileSize) + " • " + getFileTypeLabel(currentFileName)
-            
-            // Show file info card
-            binding.cardFileInfo.visibility = View.VISIBLE
-            binding.textSupportedFormats.visibility = View.GONE
-            
-            // Display the file based on type
-            displayFile(uri, currentFileName)
-            
-        } catch (e: Exception) {
-            Toast.makeText(context, "Error loading file: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun displayFile(uri: Uri, fileName: String) {
+    private suspend fun displayFile(uri: Uri, fileName: String) {
         val extension = fileName.substringAfterLast('.', "").lowercase()
+        
+        // Hide loader when content is ready
+        fun showContent(isImage: Boolean) {
+            binding.loadingIndicator.visibility = View.GONE
+            if (isImage) {
+                binding.imageViewFile.visibility = View.VISIBLE
+                binding.webViewFile.visibility = View.GONE
+            } else {
+                binding.webViewFile.visibility = View.VISIBLE
+                binding.imageViewFile.visibility = View.GONE
+            }
+        }
         
         when {
             // Images - display directly
             extension in listOf("jpg", "jpeg", "png", "gif", "webp", "bmp") -> {
-                binding.filePreviewContainer.visibility = View.VISIBLE
-                binding.webViewFile.visibility = View.GONE
-                binding.imageViewFile.visibility = View.VISIBLE
-                binding.imageViewFile.setImageURI(uri)
-                binding.cardSelectFile.visibility = View.GONE
+                binding.imageViewFile.setImageURI(uri) // This is fast for local URIs
+                showContent(true)
             }
             
-            // PDF - use Google Docs viewer or local viewer
+            // PDF - copy to cache and load
             extension == "pdf" -> {
-                binding.filePreviewContainer.visibility = View.VISIBLE
-                binding.webViewFile.visibility = View.VISIBLE
-                binding.imageViewFile.visibility = View.GONE
-                binding.cardSelectFile.visibility = View.GONE
+                val tempFile = withContext(Dispatchers.IO) {
+                    copyToCache(uri, fileName)
+                }
                 
-                // Copy to cache and load via file://
-                val tempFile = copyToCache(uri, fileName)
                 if (tempFile != null) {
                     binding.webViewFile.loadUrl("file://${tempFile.absolutePath}")
+                    showContent(false)
+                } else {
+                    throw Exception("Could not cache file")
                 }
             }
             
             // Text files - read and display
             extension in listOf("txt", "html", "xml", "json", "md") -> {
-                binding.filePreviewContainer.visibility = View.VISIBLE
-                binding.webViewFile.visibility = View.VISIBLE
-                binding.imageViewFile.visibility = View.GONE
-                binding.cardSelectFile.visibility = View.GONE
-                
-                val content = requireContext().contentResolver.openInputStream(uri)?.use { 
-                    it.bufferedReader().readText() 
-                } ?: ""
+                val content = withContext(Dispatchers.IO) {
+                    requireContext().contentResolver.openInputStream(uri)?.use { 
+                        it.bufferedReader().readText() 
+                    } ?: ""
+                }
                 
                 binding.webViewFile.loadDataWithBaseURL(
                     null,
@@ -219,14 +243,17 @@ class FileViewerFragment : Fragment() {
                     "UTF-8",
                     null
                 )
+                showContent(false)
             }
             
-            // Office documents - show info only (full rendering needs additional libraries)
+            // Office documents - show info only
             extension in listOf("doc", "docx", "xls", "xlsx", "ppt", "pptx") -> {
+                binding.loadingIndicator.visibility = View.GONE
                 Toast.makeText(context, "$fileName loaded. Use Share to open in external app.", Toast.LENGTH_LONG).show()
             }
             
             else -> {
+                binding.loadingIndicator.visibility = View.GONE
                 Toast.makeText(context, "File type not fully supported for preview", Toast.LENGTH_SHORT).show()
             }
         }
