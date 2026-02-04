@@ -91,14 +91,14 @@
                 <FrameLayout
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:background="@drawable/glass_card_background">
+                    android:background="@drawable/gradient_scanner">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_qr_code"
-                        app:tint="@color/primary" />
+                        app:tint="@color/white" />
 
                 </FrameLayout>
 
@@ -353,14 +353,14 @@
                 <FrameLayout
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:background="@drawable/glass_card_background">
+                    android:background="@drawable/gradient_converter">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:src="@android:drawable/ic_menu_upload"
-                        app:tint="@color/secondary" />
+                        app:tint="@color/white" />
 
                 </FrameLayout>
 
@@ -479,14 +479,14 @@
                 <FrameLayout
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:background="@drawable/glass_card_background">
+                    android:background="@drawable/gradient_viewer">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:src="@android:drawable/ic_menu_agenda"
-                        app:tint="@color/tertiary" />
+                        app:tint="@color/white" />
 
                 </FrameLayout>
 

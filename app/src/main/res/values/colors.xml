@@ -17,6 +17,22 @@
     <color name="tertiary_dark">#E64A19</color>
     
     <color name="gradient_middle">#44AADD</color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- VIBRANT GRADIENTS (For Attraction) -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    
+    <!-- Scanner Gradient (Deep Blue/Purple) -->
+    <color name="scanner_start">#4A00E0</color>
+    <color name="scanner_end">#8E2DE2</color>
+    
+    <!-- Converter Gradient (Emerald/Teal) -->
+    <color name="converter_start">#11998e</color>
+    <color name="converter_end">#38ef7d</color>
+    
+    <!-- Viewer Gradient (Sunset/Orange) -->
+    <color name="viewer_start">#ff9966</color>
+    <color name="viewer_end">#ff5e62</color>
     
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!-- GLASSMORPHISM THEME COLORS -->
