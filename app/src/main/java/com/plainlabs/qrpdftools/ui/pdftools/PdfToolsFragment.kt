@@ -125,12 +125,10 @@ class PdfToolsFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 Toast.makeText(context, "Merging...", Toast.LENGTH_SHORT).show()
-                val files = uris.mapNotNull { uri -> copyToCache(uri) }
+                val files = uris.mapNotNull { uri -> StorageUtils.copyToCache(requireContext(), uri) }
                 val outputFile = File(requireContext().filesDir, "merged_${System.currentTimeMillis()}.pdf")
                 
-                val success = withContext(Dispatchers.IO) {
-                    PdfProcessor(requireContext()).mergePdfs(files, outputFile)
-                }
+                val success = PdfProcessor(requireContext()).mergePdfs(files, outputFile)
 
                 if (success) {
                     onSuccess(outputFile)
@@ -162,12 +160,10 @@ class PdfToolsFragment : Fragment() {
     private fun performSplit(uri: Uri, start: Int, end: Int) {
         lifecycleScope.launch {
             try {
-                val file = withContext(Dispatchers.IO) { copyToCache(uri) } ?: return@launch
+                val file = StorageUtils.copyToCache(requireContext(), uri) ?: return@launch
                 val outputFile = File(requireContext().filesDir, "split_${System.currentTimeMillis()}.pdf")
                 
-                val success = withContext(Dispatchers.IO) {
-                    PdfProcessor(requireContext()).splitPdf(file, start, end, outputFile)
-                }
+                val success = PdfProcessor(requireContext()).splitPdf(file, start, end, outputFile)
                 
                 if (success) onSuccess(outputFile)
                 else Toast.makeText(context, "Split failed", Toast.LENGTH_SHORT).show()
@@ -181,12 +177,10 @@ class PdfToolsFragment : Fragment() {
          lifecycleScope.launch {
             try {
                 Toast.makeText(context, "Compressing...", Toast.LENGTH_SHORT).show()
-                val file = withContext(Dispatchers.IO) { copyToCache(uri) } ?: return@launch
+                val file = StorageUtils.copyToCache(requireContext(), uri) ?: return@launch
                 val outputFile = File(requireContext().filesDir, "compressed_${System.currentTimeMillis()}.pdf")
                 
-                val ratio = withContext(Dispatchers.IO) {
-                    PdfUtilityTools.compressPdf(file, outputFile, 0.5f)
-                }
+                val ratio = PdfUtilityTools.compressPdf(file, outputFile, 0.5f)
                 
                 Toast.makeText(context, "Compressed by ${(ratio * 100).toInt()}%", Toast.LENGTH_LONG).show()
                 onSuccess(outputFile)
@@ -212,12 +206,10 @@ class PdfToolsFragment : Fragment() {
     private fun performWatermark(uri: Uri, text: String) {
         lifecycleScope.launch {
             try {
-                val file = withContext(Dispatchers.IO) { copyToCache(uri) } ?: return@launch
+                val file = StorageUtils.copyToCache(requireContext(), uri) ?: return@launch
                 val outputFile = File(requireContext().filesDir, "watermarked_${System.currentTimeMillis()}.pdf")
                 
-                withContext(Dispatchers.IO) {
-                    PdfUtilityTools.watermarkPdf(file, outputFile, text)
-                }
+                PdfUtilityTools.watermarkPdf(file, outputFile, text)
                 onSuccess(outputFile)
             } catch (e: Exception) {
                  Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -241,12 +233,10 @@ class PdfToolsFragment : Fragment() {
     private fun performProtect(uri: Uri, pass: String) {
         lifecycleScope.launch {
              try {
-                val file = withContext(Dispatchers.IO) { copyToCache(uri) } ?: return@launch
+                val file = StorageUtils.copyToCache(requireContext(), uri) ?: return@launch
                 val outputFile = File(requireContext().filesDir, "protected_${System.currentTimeMillis()}.pdf")
                 
-                withContext(Dispatchers.IO) {
-                    PdfUtilityTools.protectPdf(file, outputFile, pass, pass)
-                }
+                PdfUtilityTools.protectPdf(file, outputFile, pass, pass)
                 onSuccess(outputFile)
             } catch (e: Exception) {
                  Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -255,28 +245,39 @@ class PdfToolsFragment : Fragment() {
     }
 
     private fun performRotate(uri: Uri) {
-         Toast.makeText(context, "Rotation not implemented in MVP", Toast.LENGTH_SHORT).show()
+        val options = arrayOf("90° Clockwise", "180°", "270° Counter-clockwise")
+        val degrees = intArrayOf(90, 180, 270)
+        
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Rotate PDF")
+            .setItems(options) { _, which ->
+                val rotation = degrees[which]
+                executeRotation(uri, rotation)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun executeRotation(uri: Uri, degrees: Int) {
+        lifecycleScope.launch {
+            try {
+                Toast.makeText(context, "Rotating...", Toast.LENGTH_SHORT).show()
+                val file = StorageUtils.copyToCache(requireContext(), uri) ?: return@launch
+                val outputFile = File(requireContext().filesDir, "rotated_${System.currentTimeMillis()}.pdf")
+                
+                val success = PdfProcessor(requireContext()).rotatePdf(file, outputFile, degrees)
+                
+                if (success) onSuccess(outputFile)
+                else Toast.makeText(context, "Rotation failed", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     // ------------------------------------------------------------------------
     // UTILS
     // ------------------------------------------------------------------------
-
-    private fun copyToCache(uri: Uri): File? {
-        return try {
-            val fileName = "temp_${System.currentTimeMillis()}.pdf"
-            val tempFile = File(requireContext().cacheDir, fileName)
-            requireContext().contentResolver.openInputStream(uri)?.use { input ->
-                FileOutputStream(tempFile).use { output ->
-                    input.copyTo(output)
-                }
-            }
-            tempFile
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
 
     private fun onSuccess(file: File) {
         // Open file share/view intent

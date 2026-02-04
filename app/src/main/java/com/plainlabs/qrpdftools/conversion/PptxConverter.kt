@@ -4,9 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfReader
-import com.itextpdf.kernel.utils.PdfMerger
+import com.lowagie.text.Document
+import com.lowagie.text.pdf.*
 import com.plainlabs.qrpdftools.util.PdfUtilityTools
 import org.apache.poi.xslf.usermodel.XMLSlideShow
 import org.apache.poi.xslf.usermodel.XSLFSlide
@@ -75,16 +74,18 @@ class PptxConverter(private val context: Context) {
         try {
              FileInputStream(pptxFile).use { fis ->
                 val ppt = XMLSlideShow(fis)
-                val pdfWriter = com.itextpdf.kernel.pdf.PdfWriter(outputPdf)
-                val pdfDoc = PdfDocument(pdfWriter)
-                val document = com.itextpdf.layout.Document(pdfDoc)
+                val document = com.lowagie.text.Document()
+                com.lowagie.text.pdf.PdfWriter.getInstance(document, FileOutputStream(outputPdf))
+                document.open()
                 
                 val slides = ppt.slides
                 for ((index, slide) in slides.withIndex()) {
                     // Title
                     val title = slide.title
                     if (title != null) {
-                        document.add(com.itextpdf.layout.element.Paragraph(title).setFontSize(18f).setBold())
+                        val p = com.lowagie.text.Paragraph(title)
+                        p.alignment = com.lowagie.text.Element.ALIGN_CENTER
+                        document.add(p)
                     }
                     
                     // Content
@@ -92,13 +93,13 @@ class PptxConverter(private val context: Context) {
                         if (shape is org.apache.poi.xslf.usermodel.XSLFTextShape) {
                             val text = shape.text
                             if (text.isNotEmpty()) {
-                                document.add(com.itextpdf.layout.element.Paragraph(text))
+                                document.add(com.lowagie.text.Paragraph(text))
                             }
                         }
                     }
                     
                     if (index < slides.size - 1) {
-                         document.add(com.itextpdf.layout.element.AreaBreak())
+                         document.newPage()
                     }
                     callback((index + 1).toFloat() / slides.size)
                 }

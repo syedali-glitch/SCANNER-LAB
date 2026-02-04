@@ -164,15 +164,29 @@
                     android:id="@+id/rbDocx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DOCX"
+                    android:text="Word (Text)"
                     android:layout_marginEnd="16dp"/>
 
                 <RadioButton
                     android:id="@+id/rbExcel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Excel"/>
+                    android:text="Excel (Table)"/>
             </RadioGroup>
+
+            <!-- Technical Disclaimer for Architect Pivot -->
+            <TextView
+                android:id="@+id/tvDisclaimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Note: Word export extracts raw text paragraphs only. Complex layouts and images are not preserved."
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                android:textColor="?attr/colorError"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:alpha="0.8"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
             <!-- Action Buttons -->
             <LinearLayout

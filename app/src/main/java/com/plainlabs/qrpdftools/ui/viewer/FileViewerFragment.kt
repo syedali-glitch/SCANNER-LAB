@@ -216,9 +216,7 @@ class FileViewerFragment : Fragment() {
             
             // PDF - copy to cache and load
             extension == "pdf" -> {
-                val tempFile = withContext(Dispatchers.IO) {
-                    copyToCache(uri, fileName)
-                }
+                val tempFile = StorageUtils.copyToCache(requireContext(), uri, fileName)
                 
                 if (tempFile != null) {
                     binding.webViewFile.loadUrl("file://${tempFile.absolutePath}")
@@ -256,22 +254,6 @@ class FileViewerFragment : Fragment() {
                 binding.loadingIndicator.visibility = View.GONE
                 Toast.makeText(context, "File type not fully supported for preview", Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun copyToCache(uri: Uri, fileName: String): File? {
-        return try {
-            val cacheDir = requireContext().cacheDir
-            val tempFile = File(cacheDir, fileName)
-            
-            requireContext().contentResolver.openInputStream(uri)?.use { input ->
-                FileOutputStream(tempFile).use { output ->
-                    input.copyTo(output)
-                }
-            }
-            tempFile
-        } catch (e: Exception) {
-            null
         }
     }
 

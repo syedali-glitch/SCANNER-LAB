@@ -176,17 +176,13 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     
-    // PDF Library - Using iTextG (open source fork)
-    implementation("com.itextpdf:itext7-core:7.2.5")
+    // PDF Library - Using OpenPDF (Proprietary-friendly replacement for iText)
+    implementation("com.github.LibrePDF:OpenPDF:1.3.30")
     
-    // PowerPoint Support
     // PowerPoint Support
     implementation("org.apache.poi:poi-ooxml:5.2.5") {
         exclude(group = "org.apache.logging.log4j")
     }
-    
-    // HTML Conversion
-    implementation("com.itextpdf:html2pdf:4.0.5")
     
     // Image processing for PDF scanner
     implementation("com.github.bumptech.glide:glide:4.16.0")

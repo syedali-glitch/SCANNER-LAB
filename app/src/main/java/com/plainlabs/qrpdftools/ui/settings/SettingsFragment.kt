@@ -144,6 +144,14 @@ class SettingsFragment : Fragment() {
         } catch (e: Exception) {
             binding.textVersion.text = "1.0.0"
         }
+        
+        // Navigate to About (Legal Shield)
+        binding.textVersion.parent.let { parent ->
+            (parent as? View)?.setOnClickListener {
+                androidx.navigation.fragment.findNavController()
+                    .navigate(com.plainlabs.qrpdftools.R.id.action_settings_to_about)
+            }
+        }
     }
 
     override fun onDestroyView() {

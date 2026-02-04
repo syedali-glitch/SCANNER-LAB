@@ -9,7 +9,7 @@ import com.plainlabs.qrpdftools.data.local.entity.ScanEntity
 
 @Database(
     entities = [ScanEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

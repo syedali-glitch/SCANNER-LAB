@@ -85,7 +85,20 @@
     <fragment
         android:id="@+id/documentScannerFragment"
         android:name="com.plainlabs.qrpdftools.ui.scanner.DocumentScannerFragment"
-        android:label="Document Scanner" />
+        android:label="Document Scanner">
+        <action
+            android:id="@+id/action_doc_scanner_to_editor"
+            app:destination="@id/imageEditorFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/imageEditorFragment"
+        android:name="com.plainlabs.qrpdftools.ui.scanner.ImageEditorFragment"
+        android:label="Edit Scan" />
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!-- CONVERTER & PDF TOOLS -->
@@ -111,7 +124,20 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.plainlabs.qrpdftools.ui.settings.SettingsFragment"
-        android:label="@string/settings" />
+        android:label="@string/settings">
+        <action
+            android:id="@+id/action_settings_to_about"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.plainlabs.qrpdftools.ui.settings.AboutFragment"
+        android:label="About" />
 
     <fragment
         android:id="@+id/pdfToolsFragment"

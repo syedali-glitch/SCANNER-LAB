@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Colors -->
-    <color name="primary_blue">#1E90FF</color>
-    <color name="primary_blue_dark">#1873CC</color>
+    <!-- PlainLabs Proprietary Palette -->
+    <color name="primary_cyan">#008B8B</color>
+    <color name="primary_cyan_dark">#006060</color>
+    <color name="primary_cyan_light">#00B3B3</color>
     
     <!-- Mapped Colors -->
-    <color name="primary">@color/primary_blue</color>
-    <color name="primary_dark">@color/primary_blue_dark</color>
-    <color name="primary_light">#64B5F6</color>
+    <color name="primary">@color/primary_cyan</color>
+    <color name="primary_dark">@color/primary_cyan_dark</color>
+    <color name="primary_light">@color/primary_cyan_light</color>
     
-    <color name="secondary">#03DAC5</color>
-    <color name="secondary_dark">#00B8A9</color>
-    <color name="secondary_light">#64FFDA</color>
+    <color name="secondary">#00CED1</color>
+    <color name="secondary_dark">#008B8B</color>
+    <color name="secondary_light">#40E0D0</color>
     
-    <color name="tertiary">#FF7043</color>
-    <color name="tertiary_dark">#E64A19</color>
+    <color name="tertiary">#4F4F4F</color>
+    <color name="tertiary_dark">#2F2F2F</color>
     
-    <color name="gradient_middle">#44AADD</color>
+    <color name="gradient_middle">#007A7A</color>
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- VIBRANT GRADIENTS (For Attraction) -->
+    <!-- MUTED PREMIUM GRADIENTS (Architect Rule) -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     
-    <!-- Scanner Gradient (Deep Blue/Purple) -->
-    <color name="scanner_start">#4A00E0</color>
-    <color name="scanner_end">#8E2DE2</color>
+    <!-- Scanner Gradient (Deep Cyan/Charcoal) -->
+    <color name="scanner_start">#008B8B</color>
+    <color name="scanner_end">#121212</color>
     
-    <!-- Converter Gradient (Emerald/Teal) -->
-    <color name="converter_start">#11998e</color>
-    <color name="converter_end">#38ef7d</color>
+    <!-- Converter Gradient (Steel/Cyan) -->
+    <color name="converter_start">#334E4E</color>
+    <color name="converter_end">#008B8B</color>
     
-    <!-- Viewer Gradient (Sunset/Orange) -->
-    <color name="viewer_start">#ff9966</color>
-    <color name="viewer_end">#ff5e62</color>
+    <!-- Viewer Gradient (Charcoal/Glass) -->
+    <color name="viewer_start">#121212</color>
+    <color name="viewer_end">#15FFFFFF</color>
     
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- GLASSMORPHISM THEME COLORS -->
+    <!-- GLASSMORPHISM THEME COLORS (PlainLabs Signature) -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     
     <!-- Dark Surface Background -->
     <color name="surface_dark">#121212</color>
-    <color name="surface_dark_elevated">#1E1E1E</color>
+    <color name="surface_dark_elevated">#181818</color>
     
     <!-- Glass Effect Colors -->
-    <color name="glass_background">#1AFFFFFF</color>
-    <color name="glass_border">#33FFFFFF</color>
-    <color name="glass_light">#40FFFFFF</color>
-    <color name="glass_border_light">#80FFFFFF</color>
+    <color name="glass_background">#15FFFFFF</color>
+    <color name="glass_border">#25FFFFFF</color>
+    <color name="glass_light">#30FFFFFF</color>
+    <color name="glass_border_light">#50FFFFFF</color>
+    <color name="glass_fallback">#D9121212</color>
     
     <!-- Text Colors -->
     <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="text_secondary">#99FFFFFF</color>
     <color name="text_tertiary">#66FFFFFF</color>
-    <color name="text_dark">#333333</color>
-    <color name="text_gray">#666666</color>
     <color name="text_light_gray">#999999</color>
     
     <!-- Ripple Colors -->
-    <color name="primary_ripple">#331E90FF</color>
-    <color name="secondary_ripple">#3303DAC5</color>
+    <color name="primary_ripple">#33008B8B</color>
+    <color name="secondary_ripple">#3300CED1</color>
     
     <!-- Background Colors -->
     <color name="white">#FFFFFF</color>

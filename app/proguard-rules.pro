@@ -49,11 +49,6 @@
 -dontwarn java.awt.**
 -dontwarn javax.xml.**
 
-# 2. iText: Aggressive stripping
--keep class com.itextpdf.kernel.** { *; }
--keep class com.itextpdf.layout.** { *; }
--dontwarn com.itextpdf.**
-
 # 3. Coroutines (Release mode optimizations)
 -assumenosideeffects class kotlinx.coroutines.DebugKt {
     boolean getASSERTIONS_ENABLED() return false;

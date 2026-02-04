@@ -1,20 +1,23 @@
 package com.plainlabs.qrpdftools.conversion
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.layout.Document
-import com.itextpdf.layout.element.Table
-import com.plainlabs.qrpdftools.conversion.OcrEngine.OcrResult
+import com.lowagie.text.Document
+import com.lowagie.text.pdf.PdfPTable
+import com.lowagie.text.pdf.PdfWriter
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
+/**
+ * ExcelConverter - Refactored to use OpenPDF.
+ */
 object ExcelConverter {
 
-    fun ocrToExcel(ocrResult: OcrResult, outputPath: String): Boolean {
-        // Convert OCR text to Excel
-        // Assuming simple table-like structure or just lines
+    /**
+     * Converts OCR results to an Excel spreadsheet using Apache POI.
+     */
+    fun ocrToExcel(ocrResult: com.plainlabs.qrpdftools.conversion.OcrEngine.OcrResult, outputPath: String): Boolean {
+        // ... (Existing POI logic is fine)
         return try {
             val workbook = XSSFWorkbook()
             val sheet = workbook.createSheet("OCR Result")
@@ -24,8 +27,6 @@ object ExcelConverter {
             for (line in lines) {
                 if (line.isNotBlank()) {
                     val row = sheet.createRow(rowNum++)
-                    // Try to split by whitespace or comma?
-                    // For now, put whole line in one cell or split by space
                     val cells = line.trim().split("\\s+".toRegex())
                     for ((colNum, cellValue) in cells.withIndex()) {
                         row.createCell(colNum).setCellValue(cellValue)
@@ -44,28 +45,35 @@ object ExcelConverter {
         }
     }
 
+    /**
+     * Converts an Excel file to PDF using OpenPDF PdfPTable.
+     */
     fun excelToPdf(inputPath: String, outputPath: String): Boolean {
         return try {
             FileInputStream(inputPath).use { fis ->
                 val workbook = XSSFWorkbook(fis)
                 val sheet = workbook.getSheetAt(0)
                 
-                val pdfWriter = PdfWriter(outputPath)
-                val pdfDoc = PdfDocument(pdfWriter)
-                val doc = Document(pdfDoc)
+                val document = Document()
+                PdfWriter.getInstance(document, FileOutputStream(outputPath))
+                document.open()
                 
-                // Estimate columns
-                val numCols = sheet.getRow(0)?.lastCellNum ?: 1
-                val table = Table(numCols.toInt().coerceAtLeast(1))
+                // Estimate columns from the first row or sheet max
+                val firstRow = sheet.getRow(0)
+                val numCols = firstRow?.lastCellNum?.toInt()?.coerceAtLeast(1) ?: 1
+                val table = PdfPTable(numCols)
+                table.widthPercentage = 100f
                 
                 for (row in sheet) {
-                     for (cell in row) {
-                         table.addCell(cell.toString())
+                     for (i in 0 until numCols) {
+                         val cell = row.getCell(i)
+                         table.addCell(cell?.toString() ?: "")
                      }
                 }
                 
-                doc.add(table)
-                doc.close()
+                document.add(table)
+                document.close()
+                workbook.close()
              }
              true
         } catch (e: Exception) {

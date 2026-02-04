@@ -16,13 +16,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.common.util.concurrent.ListenableFuture
 import com.plainlabs.qrpdftools.databinding.FragmentDocumentScannerBinding
-import com.plainlabs.qrpdftools.util.ErrorHandler
-import com.plainlabs.qrpdftools.util.PermissionHelper
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.navigation.fragment.findNavController
+import androidx.camera.core.Camera
+import com.plainlabs.qrpdftools.R
 
 class DocumentScannerFragment : Fragment() {
 
@@ -32,6 +31,17 @@ class DocumentScannerFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
     private var cameraProvider: ProcessCameraProvider? = null
+    private var camera: Camera? = null
+    private var isFlashOn = false
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            val bundle = Bundle().apply {
+                putString("imageUri", it.toString())
+            }
+            findNavController().navigate(R.id.action_doc_scanner_to_editor, bundle)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,13 +82,11 @@ class DocumentScannerFragment : Fragment() {
         }
 
         binding.btnGallery.setOnClickListener {
-            // TODO: Implement gallery selection
-            Toast.makeText(context, "Gallery selection reserved for next update", Toast.LENGTH_SHORT).show()
+            galleryLauncher.launch("image/*")
         }
 
         binding.btnFlash.setOnClickListener {
-            // Simple flash toggle placeholder
-            Toast.makeText(context, "Flash toggled", Toast.LENGTH_SHORT).show()
+            toggleFlash()
         }
         
         binding.scanModeGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -110,7 +118,7 @@ class DocumentScannerFragment : Fragment() {
                 cameraProvider?.unbindAll()
 
                 // Bind use cases to camera
-                cameraProvider?.bindToLifecycle(
+                camera = cameraProvider?.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
 
@@ -159,19 +167,33 @@ class DocumentScannerFragment : Fragment() {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
+                    val uri = output.savedUri ?: return
+                    
                     // Premium Feedback
                     binding.root.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM)
                     android.media.MediaActionSound().play(android.media.MediaActionSound.SHUTTER_CLICK)
                     
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
                     binding.progressLoading.visibility = View.GONE
                     
-                    // Here we would trigger the OCR / Crop flow
+                    // Navigate to Premium Editor
+                    val bundle = Bundle().apply {
+                        putString("imageUri", uri.toString())
+                    }
+                    findNavController().navigate(com.plainlabs.qrpdftools.R.id.action_doc_scanner_to_editor, bundle)
                 }
             }
         )
+    }
+
+    private fun toggleFlash() {
+        camera?.let {
+            isFlashOn = !isFlashOn
+            it.cameraControl.enableTorch(isFlashOn)
+            // Feedback
+            val icon = if (isFlashOn) android.R.drawable.ic_menu_view else android.R.drawable.ic_menu_camera
+            binding.btnFlash.setIconResource(icon)
+            Toast.makeText(context, if (isFlashOn) "Flash ON" else "Flash OFF", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

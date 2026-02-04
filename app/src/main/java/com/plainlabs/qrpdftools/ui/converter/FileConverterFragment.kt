@@ -58,11 +58,17 @@ class FileConverterFragment : Fragment() {
                 binding.rbExcel.id -> OutputFormat.EXCEL
                 else -> OutputFormat.PDF
             }
+            updateDisclaimerVisibility()
         }
 
         binding.btnConvert.setOnClickListener {
             convertFile()
         }
+    }
+
+    private fun updateDisclaimerVisibility() {
+        val isPdfToWord = selectedFormat == OutputFormat.DOCX && selectedFileUri?.let { getFileName(it).endsWith(".pdf", true) } == true
+        binding.tvDisclaimer.visibility = if (isPdfToWord) View.VISIBLE else View.GONE
     }
 
     private fun pickFile() {
@@ -170,7 +176,7 @@ class FileConverterFragment : Fragment() {
             when {
                 // PDF conversions with optimized I/O
                 inputFormat == InputFormat.PDF && outputFormat == OutputFormat.DOCX -> {
-                    PdfConverter.pdfToDocx(inputFile.absolutePath, outputFile.absolutePath, requireContext())
+                    PdfConverter.extractPdfTextToWord(inputFile.absolutePath, outputFile.absolutePath, requireContext())
                 }
                 inputFormat == InputFormat.PDF && outputFormat == OutputFormat.PDF -> {
                     // Use zero-copy for same format

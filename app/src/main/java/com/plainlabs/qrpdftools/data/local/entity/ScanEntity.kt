@@ -13,7 +13,12 @@ data class ScanEntity(
     val format: String, // QR_CODE, CODE_128, EAN_13, etc.
     val timestamp: Long = System.currentTimeMillis(),
     val isFavorite: Boolean = false,
-    val rawValue: String = content
+    val rawValue: String = content,
+    
+    // Phase 2: High-End Architecture Fields
+    val fileName: String? = null,
+    val creationDate: Long = timestamp,
+    val tag: String? = "Personal" // Default tag
 )
 
 enum class ScanType {

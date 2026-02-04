@@ -1,46 +1,47 @@
 package com.plainlabs.qrpdftools.conversion
 
 import android.content.Context
-import com.itextpdf.html2pdf.HtmlConverter as ITextHtmlConverter
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.layout.Document
-import com.itextpdf.layout.element.Paragraph
+import android.os.Handler
+import android.os.Looper
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 
+/**
+ * HtmlConverter - Refactored to Proprietary PlainLabs engine.
+ * 
+ * Uses Native Android WebView printing to generate PDFs from HTML.
+ * Mandatory Architect Rule: WebView must be instantiated on the Main Thread.
+ */
 class HtmlConverter(private val context: Context) {
 
+    /**
+     * PDF to HTML - Text extraction wrapper.
+     */
     fun convertPdfToHtml(pdfFile: File, outputHtml: File, callback: (Float) -> Unit) {
-        // PDF to HTML is complex with iText (usually it's HTML -> PDF).
-        // iText 7 pdfHTML is for HTML->PDF.
-        // For PDF->HTML, we might need to extract text and structure it, or use a specific tool.
-        // The walkthrough says "PDF -> HTML (responsive web pages)".
-        // A simple approach is extracting text and wrapping in HTML, or converting images to HTML.
-        // Given the constraints and libraries, we'll extract text and format it simply, 
-        // or just acknowledge that true PDF->HTML (preserving layout) is hard without specific libraries like PDF2HTMLEX (not java/android native usually).
-        // WE will use a text-based extraction wrapped in a template for this implementation.
-        
         try {
-             val textConverter = TextConverter(context)
-             val tempTextFile = File(context.cacheDir, "temp_text.txt")
-             
-             textConverter.convertPdfToText(pdfFile, tempTextFile, false) { progress ->
-                 callback(progress * 0.8f)
+             val reader = com.lowagie.text.pdf.PdfReader(pdfFile.absolutePath)
+             val extractor = com.lowagie.text.pdf.parser.PdfTextExtractor(reader)
+             val sb = StringBuilder()
+             for (i in 1..reader.numberOfPages) {
+                 sb.append(extractor.getTextFromPage(i)).append("\n\n")
              }
+             reader.close()
              
-             val text = tempTextFile.readText()
-             // Create Premium HTML Template
+             val text = sb.toString()
+             // Create Premium HTML Template (Same as before)
              val htmlContent = """
                  <!DOCTYPE html>
                  <html>
                  <head>
                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
                      <style>
-                         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; padding: 20px; background-color: #f5f5f5; color: #333; }
-                         .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                         body { font-family: sans-serif; line-height: 1.6; padding: 20px; background-color: #121212; color: #FFFFFF; }
+                         .container { max-width: 800px; margin: 0 auto; background: #181818; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.5); }
                          p { margin-bottom: 1em; }
                      </style>
                  </head>
@@ -60,12 +61,54 @@ class HtmlConverter(private val context: Context) {
         }
     }
 
+    /**
+     * HTML to PDF - Native WebView Print Implementation.
+     * Architect Rule: UI Thread for instantiation.
+     */
     fun convertHtmlToPdf(htmlFile: File, outputPdf: File, callback: (Float) -> Unit) {
-        try {
-            ITextHtmlConverter.convertToPdf(htmlFile, outputPdf)
-            callback(1.0f)
-        } catch (e: Exception) {
-             throw IOException("HTML to PDF failed: ${e.message}")
+        Handler(Looper.getMainLooper()).post {
+            try {
+                val webView = WebView(context)
+                webView.webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        val printAttributes = PrintAttributes.Builder()
+                            .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                            .setResolution(PrintAttributes.Resolution("pdf", "pdf", 300, 300))
+                            .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+                            .build()
+
+                        val adapter = webView.createPrintDocumentAdapter("PlainLabs_Scan")
+                        
+                        // Headless Print Execution
+                        val descriptor = android.os.ParcelFileDescriptor.open(outputPdf, android.os.ParcelFileDescriptor.MODE_READ_WRITE or android.os.ParcelFileDescriptor.MODE_CREATE or android.os.ParcelFileDescriptor.MODE_TRUNCATE)
+                        
+                        adapter.onLayout(null, printAttributes, null, object : PrintDocumentAdapter.LayoutResultCallback() {
+                            override fun onLayoutFinished(info: android.print.PrintDocumentInfo?, changed: Boolean) {
+                                adapter.onWrite(arrayOf(android.print.PageRange.ALL_PAGES), descriptor, null, object : PrintDocumentAdapter.WriteResultCallback() {
+                                    override fun onWriteFinished(pages: Array<out android.print.PageRange>?) {
+                                        try {
+                                            descriptor.close()
+                                            webView.destroy()
+                                            callback(1.0f)
+                                        } catch (e: Exception) {
+                                            e.printStackTrace()
+                                        }
+                                    }
+
+                                    override fun onWriteFailed(error: CharSequence?) {
+                                        try { descriptor.close() } catch (e: Exception) {}
+                                        webView.destroy()
+                                    }
+                                })
+                            }
+                        }, null)
+                    }
+                }
+                webView.loadUrl("file://${htmlFile.absolutePath}")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                callback(0f)
+            }
         }
     }
 
@@ -78,8 +121,8 @@ class HtmlConverter(private val context: Context) {
                  <head>
                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
                      <style>
-                         body { font-family: sans-serif; padding: 20px; background: #fafafa; }
-                         .content { background: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+                         body { font-family: sans-serif; padding: 20px; background: #121212; color: #FFFFFF; }
+                         .content { background: #181818; padding: 20px; border-radius: 5px; }
                      </style>
                  </head>
                  <body>

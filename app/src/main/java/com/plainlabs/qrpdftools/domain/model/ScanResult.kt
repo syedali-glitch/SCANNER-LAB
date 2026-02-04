@@ -12,7 +12,10 @@ data class ScanResult(
     val format: String,
     val timestamp: Long,
     val isFavorite: Boolean,
-    val rawValue: String
+    val rawValue: String,
+    val fileName: String? = null,
+    val creationDate: Long = timestamp,
+    val tag: String? = "Personal"
 ) {
     val formattedTimestamp: String
         get() {
@@ -43,7 +46,10 @@ data class ScanResult(
                 format = entity.format,
                 timestamp = entity.timestamp,
                 isFavorite = entity.isFavorite,
-                rawValue = entity.rawValue
+                rawValue = entity.rawValue,
+                fileName = entity.fileName,
+                creationDate = entity.creationDate,
+                tag = entity.tag
             )
         }
     }
@@ -56,7 +62,10 @@ data class ScanResult(
             format = format,
             timestamp = timestamp,
             isFavorite = isFavorite,
-            rawValue = rawValue
+            rawValue = rawValue,
+            fileName = fileName,
+            creationDate = creationDate,
+            tag = tag
         )
     }
 }

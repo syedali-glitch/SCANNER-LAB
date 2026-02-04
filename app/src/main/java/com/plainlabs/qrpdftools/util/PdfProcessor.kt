@@ -2,102 +2,121 @@ package com.plainlabs.qrpdftools.util
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
-import com.itextpdf.io.image.ImageDataFactory
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfReader
-import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.layout.Document
-import com.itextpdf.layout.element.Image
-import java.io.ByteArrayOutputStream
+import com.lowagie.text.Document
+import com.lowagie.text.pdf.PdfCopy
+import com.lowagie.text.pdf.PdfReader
+import com.lowagie.text.pdf.PdfStamper
+import com.lowagie.text.pdf.PdfName
+import com.lowagie.text.pdf.PdfNumber
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
+/**
+ * PdfProcessor - Refactored to use OpenPDF and Native Android PDF APIs.
+ * Eliminates AGPL iText dependency.
+ */
 class PdfProcessor(private val context: Context) {
     
-    fun createPdfFromImages(images: List<Bitmap>, outputFile: File): Boolean {
-        return try {
-            val pdfWriter = PdfWriter(FileOutputStream(outputFile))
-            val pdfDocument = PdfDocument(pdfWriter)
-            val document = Document(pdfDocument)
+    /**
+     * Creates PDF from images using the proprietary NativePdfGenerator.
+     * Uses Architect-mandated memory safeguards.
+     */
+    suspend fun createPdfFromImages(imageFiles: List<File>, outputFile: File): Boolean = withContext(Dispatchers.IO) {
+        NativePdfGenerator.generatePdfFromImages(imageFiles, outputFile).isSuccess
+    }
+    
+    /**
+     * Merges multiple PDF files using OpenPDF PdfCopy.
+     * Mandate: Offloaded to Dispatchers.IO.
+     */
+    suspend fun mergePdfs(pdfFiles: List<File>, outputFile: File): Boolean = withContext(Dispatchers.IO) {
+        var document: Document? = null
+        try {
+            document = Document()
+            val copy = PdfCopy(document, FileOutputStream(outputFile))
+            document.open()
             
-            images.forEach { bitmap ->
-                val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-                val imageData = ImageDataFactory.create(stream.toByteArray())
-                val image = Image(imageData)
-                
-                // Fit to page
-                val pageSize = pdfDocument.defaultPageSize
-                image.scaleToFit(pageSize.width - 40, pageSize.height - 40)
-                image.setHorizontalAlignment(com.itextpdf.layout.properties.HorizontalAlignment.CENTER)
-                
-                document.add(image)
-                
-                // Add new page if not the last image
-                if (bitmap != images.last()) {
-                    document.add(com.itextpdf.layout.element.AreaBreak())
+            pdfFiles.forEach { file ->
+                val reader = PdfReader(file.absolutePath)
+                val n = reader.numberOfPages
+                for (i in 1..n) {
+                    copy.addPage(copy.getImportedPage(reader, i))
+                }
+                reader.close()
+            }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        } finally {
+            document?.close()
+        }
+    }
+    
+    /**
+     * Splits a PDF file into a new file containing a specific page range.
+     */
+    suspend fun splitPdf(inputFile: File, startPage: Int, endPage: Int, outputFile: File): Boolean = withContext(Dispatchers.IO) {
+        var document: Document? = null
+        try {
+            val reader = PdfReader(inputFile.absolutePath)
+            document = Document()
+            val copy = PdfCopy(document, FileOutputStream(outputFile))
+            document.open()
+            
+            for (i in startPage..endPage) {
+                if (i in 1..reader.numberOfPages) {
+                    copy.addPage(copy.getImportedPage(reader, i))
                 }
             }
             
-            document.close()
+            reader.close()
             true
         } catch (e: Exception) {
             e.printStackTrace()
             false
+        } finally {
+            document?.close()
         }
     }
     
-    fun mergePdfs(pdfFiles: List<File>, outputFile: File): Boolean {
-        return try {
-            val pdfWriter = PdfWriter(FileOutputStream(outputFile))
-            val mergedPdf = PdfDocument(pdfWriter)
+    /**
+     * Rotates all pages in a PDF by the specified degrees (e.g. 90, 180, 270).
+     */
+    suspend fun rotatePdf(inputFile: File, outputFile: File, rotationDegrees: Int): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val reader = PdfReader(inputFile.absolutePath)
+            val stamper = PdfStamper(reader, FileOutputStream(outputFile))
+            val n = reader.numberOfPages
             
-            pdfFiles.forEach { file ->
-                val pdfReader = PdfReader(file)
-                val sourcePdf = PdfDocument(pdfReader)
-                
-                // Copy all pages
-                sourcePdf.copyPagesTo(1, sourcePdf.numberOfPages, mergedPdf)
-                
-                sourcePdf.close()
+            for (i in 1..n) {
+                val pageDict = reader.getPageN(i)
+                val rotation = pageDict.getAsNumber(PdfName.ROTATE)
+                val oldRotation = rotation?.intValue() ?: 0
+                pageDict.put(PdfName.ROTATE, PdfNumber((oldRotation + rotationDegrees) % 360))
             }
             
-            mergedPdf.close()
+            stamper.close()
+            reader.close()
             true
         } catch (e: Exception) {
             e.printStackTrace()
             false
         }
     }
-    
-    fun splitPdf(inputFile: File, startPage: Int, endPage: Int, outputFile: File): Boolean {
-        return try {
-            val pdfReader = PdfReader(inputFile)
-            val sourcePdf = PdfDocument(pdfReader)
-            
-            val pdfWriter = PdfWriter(FileOutputStream(outputFile))
-            val destinationPdf = PdfDocument(pdfWriter)
-            
-            // Copy specified page range
-            sourcePdf.copyPagesTo(startPage, endPage, destinationPdf)
-            
-            destinationPdf.close()
-            sourcePdf.close()
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
-    
-    fun getPageCount(file: File): Int {
-        return try {
-            val pdfReader = PdfReader(file)
-            val pdfDocument = PdfDocument(pdfReader)
-            val pageCount = pdfDocument.numberOfPages
-            pdfDocument.close()
-            pageCount
+
+    /**
+     * Utility to get total page count of a PDF using OpenPDF.
+     */
+    suspend fun getPageCount(file: File): Int = withContext(Dispatchers.IO) {
+        try {
+            val reader = PdfReader(file.absolutePath)
+            val count = reader.numberOfPages
+            reader.close()
+            count
         } catch (e: Exception) {
             e.printStackTrace()
             0

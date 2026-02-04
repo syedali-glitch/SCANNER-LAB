@@ -1,51 +1,46 @@
 package com.plainlabs.qrpdftools.conversion
 
 import android.content.Context
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfReader
-import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor
-import com.itextpdf.layout.Document
-import com.itextpdf.layout.element.Paragraph
-import com.itextpdf.layout.element.Text
+import android.content.Context
+import com.lowagie.text.Document
+import com.lowagie.text.Paragraph
+import com.lowagie.text.pdf.PdfReader
+import com.lowagie.text.pdf.PdfWriter
+import com.lowagie.text.pdf.parser.PdfTextExtractor
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
-// import com.plainlabs.qrpdftools.conversion.OcrEngine // Will implement this
 
+/**
+ * TextConverter - Refactored to use OpenPDF.
+ */
 class TextConverter(private val context: Context) {
 
-    private val ocrEngine = OcrEngine(context) // Assuming OcrEngine is restored
+    private val ocrEngine = OcrEngine(context)
 
+    /**
+     * Extracts text from PDF using OpenPDF.
+     */
     fun convertPdfToText(pdfFile: File, outputText: File, useOcr: Boolean, callback: (Float) -> Unit) {
         try {
             val sb = StringBuilder()
-            val pdfDoc = PdfDocument(PdfReader(pdfFile))
-            val pageCount = pdfDoc.numberOfPages
+            val reader = PdfReader(pdfFile.absolutePath)
+            val pageCount = reader.numberOfPages
             
-            // First pass: Try standard extraction
-            var extractedText = ""
+            val extractor = PdfTextExtractor(reader)
             for (i in 1..pageCount) {
-                val page = pdfDoc.getPage(i)
-                val text = PdfTextExtractor.getTextFromPage(page)
+                val text = extractor.getTextFromPage(i)
                 if (text.isNotBlank()) {
                     sb.append(text).append("\n\n")
                 }
-                callback((i).toFloat() / pageCount * 0.5f) // 50% progress
+                callback((i).toFloat() / pageCount * 0.5f)
             }
             
-            pdfDoc.close()
-            extractedText = sb.toString()
+            reader.close()
+            val extractedText = sb.toString()
             
-            // If text is empty or sparse and OCR is requested, use OCR
-            if ((extractedText.length < 50 && useOcr) || useOcr) { // Heuristic: if little text, might be image-based
-                // Delegate to OCR Engine
-                // We'll traverse pages, render to bitmap, and OCR.
-                // Since OcrEngine.kt is corrupted, this call depends on its restoration.
-                // For now, we assume OcrEngine exposes a method for file or bitmaps.
+            if ((extractedText.length < 50 && useOcr) || useOcr) {
                 ocrEngine.extractTextFromPdf(pdfFile) { progress, text ->
-                     // Handle progress (mapped to 50-100%)
                      callback(0.5f + (progress * 0.5f))
                      outputText.writeText(text)
                 }
@@ -59,14 +54,16 @@ class TextConverter(private val context: Context) {
         }
     }
 
+    /**
+     * Converts text to PDF using OpenPDF.
+     */
     fun convertTextToPdf(textFile: File, outputPdf: File, callback: (Float) -> Unit) {
         try {
-            val text = textFile.readText() // TODO: Encoding detection (UTF-8 default for now)
-            val pdfWriter = PdfWriter(outputPdf)
-            val pdfDoc = PdfDocument(pdfWriter)
-            val document = Document(pdfDoc)
+            val text = textFile.readText()
+            val document = Document()
+            PdfWriter.getInstance(document, FileOutputStream(outputPdf))
+            document.open()
             
-            // Split into paragraphs to handle wrapping
             val lines = text.split("\n")
             for ((index, line) in lines.withIndex()) {
                 if (line.isNotBlank()) {
