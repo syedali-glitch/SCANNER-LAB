@@ -4,10 +4,15 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- HOME HUB - Main Menu -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.plainlabs.qrpdftools.ui.home.HomeFragment"
         android:label="Home">
+        
+        <!-- Scanner Navigation -->
         <action
             android:id="@+id/action_home_to_qr_scanner"
             app:destination="@id/qrScannerFragment"
@@ -15,6 +20,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+            
         <action
             android:id="@+id/action_home_to_doc_scanner"
             app:destination="@id/documentScannerFragment"
@@ -22,6 +28,26 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        
+        <!-- File Converter Navigation -->
+        <action
+            android:id="@+id/action_home_to_file_converter"
+            app:destination="@id/fileConverterFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+            
+        <!-- PDF Tools Navigation -->
+        <action
+            android:id="@+id/action_home_to_pdf_tools"
+            app:destination="@id/pdfToolsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+            
+        <!-- Utility Navigation -->
         <action
             android:id="@+id/action_home_to_history"
             app:destination="@id/historyFragment"
@@ -29,6 +55,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+            
         <action
             android:id="@+id/action_home_to_settings"
             app:destination="@id/settingsFragment"
@@ -38,6 +65,9 @@
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- SCANNER FRAGMENTS -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <fragment
         android:id="@+id/qrScannerFragment"
         android:name="com.plainlabs.qrpdftools.ui.scanner.QRScannerFragment"
@@ -48,6 +78,22 @@
         android:name="com.plainlabs.qrpdftools.ui.scanner.DocumentScannerFragment"
         android:label="Document Scanner" />
 
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- CONVERTER & PDF TOOLS -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <fragment
+        android:id="@+id/fileConverterFragment"
+        android:name="com.plainlabs.qrpdftools.ui.converter.FileConverterFragment"
+        android:label="File Converter" />
+        
+    <fragment
+        android:id="@+id/pdfToolsFragment"
+        android:name="com.plainlabs.qrpdftools.ui.pdftools.PdfToolsFragment"
+        android:label="PDF Tools" />
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- UTILITY FRAGMENTS -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.plainlabs.qrpdftools.ui.history.HistoryFragment"

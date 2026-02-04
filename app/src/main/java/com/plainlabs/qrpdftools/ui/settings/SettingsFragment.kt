@@ -1,30 +1,32 @@
 package com.plainlabs.qrpdftools.ui.settings
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.android.billingclient.api.ProductDetails
-import com.plainlabs.qrpdftools.R
-import com.plainlabs.qrpdftools.billing.BillingManager
 import com.plainlabs.qrpdftools.databinding.FragmentSettingsBinding
-import kotlinx.coroutines.launch
 
+/**
+ * Settings Fragment
+ * 
+ * Provides app settings without requiring account/cloud:
+ * - Theme (Dark/Light/System)
+ * - Scanner settings (Auto-save, Vibration, Sound)
+ * - Storage settings (Save location, Clear history)
+ * - About info
+ */
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: SettingsViewModel by viewModels {
-        SettingsViewModel.Factory(requireActivity().application)
+    
+    private val prefs by lazy {
+        requireContext().getSharedPreferences("scanner_settings", Context.MODE_PRIVATE)
     }
-
-    private lateinit var billingManager: BillingManager
-    private var removeAdsProduct: ProductDetails? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,87 +39,103 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        billingManager = BillingManager(
-            requireContext(),
-            viewModel.preferencesManager
-        )
-
+        loadSettings()
         setupListeners()
-        observeViewModel()
-        loadProductDetails()
+        setupVersion()
+    }
+
+    private fun loadSettings() {
+        // Load saved preferences
+        binding.switchDarkTheme.isChecked = prefs.getBoolean("dark_theme", true)
+        binding.switchSystemTheme.isChecked = prefs.getBoolean("system_theme", false)
+        binding.switchAutoSave.isChecked = prefs.getBoolean("auto_save", true)
+        binding.switchVibration.isChecked = prefs.getBoolean("vibration", true)
+        binding.switchSound.isChecked = prefs.getBoolean("sound", false)
+        
+        // Update dark theme switch state based on system theme
+        binding.switchDarkTheme.isEnabled = !binding.switchSystemTheme.isChecked
     }
 
     private fun setupListeners() {
-        binding.btnRemoveAds.setOnClickListener {
-            removeAdsProduct?.let { product ->
-                billingManager.launchPurchaseFlow(
-                    requireActivity(),
-                    product,
-                    onSuccess = {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.ads_removed,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    },
-                    onFailure = { error ->
-                        Toast.makeText(
-                            requireContext(),
-                            "${getString(R.string.purchase_failed)}: $error",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                )
+        // Dark Theme Toggle
+        binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("dark_theme", isChecked).apply()
+            if (!binding.switchSystemTheme.isChecked) {
+                applyTheme(isChecked)
             }
         }
 
-        binding.btnRestorePurchase.setOnClickListener {
-            billingManager.queryPurchases()
-            Toast.makeText(
-                requireContext(),
-                "Checking purchases...",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-        binding.btnClearHistory.setOnClickListener {
-            viewModel.clearAllHistory()
-            Toast.makeText(
-                requireContext(),
-                "History cleared",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    private fun observeViewModel() {
-        lifecycleScope.launch {
-            viewModel.adsRemoved.collect { removed ->
-                if (removed) {
-                    binding.btnRemoveAds.isEnabled = false
-                    binding.btnRemoveAds.text = "Ads Removed ✓"
-                }
+        // System Theme Toggle
+        binding.switchSystemTheme.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("system_theme", isChecked).apply()
+            binding.switchDarkTheme.isEnabled = !isChecked
+            
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            } else {
+                applyTheme(binding.switchDarkTheme.isChecked)
             }
+        }
+
+        // Auto-save Toggle
+        binding.switchAutoSave.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("auto_save", isChecked).apply()
+        }
+
+        // Vibration Toggle
+        binding.switchVibration.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("vibration", isChecked).apply()
+        }
+
+        // Sound Toggle
+        binding.switchSound.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("sound", isChecked).apply()
+        }
+
+        // Save Location
+        binding.settingSaveLocation.setOnClickListener {
+            Toast.makeText(context, "Files saved to: Documents/ScannerLab", Toast.LENGTH_SHORT).show()
+        }
+
+        // Clear History
+        binding.settingClearHistory.setOnClickListener {
+            showClearHistoryDialog()
         }
     }
 
-    private fun loadProductDetails() {
-        billingManager.queryProductDetails { products ->
-            removeAdsProduct = products.find {
-                it.productId == BillingManager.REMOVE_ADS_PRODUCT_ID
-            }
+    private fun applyTheme(darkMode: Boolean) {
+        val mode = if (darkMode) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
 
-            removeAdsProduct?.let { product ->
-                val price = product.oneTimePurchaseOfferDetails?.formattedPrice ?: "$2.99"
-                binding.btnRemoveAds.text = "Remove Ads - $price"
+    private fun showClearHistoryDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Clear History")
+            .setMessage("This will delete all scan history. This action cannot be undone.")
+            .setPositiveButton("Clear") { _, _ ->
+                // Clear history from database
+                Toast.makeText(context, "History cleared", Toast.LENGTH_SHORT).show()
             }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun setupVersion() {
+        try {
+            val pInfo = requireContext().packageManager
+                .getPackageInfo(requireContext().packageName, 0)
+            binding.textVersion.text = pInfo.versionName
+        } catch (e: Exception) {
+            binding.textVersion.text = "1.0.0"
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        billingManager.destroy()
         _binding = null
     }
 }

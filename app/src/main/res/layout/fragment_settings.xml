@@ -1,105 +1,587 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/glass_sheet_background"
-    android:padding="16dp">
-    
-    <!-- Header -->
-    <TextView
+    android:layout_height="match_parent"
+    android:background="@color/surface_dark"
+    android:fillViewport="true">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings"
-        android:textColor="@color/text_dark"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
-    
-    <!-- Remove Ads Section -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-        
-        <LinearLayout
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- HEADER -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="Settings"
+            android:textSize="28sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold" />
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- APPEARANCE SECTION -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="🎨  Appearance"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-            
-            <TextView
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/glass_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/glass_border">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/remove_ads"
-                android:textColor="@color/text_dark"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-            
-            <TextView
+                android:orientation="vertical">
+
+                <!-- Theme Toggle -->
+                <LinearLayout
+                    android:id="@+id/settingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_day"
+                        app:tint="@color/primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dark Theme"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Always use dark theme"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchDarkTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="56dp"
+                    android:background="@color/glass_border" />
+
+                <!-- System Theme -->
+                <LinearLayout
+                    android:id="@+id/settingSystemTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_manage"
+                        app:tint="@color/primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Follow System"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Match system dark/light mode"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchSystemTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- SCANNER SETTINGS -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="📷  Scanner"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/glass_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/glass_border">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/remove_ads_description"
-                android:textColor="@color/text_gray"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp" />
-            
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnRemoveAds"
-                style="@style/Widget.QRPDFTools.Button"
+                android:orientation="vertical">
+
+                <!-- Auto-save scans -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:tint="@color/secondary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Auto-save Scans"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Save scans to device automatically"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchAutoSave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="56dp"
+                    android:background="@color/glass_border" />
+
+                <!-- Vibration feedback -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_lock_silent_mode_off"
+                        app:tint="@color/secondary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vibration"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Haptic feedback on scan"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchVibration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="56dp"
+                    android:background="@color/glass_border" />
+
+                <!-- Sound on scan -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_lock_silent_mode"
+                        app:tint="@color/secondary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sound"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Beep when scan successful"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchSound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- STORAGE SETTINGS -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="📁  Storage"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/glass_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/glass_border">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/remove_ads"
-                android:layout_marginTop="12dp" />
-            
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnRestorePurchase"
-                style="@style/Widget.QRPDFTools.Button.Outlined"
+                android:orientation="vertical">
+
+                <!-- Save Location -->
+                <LinearLayout
+                    android:id="@+id/settingSaveLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_myplaces"
+                        app:tint="@color/tertiary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Save Location"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:id="@+id/textSaveLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Documents/ScannerLab"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_media_play"
+                        app:tint="@color/text_tertiary" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="56dp"
+                    android:background="@color/glass_border" />
+
+                <!-- Clear History -->
+                <LinearLayout
+                    android:id="@+id/settingClearHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_delete"
+                        app:tint="@color/error_red" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Clear History"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delete all scan history"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- ABOUT SECTION -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="ℹ️  About"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/glass_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/glass_border">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/restore_purchase"
-                android:layout_marginTop="8dp" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-    
-    <!-- Data Management -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Data Management"
-        android:textColor="@color/text_dark"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
-    
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnClearHistory"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/clear_history"
-        android:textColor="@color/error_red"
-        android:gravity="start|center_vertical" />
-    
-    <!-- About Section -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/about"
-        android:textColor="@color/text_dark"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp" />
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/version"
-        android:textColor="@color/text_gray"
-        android:textSize="14sp" />
-</LinearLayout>
+                android:orientation="vertical">
+
+                <!-- Version -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_info_details"
+                        app:tint="@color/text_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Version"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:id="@+id/textVersion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1.0.0"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="56dp"
+                    android:background="@color/glass_border" />
+
+                <!-- Privacy Note -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_lock_lock"
+                        app:tint="@color/success_green" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Privacy"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No account required • All data stored locally"
+                            android:textSize="13sp"
+                            android:textColor="@color/success_green" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Bottom Spacing -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+    </LinearLayout>
+
+</ScrollView>

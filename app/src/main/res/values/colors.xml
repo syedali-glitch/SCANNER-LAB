@@ -9,24 +9,44 @@
     <color name="primary_dark">@color/primary_blue_dark</color>
     <color name="primary_light">#64B5F6</color>
     
-    <color name="secondary">@color/favorite_yellow</color>
-    <color name="secondary_dark">#FFC107</color>
-    <color name="secondary_light">#FFE57F</color>
+    <color name="secondary">#03DAC5</color>
+    <color name="secondary_dark">#00B8A9</color>
+    <color name="secondary_light">#64FFDA</color>
+    
+    <color name="tertiary">#FF7043</color>
+    <color name="tertiary_dark">#E64A19</color>
     
     <color name="gradient_middle">#44AADD</color>
     
-    <!-- Glassmorphism -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- GLASSMORPHISM THEME COLORS -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    
+    <!-- Dark Surface Background -->
+    <color name="surface_dark">#121212</color>
+    <color name="surface_dark_elevated">#1E1E1E</color>
+    
+    <!-- Glass Effect Colors -->
+    <color name="glass_background">#1AFFFFFF</color>
+    <color name="glass_border">#33FFFFFF</color>
     <color name="glass_light">#40FFFFFF</color>
     <color name="glass_border_light">#80FFFFFF</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="text_tertiary">#66FFFFFF</color>
+    <color name="text_dark">#333333</color>
+    <color name="text_gray">#666666</color>
+    <color name="text_light_gray">#999999</color>
+    
+    <!-- Ripple Colors -->
+    <color name="primary_ripple">#331E90FF</color>
+    <color name="secondary_ripple">#3303DAC5</color>
     
     <!-- Background Colors -->
     <color name="white">#FFFFFF</color>
     <color name="background_gray">#F0F0F0</color>
-    
-    <!-- Text Colors -->
-    <color name="text_dark">#333333</color>
-    <color name="text_gray">#666666</color>
-    <color name="text_light_gray">#999999</color>
     
     <!-- Accent Colors -->
     <color name="favorite_yellow">#FFD700</color>
@@ -34,7 +54,7 @@
     <color name="error_red">#F44336</color>
     
     <!-- Status Bar and Navigation Bar -->
-    <color name="status_bar">#1873CC</color>
+    <color name="status_bar">#000000</color>
     
     <!-- Transparent -->
     <color name="transparent">#00000000</color>
