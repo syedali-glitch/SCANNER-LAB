@@ -177,7 +177,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     
     // PDF Library - Using OpenPDF (Proprietary-friendly replacement for iText)
-    implementation("com.github.LibrePDF:OpenPDF:1.3.30")
+    implementation("com.github.librepdf:openpdf:1.3.30")
     
     // PowerPoint Support
     implementation("org.apache.poi:poi-ooxml:5.2.5") {
