@@ -78,4 +78,10 @@
     
     <!-- Material Design defaults -->
     <color name="black">#FF000000</color>
+
+    <!-- Compatibility mappings for legacy theme references -->
+    <color name="primary_blue">#008B8B</color>
+    <color name="primary_blue_dark">#006060</color>
+    <color name="text_dark">#212121</color>
+    <color name="text_gray">#757575</color>
 </resources>
