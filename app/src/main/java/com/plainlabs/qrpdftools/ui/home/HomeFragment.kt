@@ -109,7 +109,7 @@ class HomeFragment : Fragment() {
         // This prevents double navigation if the user taps quickly
         if (currentDestination?.id == R.id.homeFragment) {
             try {
-                navController.navigate(actionId)
+                androidx.navigation.fragment.NavHostFragment.findNavController(this).navigate(actionId)
             } catch (e: Exception) {
                 // Log the error but don't crash
                 android.util.Log.e("HomeFragment", "Navigation failed: ${e.message}")

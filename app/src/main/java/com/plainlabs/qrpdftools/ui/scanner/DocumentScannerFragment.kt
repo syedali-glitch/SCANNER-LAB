@@ -94,7 +94,7 @@ class DocumentScannerFragment : Fragment() {
             toggleFlash()
         }
         
-        binding.scanModeGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.scanModeGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             // Handle scanning modes
         }
     }

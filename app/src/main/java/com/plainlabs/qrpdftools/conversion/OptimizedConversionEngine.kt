@@ -8,8 +8,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class OptimizedConversionEngine(private val context: Context) {
-
-    private val memoryManager = AdvancedMemoryManager() // Inner class
     
     // Cache for OCR results
     private val ocrCache = LruCache<String, String>(100) // cache 100 items
@@ -29,23 +27,6 @@ class OptimizedConversionEngine(private val context: Context) {
             val result = conversionAction()
             ocrCache.put(key, result)
             result
-        }
-    }
-
-    // Inner class for memory management
-    class AdvancedMemoryManager {
-        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
-        val cacheSize = maxMemory / 4 // Use 1/4th of available memory
-
-        val bitmapCache = object : LruCache<String, Bitmap>(cacheSize) {
-            override fun sizeOf(key: String, bitmap: Bitmap): Int {
-                return bitmap.byteCount / 1024
-            }
-        }
-        
-        fun clearMemory() {
-            bitmapCache.evictAll()
-            System.gc()
         }
     }
 }

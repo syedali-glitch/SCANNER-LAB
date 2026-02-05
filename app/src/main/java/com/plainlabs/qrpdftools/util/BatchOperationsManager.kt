@@ -63,6 +63,9 @@ class BatchOperationsManager(private val context: Context) {
 
     private suspend fun processOperation(op: BatchOperation) {
         when (op.type) {
+            ConversionType.PDF_TO_DOCX -> PdfConverter.extractPdfTextToWord(op.inputFile.absolutePath, op.outputFile.absolutePath, context)
+            ConversionType.DOCX_TO_PDF -> DocxConverter.docxToPdf(op.inputFile.absolutePath, op.outputFile.absolutePath)
+            
             ConversionType.PDF_TO_PPTX -> pptxConverter.convertPdfToPptx(op.inputFile, op.outputFile) { }
             ConversionType.PPTX_TO_PDF -> pptxConverter.convertPptxToPdf(op.inputFile, op.outputFile) { }
             
