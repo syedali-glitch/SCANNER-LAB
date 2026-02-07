@@ -39,7 +39,8 @@ class DocumentScannerFragment : Fragment() {
     private var camera: Camera? = null
     private var isFlashOn = false
 
-    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+    // Android 16: Use PickVisualMedia for privacy-preserving photo selection
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
         uri?.let {
             val bundle = Bundle().apply {
                 putString("imageUri", it.toString())
@@ -68,6 +69,8 @@ class DocumentScannerFragment : Fragment() {
         }
 
         setupUI()
+        setupInsets()
+        setupBackHandling()
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
@@ -87,7 +90,12 @@ class DocumentScannerFragment : Fragment() {
         }
 
         binding.btnGallery.setOnClickListener {
-            galleryLauncher.launch("image/*")
+            // Android 16: Launch standard photo picker (ImageOnly)
+            galleryLauncher.launch(
+                androidx.activity.result.PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
         }
 
         binding.btnFlash.setOnClickListener {
@@ -97,6 +105,39 @@ class DocumentScannerFragment : Fragment() {
         binding.scanModeGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             // Handle scanning modes
         }
+    }
+
+    private fun setupInsets() {
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            // Apply padding to avoid system bars covering UI (e.g. shutter button)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+
+    private fun setupBackHandling() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Predictive Back: Show dialog if there are captured pages (simulated here)
+                val hasPages = false // Replace with actual check like: pages.isNotEmpty()
+                
+                if (hasPages) { 
+                     androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Discard Scan?")
+                        .setMessage("You have unsaved pages. Are you sure you want to exit?")
+                        .setPositiveButton("Discard") { _, _ ->
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                } else {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        })
     }
 
     private fun startCamera() {
