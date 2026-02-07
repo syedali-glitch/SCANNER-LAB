@@ -19,6 +19,7 @@ object PdfUtilityTools {
      * Attempts to compress PDF by enabling full compression in OpenPDF.
      * Mandate: Offloaded to Dispatchers.IO.
      */
+    suspend fun compressPdf(inputPath: File, outputPath: File, quality: Float = 0.5f, removeMetadata: Boolean = false): Float = withContext(Dispatchers.IO) {
         var reader: PdfReader? = null
         var stamper: PdfStamper? = null
         try {
@@ -46,6 +47,7 @@ object PdfUtilityTools {
             try { stamper?.close() } catch (e: Exception) {}
             try { reader?.close() } catch (e: Exception) {}
         }
+    }
 
     /**
      * Adds a watermark to each page of the PDF using OpenPDF.
