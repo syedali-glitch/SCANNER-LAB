@@ -113,16 +113,31 @@ class ImageEditorFragment : Fragment() {
         lifecycleScope.launch {
             binding.progressEditor.visibility = View.VISIBLE
             try {
-                // Map CropView points to actual bitmap coordinates
-                val viewWidth = binding.cropView.width
-                val viewHeight = binding.cropView.height
-                val bitmapWidth = bitmapToRectify.width
-                val bitmapHeight = bitmapToRectify.height
+                // Map CropView points to actual bitmap coordinates (Accounting for fitCenter)
+                val viewWidth = binding.cropView.width.toFloat()
+                val viewHeight = binding.cropView.height.toFloat()
+                val bitmapWidth = bitmapToRectify.width.toFloat()
+                val bitmapHeight = bitmapToRectify.height.toFloat()
                 
-                val scaleX = bitmapWidth.toFloat() / viewWidth
-                val scaleY = bitmapHeight.toFloat() / viewHeight
+                val scale: Float
+                val offsetX: Float
+                val offsetY: Float
                 
-                val mappedPoints = points.map { android.graphics.PointF(it.x * scaleX, it.y * scaleY) }
+                if (bitmapWidth / bitmapHeight > viewWidth / viewHeight) {
+                    // Bitmap is wider than view (letterboxed top/bottom)
+                    scale = viewWidth / bitmapWidth
+                    offsetX = 0f
+                    offsetY = (viewHeight - bitmapHeight * scale) / 2f
+                } else {
+                    // Bitmap is taller than view (letterboxed left/right)
+                    scale = viewHeight / bitmapHeight
+                    offsetY = 0f
+                    offsetX = (viewWidth - bitmapWidth * scale) / 2f
+                }
+                
+                val mappedPoints = points.map { 
+                    android.graphics.PointF((it.x - offsetX) / scale, (it.y - offsetY) / scale) 
+                }
                 
                 val result = withContext(Dispatchers.Default) {
                     PerspectiveTransformation.transform(bitmapToRectify, mappedPoints)

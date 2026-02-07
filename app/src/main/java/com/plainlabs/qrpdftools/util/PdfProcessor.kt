@@ -87,9 +87,11 @@ class PdfProcessor(private val context: Context) {
      * Rotates all pages in a PDF by the specified degrees (e.g. 90, 180, 270).
      */
     suspend fun rotatePdf(inputFile: File, outputFile: File, rotationDegrees: Int): Boolean = withContext(Dispatchers.IO) {
+        var reader: PdfReader? = null
+        var stamper: PdfStamper? = null
         try {
-            val reader = PdfReader(inputFile.absolutePath)
-            val stamper = PdfStamper(reader, FileOutputStream(outputFile))
+            reader = PdfReader(inputFile.absolutePath)
+            stamper = PdfStamper(reader, FileOutputStream(outputFile))
             val n = reader.numberOfPages
             
             for (i in 1..n) {
@@ -105,6 +107,9 @@ class PdfProcessor(private val context: Context) {
         } catch (e: Exception) {
             e.printStackTrace()
             false
+        } finally {
+            try { stamper?.close() } catch (e: Exception) {}
+            try { reader?.close() } catch (e: Exception) {}
         }
     }
 

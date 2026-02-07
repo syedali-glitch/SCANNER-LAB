@@ -32,16 +32,11 @@ class OcrEngine(private val context: Context) {
 
     // Synchronous/Blocking wrapper for compatibility if needed (but suspend is better)
     fun extractTextFromPdf(pdfFile: File, callback: (Float, String) -> Unit) {
-        // Since we are in a non-suspend function in TextConverter currently (simplification),
-        // we might need to block or launch a coroutine scope. 
-        // For this restoration, we will use a naive blocking approach strictly for the logic flow, 
-        // OR better, we assume the caller handles async/threading.
-        // But TextConverter.convertPdfToText is likely called on Bg thread.
-        // We'll execute logic here.
-        
+        var fileDescriptor: ParcelFileDescriptor? = null
+        var renderer: PdfRenderer? = null
         try {
-            val fileDescriptor = ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
-            val renderer = PdfRenderer(fileDescriptor)
+            fileDescriptor = ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            renderer = PdfRenderer(fileDescriptor)
             val pageCount = renderer.pageCount
             val sb = StringBuilder()
 
@@ -50,30 +45,28 @@ class OcrEngine(private val context: Context) {
                 val width = page.width
                 val height = page.height
                 val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                 
-                val image = InputImage.fromBitmap(bitmap, 0)
-                // ML Kit process is async. We need to wait.
-                // We'll use a latch or simple loop if in bg thread ??
-                // Actually ML Kit Task API supports 'Tasks.await' which blocks.
-                val task = recognizer.process(image)
-                val result = com.google.android.gms.tasks.Tasks.await(task) // Blocks
-                
-                sb.append(result.text).append("\n\n")
-                
-                page.close()
-                callback((i + 1).toFloat() / pageCount, sb.toString())
+                try {
+                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                    val image = InputImage.fromBitmap(bitmap, 0)
+                    val task = recognizer.process(image)
+                    val result = com.google.android.gms.tasks.Tasks.await(task)
+                    
+                    sb.append(result.text).append("\n\n")
+                    callback((i + 1).toFloat() / pageCount, sb.toString())
+                } finally {
+                    page.close()
+                    bitmap.recycle()
+                }
             }
-            renderer.close()
-            fileDescriptor.close()
-            
-            // Final callback with complete string is handled by progress updates?
-            // Caller expects final string at end.
             callback(1.0f, sb.toString())
 
         } catch (e: Exception) {
             e.printStackTrace()
             callback(1.0f, "OCR Failed: ${e.message}")
+        } finally {
+            try { renderer?.close() } catch (e: Exception) {}
+            try { fileDescriptor?.close() } catch (e: Exception) {}
         }
     }
 

@@ -87,10 +87,15 @@ class FileConverterFragment : Fragment() {
 
     private fun getFileName(uri: Uri): String {
         var name = "Unknown"
-        requireContext().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-            val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
-            cursor.moveToFirst()
-            name = cursor.getString(nameIndex)
+        try {
+            requireContext().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                if (nameIndex != -1 && cursor.moveToFirst()) {
+                    name = cursor.getString(nameIndex) ?: "Unknown"
+                }
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("FileConverter", "Error getting filename", e)
         }
         return name
     }

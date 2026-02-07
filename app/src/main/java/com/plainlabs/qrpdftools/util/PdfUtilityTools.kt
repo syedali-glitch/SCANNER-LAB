@@ -19,10 +19,11 @@ object PdfUtilityTools {
      * Attempts to compress PDF by enabling full compression in OpenPDF.
      * Mandate: Offloaded to Dispatchers.IO.
      */
-    suspend fun compressPdf(inputPath: File, outputPath: File, quality: Float = 0.5f, removeMetadata: Boolean = false): Float = withContext(Dispatchers.IO) {
+        var reader: PdfReader? = null
+        var stamper: PdfStamper? = null
         try {
-            val reader = PdfReader(inputPath.absolutePath)
-            val stamper = PdfStamper(reader, FileOutputStream(outputPath))
+            reader = PdfReader(inputPath.absolutePath)
+            stamper = PdfStamper(reader, FileOutputStream(outputPath))
             
             // OpenPDF Full Compression
             stamper.setFullCompression()
@@ -41,16 +42,20 @@ object PdfUtilityTools {
             if (originalSize == 0L) 0f else 1.0f - (newSize.toFloat() / originalSize.toFloat())
         } catch (e: Exception) {
             throw IOException("Compression failed: ${e.message}")
+        } finally {
+            try { stamper?.close() } catch (e: Exception) {}
+            try { reader?.close() } catch (e: Exception) {}
         }
-    }
 
     /**
      * Adds a watermark to each page of the PDF using OpenPDF.
      */
     suspend fun watermarkPdf(inputPath: File, outputPath: File, watermarkText: String, opacity: Float = 0.3f, diagonal: Boolean = true) = withContext(Dispatchers.IO) {
+        var reader: PdfReader? = null
+        var stamper: PdfStamper? = null
         try {
-            val reader = PdfReader(inputPath.absolutePath)
-            val stamper = PdfStamper(reader, FileOutputStream(outputPath))
+            reader = PdfReader(inputPath.absolutePath)
+            stamper = PdfStamper(reader, FileOutputStream(outputPath))
             val font = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED)
             
             val n = reader.numberOfPages
@@ -78,6 +83,9 @@ object PdfUtilityTools {
             reader.close()
         } catch (e: Exception) {
             throw IOException("Watermarking failed: ${e.message}")
+        } finally {
+            try { stamper?.close() } catch (e: Exception) {}
+            try { reader?.close() } catch (e: Exception) {}
         }
     }
 
@@ -85,9 +93,11 @@ object PdfUtilityTools {
      * Protects a PDF with a user and owner password using OpenPDF encryption.
      */
     suspend fun protectPdf(inputPath: File, outputPath: File, userPass: String, ownerPass: String) = withContext(Dispatchers.IO) {
+        var reader: PdfReader? = null
+        var stamper: PdfStamper? = null
         try {
-            val reader = PdfReader(inputPath.absolutePath)
-            val stamper = PdfStamper(reader, FileOutputStream(outputPath))
+            reader = PdfReader(inputPath.absolutePath)
+            stamper = PdfStamper(reader, FileOutputStream(outputPath))
             
             stamper.setEncryption(
                 userPass.toByteArray(),
@@ -100,6 +110,9 @@ object PdfUtilityTools {
             reader.close()
         } catch (e: Exception) {
             throw IOException("Password protection failed: ${e.message}")
+        } finally {
+            try { stamper?.close() } catch (e: Exception) {}
+            try { reader?.close() } catch (e: Exception) {}
         }
     }
 }
