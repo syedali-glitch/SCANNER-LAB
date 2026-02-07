@@ -45,6 +45,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.QRPDFTools.Splash"
             android:screenOrientation="unspecified"
             android:resizeableActivity="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
