@@ -27,6 +27,11 @@ android {
         resourceConfigurations.add("en")
         
         multiDexEnabled = true
+        
+        ndk {
+            // STRICTLY limit to physical devices. Drop x86/x86_64 (Emulators).
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
     }
 
     // Advanced Optimization: ABI Splits
@@ -182,6 +187,7 @@ dependencies {
     // PowerPoint Support
     implementation("org.apache.poi:poi-ooxml:5.2.5") {
         exclude(group = "org.apache.logging.log4j")
+        exclude(group = "org.apache.poi", module = "poi-ooxml-schemas") // Exclude fat schemas
     }
     
     // Image processing for PDF scanner

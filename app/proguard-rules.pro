@@ -37,7 +37,13 @@
 -keep class org.apache.xmlbeans.** { *; }
 -keep class org.openxmlformats.** { *; }
 -keep class schemaorg_apache_xmlbeans.** { *; }
-# -keep class com.microsoft.schemas.** { *; } # Removed to allow stripping of missing classes
+-dontwarn org.apache.poi.**
+-dontwarn org.apache.xmlbeans.**
+
+# ML Kit (Keep Bundled Models)
+-keep class com.google.mlkit.** { *; }
+-keep class com.google.android.gms.** { *; }
+
 
 -dontwarn org.apache.poi.**
 -dontwarn org.apache.xmlbeans.**
