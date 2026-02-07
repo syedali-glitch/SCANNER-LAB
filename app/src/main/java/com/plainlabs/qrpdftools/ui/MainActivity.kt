@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme.QRPDFTools)
+        setTheme(R.style.Theme_QRPDFTools)
         super.onCreate(savedInstanceState)
         
         CrashLogger.log("MainActivity", "==================== STARTUP ====================")
