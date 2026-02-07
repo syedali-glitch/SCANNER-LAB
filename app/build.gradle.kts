@@ -30,7 +30,8 @@ android {
         
         ndk {
             // STRICTLY limit to physical devices. Drop x86/x86_64 (Emulators).
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+            // ENABLED x86 BACK for Emulator Testing (Android 16 Previews)
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
         }
     }
 

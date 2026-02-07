@@ -102,17 +102,23 @@ class HomeFragment : Fragment() {
      * or if the destination is invalid from the current state (double-click prevention).
      */
     private fun safeNavigate(actionId: Int) {
-        val navController = findNavController()
-        val currentDestination = navController.currentDestination
-        
-        // Check if we are currently on the HomeFragment (source destination)
-        // This prevents double navigation if the user taps quickly
-        if (currentDestination?.id == R.id.homeFragment) {
+        try {
+            val navController = findNavController()
+            val currentDestination = navController.currentDestination
+            
+            // Check if we are currently on the HomeFragment (source destination)
+            // This prevents double navigation if the user taps quickly
+            if (currentDestination?.id == R.id.homeFragment) {
+                navController.navigate(actionId)
+            }
+        } catch (e: Exception) {
+            // Log the error but don't crash
+            android.util.Log.e("HomeFragment", "Navigation failed: ${e.message}")
             try {
+                // Last ditch effort: Try parent navigator if child fails
                 androidx.navigation.fragment.NavHostFragment.findNavController(this).navigate(actionId)
-            } catch (e: Exception) {
-                // Log the error but don't crash
-                android.util.Log.e("HomeFragment", "Navigation failed: ${e.message}")
+            } catch (e2: Exception) {
+                // If even strict finding fails, we give up gracefully
             }
         }
     }
