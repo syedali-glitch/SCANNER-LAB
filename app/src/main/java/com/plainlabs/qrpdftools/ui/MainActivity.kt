@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
-        androidx.activity.enableEdgeToEdge()
         setTheme(R.style.Theme_QRPDFTools)
         super.onCreate(savedInstanceState)
         
