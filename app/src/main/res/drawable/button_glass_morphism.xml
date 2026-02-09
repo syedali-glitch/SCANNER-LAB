@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed State - Intensified glass -->
+    <item android:state_pressed="true">
+        <layer-list>
+            <!-- Glass Background (More transparent when pressed) -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <solid android:color="#E0FFFFFF" />
+                </shape>
+            </item>
+            
+            <!-- Border Stroke -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <stroke
+                        android:width="2dp"
+                        android:color="#60FFFFFF" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    
+    <!-- Normal State - Glassmorphism -->
+    <item>
+        <layer-list>
+            <!-- Frosted Glass Background -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <solid android:color="@color/glass_light" />
+                </shape>
+            </item>
+            
+            <!-- Light Reflection (Top to middle gradient) -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <gradient
+                        android:startColor="#30FFFFFF"
+                        android:centerColor="#15FFFFFF"
+                        android:endColor="#00000000"
+                        android:angle="90" />
+                </shape>
+            </item>
+            
+            <!-- Border Stroke -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <stroke
+                        android:width="1.5dp"
+                        android:color="@color/glass_border_light" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

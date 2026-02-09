@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed State -->
+    <item android:state_pressed="true">
+        <layer-list>
+            <!-- Bottom Shadow Layer -->
+            <item android:top="4dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <solid android:color="#40000000" />
+                </shape>
+            </item>
+            
+            <!-- Glow Layer -->
+            <item android:bottom="2dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <gradient
+                        android:startColor="@color/primary"
+                        android:endColor="@color/secondary"
+                        android:angle="135" />
+                </shape>
+            </item>
+            
+            <!-- Main Button -->
+            <item android:bottom="4dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <gradient
+                        android:startColor="@color/primary_dark"
+                        android:endColor="@color/secondary_dark"
+                        android:angle="135" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    
+    <!-- Normal State - 4 Layer Elevation -->
+    <item>
+        <layer-list>
+            <!-- Deep Shadow Layer (Bottom) -->
+            <item android:top="8dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <solid android:color="#60000000" />
+                </shape>
+            </item>
+            
+            <!-- Mid Shadow Layer -->
+            <item android:top="4dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <solid android:color="#40000000" />
+                </shape>
+            </item>
+            
+            <!-- Glow Layer (Premium effect) -->
+            <item android:bottom="4dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <gradient
+                        android:startColor="@color/primary_light"
+                        android:endColor="@color/secondary_light"
+                        android:angle="135" />
+                </shape>
+            </item>
+            
+            <!-- Main Gradient Button -->
+            <item android:bottom="8dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <gradient
+                        android:startColor="@color/primary"
+                        android:endColor="@color/secondary"
+                        android:angle="135" />
+                </shape>
+            </item>
+            
+            <!-- Top Highlight (3D effect) -->
+            <item android:bottom="8dp">
+                <shape android:shape="rectangle">
+                    <corners android:radius="24dp" />
+                    <gradient
+                        android:startColor="#40FFFFFF"
+                        android:endColor="#00FFFFFF"
+                        android:angle="90" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

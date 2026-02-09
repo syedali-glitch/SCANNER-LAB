@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">Scanner Lab</string>
+    
+    <!-- Main Screen -->
+    <string name="main_title">Scanner Lab</string>
+    <string name="qr_scanner">QR Scanner</string>
+    <string name="document_scanner">Document Scanner</string>
+    <string name="file_converter">File Converter</string>
+    <string name="pdf_tools">PDF Tools</string>
+    
+    <!-- QR Scanner -->
+    <string name="scan_qr">Scan QR Code</string>
+    <string name="qr_result">QR Result:</string>
+    <string name="scan_another">Scan Another</string>
+    
+    <!-- Document Scanner -->
+    <string name="scan_document">Scan Document</string>
+    <string name="capture">Capture</string>
+    <string name="retake">Retake</string>
+    <string name="save_document">Save Document</string>
+    
+    <!-- File Converter -->
+    <string name="select_file">Select File</string>
+    <string name="convert_to">Convert To</string>
+    <string name="converting">Converting…</string>
+    <string name="conversion_complete">Conversion Complete!</string>
+    <string name="conversion_failed">Conversion Failed</string>
+    
+    <!-- Conversion Types -->
+    <string name="pdf_to_docx">PDF → DOCX</string>
+    <string name="pdf_to_xlsx">PDF → XLSX</string>
+    <string name="pdf_to_pptx">PDF → PPTX</string>
+    <string name="pdf_to_image">PDF → Image</string>
+    <string name="pdf_to_text">PDF → Text</string>
+    <string name="pdf_to_html">PDF → HTML</string>
+    <string name="docx_to_pdf">DOCX → PDF</string>
+    <string name="xlsx_to_pdf">XLSX → PDF</string>
+    <string name="pptx_to_pdf">PPTX → PDF</string>
+    <string name="image_to_pdf">Image → PDF</string>
+    <string name="text_to_pdf">Text → PDF</string>
+    <string name="html_to_pdf">HTML → PDF</string>
+    
+    <!-- PDF Tools -->
+    <string name="merge_pdf">Merge PDFs</string>
+    <string name="split_pdf">Split PDF</string>
+    <string name="compress_pdf">Compress PDF</string>
+    <string name="watermark_pdf">Watermark PDF</string>
+    <string name="protect_pdf">Password Protect</string>
+    <string name="rotate_pdf">Rotate Pages</string>
+    <string name="extract_pages">Extract Pages</string>
+    
+    <!-- Progress -->
+    <string name="processing">Processing…</string>
+    <string name="please_wait">Please wait</string>
+    <string name="progress_format">%1$d%%</string>
+    
+    <!-- Errors -->
+    <string name="error_camera_permission">Camera permission required</string>
+    <string name="error_storage_permission">Storage permission required</string>
+    <string name="error_file_not_found">File not found</string>
+    <string name="error_conversion">Conversion error occurred</string>
+    <string name="error_invalid_file">Invalid file format</string>
+    
+    <!-- Success -->
+    <string name="success_saved">File saved successfully</string>
+    <string name="success_converted">Converted successfully</string>
+    
+    <!-- History & Settings -->
+    <string name="history">History</string>
+    <string name="search_history">Search History</string>
+    <string name="no_history">No history available</string>
+    <string name="swipe_left_delete">Swipe left to delete</string>
+    <string name="close">Close</string>
+    
+    <!-- Actions -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+    <string name="retry">Retry</string>
+    
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="image_quality">Image Quality</string>
+    <string name="compression_level">Compression Level</string>
+</resources>

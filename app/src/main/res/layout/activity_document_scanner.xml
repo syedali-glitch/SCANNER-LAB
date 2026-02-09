@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/imgPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Captured Image"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:background="@color/black" />
+        
+    <!-- Top Bar (Back Button) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+        
+       <ImageView
+           android:id="@+id/btnBack"
+           android:layout_width="40dp"
+           android:layout_height="40dp"
+           android:src="@drawable/ic_play_arrow"
+           android:rotation="180"
+           app:tint="@color/white"
+           android:background="@drawable/glass_background"
+           android:padding="8dp"/>
+    </FrameLayout>
+        
+    <!-- Controls Layout (Bottom) -->
+    <LinearLayout
+        android:id="@+id/controlsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#66000000">
+
+        <!-- Retake Button (Hidden initially) -->
+        <FrameLayout
+            android:id="@+id/btnRetakeContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginEnd="32dp">
+             <ImageView
+                android:id="@+id/btnRetake"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@color/white" 
+                android:padding="12dp"
+                android:background="@drawable/glass_background" 
+                android:contentDescription="Retake"/>
+        </FrameLayout>
+
+        <!-- Capture Button -->
+        <ImageView
+            android:id="@+id/btnCapture"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="Capture"
+            android:src="@drawable/ic_scan_doc"
+            android:padding="16dp"
+            app:tint="@color/white"
+            android:background="@drawable/ref_bg_scanner"/>
+
+        <!-- Save Button (Hidden initially) -->
+         <FrameLayout
+             android:id="@+id/btnSaveContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:visibility="gone"
+            android:layout_marginStart="32dp">
+             <ImageView
+                android:id="@+id/btnSave"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@android:drawable/ic_menu_save"
+                app:tint="@color/white"
+                android:padding="12dp"
+                android:background="@drawable/glass_background"
+                android:contentDescription="Save PDF"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- Loading Bar with Text -->
+    <LinearLayout
+        android:id="@+id/progressLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="24dp"
+        android:background="@drawable/ref_card_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/ref_gradient_scanner_start"
+            android:layout_marginBottom="16dp"/>
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Processing..."
+            android:textColor="@color/ref_text_primary"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,664 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ref_background">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:animateLayoutChanges="true">
+
+            <!-- App Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/ref_card_bg"
+                android:padding="24dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="24dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ref_text_primary"
+                    android:fontFamily="sans-serif-bold"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scan • Convert • Create"
+                    android:textSize="14sp"
+                    android:textColor="@color/ref_text_secondary"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- SECTION: Scan Anything -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📷  Scan Anything"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Scanner Hub Card (Large) -->
+            <FrameLayout
+                android:id="@+id/cardScannerHub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ref_card_bg"
+                android:layout_marginBottom="16dp"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <!-- Icon Box -->
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/ref_bg_scanner"
+                        android:src="@drawable/ic_scan_doc"
+                        android:padding="12dp"
+                        app:tint="@color/white"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Scanner Hub"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="18sp" 
+                            android:layout_marginBottom="4dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="QR codes • Barcodes • Documents"
+                            android:textColor="@color/ref_text_secondary"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="8dp"/>
+                            
+                        <!-- Chips -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="QR"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_scanner_end"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp"/>
+                                
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Barcode"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_scanner_end"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp"/>
+                                
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Doc"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_scanner_end"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Play Action -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_play_arrow"
+                        app:tint="@color/ref_text_secondary" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- Shortcuts Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="24dp">
+
+                <!-- QR Code Short -->
+                <LinearLayout
+                    android:id="@+id/btnShortcutQr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/ref_card_bg"
+                    android:padding="16dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_qr_code"
+                        app:tint="@color/ref_gradient_scanner_start"
+                        android:layout_marginBottom="8dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="QR Code"
+                        android:textSize="12sp"
+                        android:textColor="@color/ref_text_primary"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                
+                <!-- Document Short -->
+                <LinearLayout
+                    android:id="@+id/btnShortcutDoc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/ref_card_bg"
+                    android:padding="16dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_scan_doc"
+                        app:tint="@color/ref_gradient_scanner_start"
+                        android:layout_marginBottom="8dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Document"
+                        android:textSize="12sp"
+                        android:textColor="@color/ref_text_primary"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                
+                <!-- Barcode Short -->
+                <LinearLayout
+                    android:id="@+id/btnShortcutBarcode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/ref_card_bg"
+                    android:padding="16dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_barcode"
+                         app:tint="@color/ref_text_secondary"
+                        android:layout_marginBottom="8dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Barcode"
+                        android:textSize="12sp"
+                        android:textColor="@color/ref_text_primary"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- SECTION: Convert Files -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔄  Convert Files"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- File Converter Card -->
+            <FrameLayout
+                android:id="@+id/cardConverter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ref_card_bg"
+                android:layout_marginBottom="24dp"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/ref_bg_converter"
+                        android:src="@drawable/ic_upload"
+                        android:padding="12dp"
+                        app:tint="@color/white"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="File Converter"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="18sp" 
+                            android:layout_marginBottom="4dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Upload • Select Format • Download"
+                            android:textColor="@color/ref_text_secondary"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="8dp"/>
+                            
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PDF"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_converter_start"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp"/>
+                                
+                             <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="DOCX"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_converter_start"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp"/>
+                                
+                             <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="IMG"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_converter_start"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_play_arrow"
+                        app:tint="@color/ref_text_secondary" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- SECTION: View & Edit Files -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👁  View &amp; Edit Files"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- File Viewer Card -->
+             <FrameLayout
+                android:id="@+id/cardFileViewer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ref_card_bg"
+                android:layout_marginBottom="16dp"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/ref_bg_viewer"
+                        android:src="@drawable/ic_file_viewer"
+                        android:padding="12dp"
+                        app:tint="@color/white"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="File Viewer"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="18sp" 
+                            android:layout_marginBottom="4dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View &amp; Edit • E-Sign • Annotate"
+                            android:textColor="@color/ref_text_secondary"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="8dp"/>
+                            
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PDF"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_text_secondary"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp"/>
+                                
+                             <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="DOC"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_text_secondary"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp"/>
+                                
+                             <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="XLS"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_text_secondary"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_play_arrow"
+                        app:tint="@color/ref_text_secondary" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- PDF Tools Card -->
+             <FrameLayout
+                android:id="@+id/cardPdfTools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ref_card_bg"
+                android:layout_marginBottom="24dp"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/ref_bg_tools"
+                        android:src="@drawable/ic_pdf_tool"
+                        android:padding="12dp"
+                        app:tint="@color/white"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PDF Tools"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="18sp" 
+                            android:layout_marginBottom="4dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Merge • Split • Compress • Protect"
+                            android:textColor="@color/ref_text_secondary"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="8dp"/>
+                            
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Utils"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_scanner_start"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp"/>
+                                
+                             <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Security"
+                                android:background="@drawable/ref_chip_bg"
+                                android:textColor="@color/ref_gradient_scanner_start"
+                                android:textSize="11sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_play_arrow"
+                        app:tint="@color/ref_text_secondary" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- AdMob Banner Ad -->
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Custom Bottom Navigation -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom"
+
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:weightSum="4"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/ref_card_bg"
+        android:backgroundTint="#FAFAFA"
+        android:layout_margin="16dp"
+        android:elevation="12dp">
+        
+        <!-- Home -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_scan_doc"
+                android:background="@drawable/ref_chip_bg"
+                android:backgroundTint="#424242"
+                android:padding="6dp"
+                app:tint="@color/ref_gradient_scanner_start"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- QR Scan -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_qr_code"
+                app:tint="@color/ref_gradient_scanner_start"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QR Scan"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- Doc Scan -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_scan_doc"
+                app:tint="@color/ref_gradient_scanner_start"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doc Scan"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- History -->
+         <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_history"
+                app:tint="@color/ref_gradient_scanner_start"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="History"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
