@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.plainlabs.qrpdftools"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.plainlabs.qrpdftools"
