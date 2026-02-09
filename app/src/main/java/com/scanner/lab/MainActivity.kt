@@ -42,8 +42,22 @@ class MainActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Edge-to-Edge Polish
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
+        
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        // Init Monetization
+        com.scanner.lab.utils.UserPremiums.init(this)
+        
+        // Apply Insets
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
         
         // Initialize AdMob
         MobileAds.initialize(this) {}
@@ -55,6 +69,29 @@ class MainActivity : AppCompatActivity() {
         setupUI()
         setupGestures()
         requestPermissionsIfNeeded()
+    }
+    
+    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+    
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_about -> {
+                showAboutDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+    
+    private fun showAboutDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("PlainLabs Scanner")
+            .setMessage("Version 1.0\n\nPatent Pending.\n\n© 2024 PlainLabs Inc.\nAll Rights Reserved.")
+            .setPositiveButton("OK", null)
+            .show()
     }
     
     private fun setupUI() {
@@ -74,18 +111,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
         
-        // File Converter Button
+        // File Converter Button (Gated Feature)
         binding.btnConverter.setOnClickListener {
             it.performHapticFeedback()
-            // Open file picker for conversion
-            Toast.makeText(this, "File Converter - Coming in next update", Toast.LENGTH_SHORT).show()
+            
+            // "Monetization Gate": Check Pro Status before allowing "Excel Export" (simulated)
+            if (com.scanner.lab.utils.UserPremiums.checkOrShowUpsell(this)) {
+                // Open file picker for conversion
+                Toast.makeText(this, "File Converter - Coming in next update", Toast.LENGTH_SHORT).show()
+            }
         }
         
-        // PDF Tools Button
+        // PDF Tools Button (Gated Feature)
         binding.btnPdfTools.setOnClickListener {
             it.performHapticFeedback()
-            // Open PDF tools
-            Toast.makeText(this, "PDF Tools - Coming in next update", Toast.LENGTH_SHORT).show()
+            
+            if (com.scanner.lab.utils.UserPremiums.checkOrShowUpsell(this)) {
+                // Open PDF tools
+                Toast.makeText(this, "PDF Tools - Coming in next update", Toast.LENGTH_SHORT).show()
+            }
         }
     }
     

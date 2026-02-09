@@ -39,8 +39,22 @@ class DocumentScannerActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Edge-to-Edge Polish
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
+        
         binding = ActivityDocumentScannerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        // Apply Insets
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        
+        // Init Monetization
+        com.scanner.lab.utils.UserPremiums.init(this)
         
         cameraExecutor = Executors.newSingleThreadExecutor()
         
