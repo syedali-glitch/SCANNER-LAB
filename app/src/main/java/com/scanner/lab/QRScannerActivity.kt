@@ -33,7 +33,30 @@ class QRScannerActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         
         setupUI()
-        startCamera()
+        checkCameraPermission()
+    }
+    
+    private val requestPermissionLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            startCamera()
+        } else {
+            Toast.makeText(this, "Camera permission required for scanning", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+    
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.CAMERA
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            startCamera()
+        } else {
+            requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+        }
     }
     
     private fun setupUI() {

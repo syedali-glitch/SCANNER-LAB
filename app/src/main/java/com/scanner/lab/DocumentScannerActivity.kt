@@ -45,7 +45,30 @@ class DocumentScannerActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         
         setupUI()
-        startCamera()
+        checkCameraPermission()
+    }
+    
+    private val requestPermissionLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            startCamera()
+        } else {
+            Toast.makeText(this, "Camera permission required for scanning", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+    
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.CAMERA
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            startCamera()
+        } else {
+            requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+        }
     }
     
     private fun setupUI() {
@@ -144,34 +167,61 @@ class DocumentScannerActivity : AppCompatActivity() {
         
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Perform OCR
-                val image = InputImage.fromBitmap(bitmap, 0)
-                val text = withContext(Dispatchers.Main) {
-                    textRecognizer.process(image)
-                }.await().text
-                
-                // Save as PDF
+                // 1. Generate Timestamp and Filename
                 val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-                val fileName = "scan_$timestamp"
-                val outputDir = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                val pdfFile = File(outputDir, "$fileName.pdf")
+                val fileName = "scan_$timestamp.pdf"
                 
-                TextConverter.textToPdf(text, pdfFile.absolutePath)
+                // 2. Prepare Source Image
+                // "High-End" Feature: Apply Magic Filter automatically
+                val enhancedBitmap = com.scanner.lab.utils.ImageProcessor.applyFilter(
+                    bitmap, 
+                    com.scanner.lab.utils.ImageProcessor.FilterMode.MAGIC
+                )
                 
-                // Also save the image
-                val imageFile = File(outputDir, "$fileName.jpg")
-                FileOutputStream(imageFile).use { out ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                val cacheFile = com.scanner.lab.utils.ScopedStorageHelper.createCacheFile(this@DocumentScannerActivity, "jpg")
+                FileOutputStream(cacheFile).use { out ->
+                    enhancedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
                 }
+                // Recycle enhanced bitmap
+                if (enhancedBitmap != bitmap) enhancedBitmap.recycle()
+                // Use FileProvider or Uri.fromFile? 
+                // NativePdfGenerator uses ContentResolver.openInputStream(uri). 
+                // Uri.fromFile(cacheFile) works seamlessly with ContentResolver for local files.
+                val imageUri = android.net.Uri.fromFile(cacheFile)
                 
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@DocumentScannerActivity,
-                        getString(R.string.success_saved),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    finish()
+                // 3. Prepare Target PDF Uri (Scoped Storage)
+                val targetUri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(
+                    this@DocumentScannerActivity, 
+                    fileName, 
+                    "application/pdf"
+                ) ?: throw Exception("Could not create target URI")
+                
+                // 4. Generate PDF
+                val success = com.scanner.lab.converters.NativePdfGenerator.generatePdf(
+                    this@DocumentScannerActivity,
+                    listOf(imageUri),
+                    targetUri
+                )
+                
+                if (success.getOrDefault(false)) {
+                    // 5. Finalize (for Android Q+)
+                    com.scanner.lab.utils.ScopedStorageHelper.finalizeFile(this@DocumentScannerActivity, targetUri)
+                    
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@DocumentScannerActivity,
+                            getString(R.string.success_saved),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        finish()
+                    }
+                } else {
+                    throw Exception("PDF Generation returned failure")
                 }
+
+                // Cleanup cache
+                cacheFile.delete()
+                
             } catch (e: Exception) {
                 Log.e("DocScanner", "Save failed", e)
                 withContext(Dispatchers.Main) {

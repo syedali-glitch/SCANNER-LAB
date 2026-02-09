@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-files-path name="pdf_files" path="PDFs/" />
-    <cache-path name="cache_files" path="/" />
+    <external-files-path name="my_images" path="Pictures" />
+    <external-files-path name="my_docs" path="Documents" />
+    <cache-path name="my_cache" path="." />
+    <!-- For sharing files from cache -->
+    <external-path name="external_files" path="." />
 </paths>

@@ -139,58 +139,66 @@ object PdfUtilityTools {
     /**
      * Merge multiple PDFs
      */
+    /**
+     * Merge multiple PDFs using OpenPDF
+     */
     fun mergePdfs(
         inputPaths: List<String>,
         outputPath: String
     ): Result<File> = ErrorHandler.safe("MergePdfs") {
         val outputFile = File(outputPath)
+        val document = com.lowagie.text.Document()
+        val copy = com.lowagie.text.pdf.PdfCopy(document, java.io.FileOutputStream(outputFile))
         
-        PDDocument().use { mergedDoc ->
-            inputPaths.forEach { path ->
-                PDDocument.load(File(path)).use { doc ->
-                    doc.pages.forEach { page ->
-                        mergedDoc.addPage(page)
-                    }
-                }
+        document.open()
+        
+        inputPaths.forEach { path ->
+            val reader = com.lowagie.text.pdf.PdfReader(path)
+            val n = reader.numberOfPages
+            for (i in 0 until n) {
+                copy.addPage(copy.getImportedPage(reader, i + 1))
             }
-            
-            mergedDoc.save(outputFile)
         }
         
+        document.close()
         outputFile
     }
     
     /**
      * Split PDF into individual pages
      */
+    /**
+     * Split PDF using OpenPDF
+     */
     fun splitPdf(
         inputPath: String,
         outputDir: String,
         pageRanges: List<IntRange>? = null
     ): Result<List<File>> = ErrorHandler.safe("SplitPdf") {
-        val inputFile = File(inputPath)
         val outputDirectory = File(outputDir).apply { mkdirs() }
         val outputFiles = mutableListOf<File>()
         
-        PDDocument.load(inputFile).use { document ->
-            val totalPages = document.numberOfPages
+        val reader = com.lowagie.text.pdf.PdfReader(inputPath)
+        val totalPages = reader.numberOfPages
+        
+        val ranges = pageRanges ?: listOf(0 until totalPages)
+        
+        ranges.forEachIndexed { index, range ->
+            val outputFile = File(outputDirectory, "split_$index.pdf")
+            val document = com.lowagie.text.Document()
+            val copy = com.lowagie.text.pdf.PdfCopy(document, java.io.FileOutputStream(outputFile))
             
-            val ranges = pageRanges ?: listOf(0 until totalPages)
+            document.open()
             
-            ranges.forEachIndexed { index, range ->
-                val outputFile = File(outputDirectory, "split_$index.pdf")
-                
-                PDDocument().use { newDoc ->
-                    range.forEach { pageNum ->
-                        if (pageNum < totalPages) {
-                            newDoc.addPage(document.getPage(pageNum))
-                        }
-                    }
-                    newDoc.save(outputFile)
+            range.forEach { pageNum ->
+                // Convert 0-based index to 1-based for OpenPDF
+                if (pageNum < totalPages) {
+                    copy.addPage(copy.getImportedPage(reader, pageNum + 1))
                 }
-                
-                outputFiles.add(outputFile)
             }
+            
+            document.close()
+            outputFiles.add(outputFile)
         }
         
         outputFiles
