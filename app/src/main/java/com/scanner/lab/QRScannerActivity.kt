@@ -68,6 +68,38 @@ class QRScannerActivity : AppCompatActivity() {
             binding.cardResult.visibility = View.GONE
             startCamera()
         }
+
+        binding.btnCopy.setOnClickListener {
+            val text = binding.etResult.text.toString()
+            if (text.isNotEmpty()) {
+                val clipboard = getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = android.content.ClipData.newPlainText("QR Result", text)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(this, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
+                it.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+            }
+        }
+
+        binding.btnOpenLink.setOnClickListener {
+            val url = binding.etResult.text.toString()
+            showUrlWarning(url)
+        }
+    }
+
+    private fun showUrlWarning(url: String) {
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_ScannerLab_Dialog)
+            .setTitle(R.string.url_warning_title)
+            .setMessage(R.string.url_warning_message)
+            .setPositiveButton(R.string.open) { _, _ ->
+                try {
+                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Could not open link", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
     
     private fun startCamera() {
@@ -110,7 +142,15 @@ class QRScannerActivity : AppCompatActivity() {
             val rawValue = barcode.rawValue ?: return
             
             runOnUiThread {
-                binding.tvResult.text = rawValue
+                binding.etResult.setText(rawValue)
+                
+                // Show Open Link button if it's a URL
+                if (android.util.Patterns.WEB_URL.matcher(rawValue).matches() || rawValue.startsWith("http")) {
+                    binding.btnOpenLink.visibility = View.VISIBLE
+                } else {
+                    binding.btnOpenLink.visibility = View.GONE
+                }
+
                 binding.cardResult.visibility = View.VISIBLE
                 binding.cardResult.startAnimation(
                     android.view.animation.AnimationUtils.loadAnimation(
