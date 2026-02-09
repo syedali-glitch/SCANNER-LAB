@@ -62,6 +62,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity
+            android:name=".PdfToolsActivity"
+            android:exported="false"
+            android:label="PDF Tools"
+            android:screenOrientation="portrait" />
+            
+        <activity
+            android:name=".ConverterActivity"
+            android:exported="false"
+            android:label="File Converter"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

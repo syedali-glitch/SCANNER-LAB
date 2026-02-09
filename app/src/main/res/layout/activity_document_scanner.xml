@@ -1,116 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="?attr/colorSurface">
 
-    <!-- Camera Preview -->
     <androidx.camera.view.PreviewView
-        android:id="@+id/previewView"
+        android:id="@+id/viewFinder"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Overlay UI -->
-    <LinearLayout
+    <ImageView
+        android:id="@+id/imgPreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <!-- Top Bar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
-
-            <com.scanner.lab.ui.PremiumButton
-                android:id="@+id/btnBack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:text="←"
-                android:textSize="24sp"
-                android:background="@drawable/button_glass_morphism"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/scan_document"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="64dp" />
-        </LinearLayout>
-
-        <!-- Instructions -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardInstructions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            style="@style/GlassCard">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Position document within frame"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:padding="16dp" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Spacer -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+        android:contentDescription="Captured Image"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:background="#000000" />
+        
+    <!-- Controls Layout -->
+    <LinearLayout
+        android:id="@+id/controlsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#80000000">
 
         <!-- Capture Button -->
-        <com.scanner.lab.ui.PremiumButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnCapture"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:text="●"
-            android:textSize="48sp"
-            android:background="@drawable/button_premium_elevated"
-            android:textColor="@color/white"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Actions (Initially Hidden) -->
-        <LinearLayout
-            android:id="@+id/layoutActions"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
+            android:contentDescription="Capture"
+            app:backgroundTint="?attr/colorPrimary"
+            app:tint="?attr/colorOnPrimary"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+        <!-- Save Button (Hidden initially) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Save PDF"
             android:visibility="gone"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="32dp"
+            app:backgroundTint="?attr/colorSecondary"
+            app:tint="?attr/colorOnSecondary"
+            app:srcCompat="@android:drawable/ic_menu_save" />
+            
+        <!-- Retake Button (Hidden initially) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnRetake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Retake"
+            android:visibility="gone"
+            android:layout_marginStart="32dp"
+            app:backgroundTint="?attr/colorError"
+            app:tint="?attr/colorOnError"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
-            <com.scanner.lab.ui.PremiumButton
-                android:id="@+id/btnRetake"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/retake"
-                android:background="@drawable/button_glass_morphism"
-                android:textColor="@color/white"
-                android:layout_marginEnd="8dp" />
-
-            <com.scanner.lab.ui.PremiumButton
-                android:id="@+id/btnSave"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/save_document"
-                android:background="@drawable/button_premium_gradient"
-                android:textColor="@color/white"
-                android:layout_marginStart="8dp" />
-        </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+
+    <!-- Loading Bar with Text -->
+    <LinearLayout
+        android:id="@+id/progressLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="24dp"
+        android:background="@drawable/rounded_bg_loading"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Processing..."
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

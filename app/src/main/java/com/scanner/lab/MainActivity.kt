@@ -117,8 +117,7 @@ class MainActivity : AppCompatActivity() {
             
             // "Monetization Gate": Check Pro Status before allowing "Excel Export" (simulated)
             if (com.scanner.lab.utils.UserPremiums.checkOrShowUpsell(this)) {
-                // Open file picker for conversion
-                Toast.makeText(this, "File Converter - Coming in next update", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, ConverterActivity::class.java))
             }
         }
         
@@ -126,9 +125,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnPdfTools.setOnClickListener {
             it.performHapticFeedback()
             
+            // Allow access (or gate if needed, but defaults to True now)
             if (com.scanner.lab.utils.UserPremiums.checkOrShowUpsell(this)) {
-                // Open PDF tools
-                Toast.makeText(this, "PDF Tools - Coming in next update", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, PdfToolsActivity::class.java))
             }
         }
     }
@@ -200,10 +199,14 @@ class MainActivity : AppCompatActivity() {
                 != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
         }
         
         if (permissions.isNotEmpty()) {
-            // Request permissions
+            storagePermissionLauncher.launch(permissions.toTypedArray())
         }
     }
     

@@ -175,13 +175,18 @@ class DocumentScannerActivity : AppCompatActivity() {
     }
     
     private fun saveDocument() {
-        val bitmap = capturedBitmap ?: return
+        if (capturedBitmap == null) return
         
+        binding.progressLayout.visibility = View.VISIBLE
+        binding.btnCapture.isEnabled = false
         binding.btnSave.isEnabled = false
+        binding.btnRetake.isEnabled = false
+        
+        val bitmap = capturedBitmap!!
         
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // 1. Generate Timestamp and Filename
+                // 1. Create Target Filename
                 val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
                 val fileName = "scan_$timestamp.pdf"
                 
@@ -198,53 +203,40 @@ class DocumentScannerActivity : AppCompatActivity() {
                 }
                 // Recycle enhanced bitmap
                 if (enhancedBitmap != bitmap) enhancedBitmap.recycle()
-                // Use FileProvider or Uri.fromFile? 
-                // NativePdfGenerator uses ContentResolver.openInputStream(uri). 
-                // Uri.fromFile(cacheFile) works seamlessly with ContentResolver for local files.
-                val imageUri = android.net.Uri.fromFile(cacheFile)
                 
-                // 3. Prepare Target PDF Uri (Scoped Storage)
-                val targetUri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(
-                    this@DocumentScannerActivity, 
-                    fileName, 
-                    "application/pdf"
-                ) ?: throw Exception("Could not create target URI")
+                val imageUri = com.scanner.lab.utils.ScopedStorageHelper.getUriForFile(this@DocumentScannerActivity, cacheFile)
                 
-                // 4. Generate PDF
+                // 3. Create Public Output Uri
+                val targetUri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(this@DocumentScannerActivity, fileName)
+                    ?: throw Exception("Could not create output file")
+                    
+                // 4. Generate PDF (Native)
                 val success = com.scanner.lab.converters.NativePdfGenerator.generatePdf(
-                    this@DocumentScannerActivity,
-                    listOf(imageUri),
+                    this@DocumentScannerActivity, 
+                    listOf(imageUri), 
                     targetUri
                 )
                 
-                if (success.getOrDefault(false)) {
-                    // 5. Finalize (for Android Q+)
+                if (success.isSuccess) {
                     com.scanner.lab.utils.ScopedStorageHelper.finalizeFile(this@DocumentScannerActivity, targetUri)
-                    
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            this@DocumentScannerActivity,
-                            getString(R.string.success_saved),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Toast.makeText(this@DocumentScannerActivity, "Saved to Documents: $fileName", Toast.LENGTH_LONG).show()
                         finish()
                     }
                 } else {
-                    throw Exception("PDF Generation returned failure")
+                    throw Exception("PDF Generation failed")
                 }
-
-                // Cleanup cache
+                
+                // Cleanup Cache
                 cacheFile.delete()
                 
             } catch (e: Exception) {
-                Log.e("DocScanner", "Save failed", e)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@DocumentScannerActivity,
-                        "Save failed: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@DocumentScannerActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    binding.progressLayout.visibility = View.GONE
+                    binding.btnCapture.isEnabled = true
                     binding.btnSave.isEnabled = true
+                    binding.btnRetake.isEnabled = true
                 }
             }
         }
