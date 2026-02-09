@@ -14,11 +14,30 @@ import com.scanner.lab.databinding.ActivityFileViewerBinding
 import com.scanner.lab.databinding.ItemFilePremiumBinding
 import java.io.File
 
+import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.scanner.lab.databinding.ActivityFileViewerBinding
+import com.scanner.lab.databinding.ItemFilePremiumBinding
+import java.io.File
+import java.util.Locale
+
 class FileViewerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFileViewerBinding
     private val fileAdapter = FileAdapter { file -> openFile(file) }
     
+    private var allFiles = mutableListOf<FileModel>()
+    private var currentFilter = "ALL"
+    private var currentQuery = ""
+
     // File Picker
     private val filePickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
@@ -43,7 +62,7 @@ class FileViewerActivity : AppCompatActivity() {
         }
 
         setupUI()
-        loadDummyFiles() // For demo/verification, populate with some dummy entries or scan directory
+        scanFiles()
     }
 
     private fun setupUI() {
@@ -56,37 +75,75 @@ class FileViewerActivity : AppCompatActivity() {
             filePickerLauncher.launch(arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/plain"))
         }
         
-        // Chip Filters (Mock logic for now)
-        binding.chipAll.setOnClickListener { filterList("ALL") }
-        binding.chipPdf.setOnClickListener { filterList("PDF") }
-        binding.chipDoc.setOnClickListener { filterList("DOC") }
-        binding.chipXls.setOnClickListener { filterList("XLS") }
+        // Search Logic
+        binding.searchEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                currentQuery = s?.toString()?.lowercase() ?: ""
+                applyFilters()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // Chip Filters
+        binding.chipAll.setOnClickListener { selectFilter("ALL") }
+        binding.chipPdf.setOnClickListener { selectFilter("PDF") }
+        binding.chipDoc.setOnClickListener { selectFilter("DOC") }
+        binding.chipXls.setOnClickListener { selectFilter("XLS") }
     }
     
-    private fun filterList(type: String) {
-        // Todo: Implement real filtering. For now just toast
-        Toast.makeText(this, "Filtering: $type", Toast.LENGTH_SHORT).show()
+    private fun selectFilter(type: String) {
+        currentFilter = type
+        // Update chip UI (Optional: change colors to show active state)
+        applyFilters()
     }
 
-    private fun loadDummyFiles() {
-        // Mock data to confirm UI works
-        val mockFiles = listOf(
-            FileModel("Scan_20240209.pdf", "2.4 MB", "PDF"),
-            FileModel("Invoice_Oct.xlsx", "1.1 MB", "XLS"),
-            FileModel("Contract_Draft.docx", "800 KB", "DOC"),
-            FileModel("Notes.txt", "12 KB", "TXT")
-        )
-        fileAdapter.submitList(mockFiles)
+    private fun applyFilters() {
+        val filtered = allFiles.filter { file ->
+            val matchesType = when (currentFilter) {
+                "PDF" -> file.type == "PDF"
+                "DOC" -> file.type == "DOC" || file.type == "DOCX"
+                "XLS" -> file.type == "XLS" || file.type == "XLSX"
+                else -> true
+            }
+            val matchesQuery = file.name.lowercase().contains(currentQuery)
+            matchesType && matchesQuery
+        }
+        fileAdapter.submitList(filtered)
+    }
+
+    private fun scanFiles() {
+        allFiles.clear()
+        
+        // Scan Documents folder
+        val docDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        val scannerDir = File(docDir, "ScannerLab")
+        
+        val filesToScan = mutableListOf<File>()
+        if (scannerDir.exists()) {
+            scannerDir.listFiles()?.let { filesToScan.addAll(it) }
+        }
+        
+        // Also scan internal files if any
+        getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.listFiles()?.let { filesToScan.addAll(it) }
+
+        filesToScan.forEach { file ->
+            if (file.isFile) {
+                val ext = file.extension.uppercase()
+                val size = String.format("%.1f MB", file.length() / (1024.0 * 1024.0))
+                allFiles.add(FileModel(file.name, size, ext, file.absolutePath))
+            }
+        }
+        
+        applyFilters()
     }
 
     private fun openFile(file: FileModel) {
-        // TODO: Launch DocumentViewerActivity with dummy path or logic
-        Toast.makeText(this, "Opening ${file.name}...", Toast.LENGTH_SHORT).show()
+        val uri = Uri.fromFile(File(file.path))
+        openFileUri(uri)
     }
     
     private fun openFileUri(uri: Uri) {
-         // TODO: Launch DocumentViewerActivity with real URI
-        Toast.makeText(this, "Opened: $uri", Toast.LENGTH_SHORT).show()
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = uri
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -98,7 +155,7 @@ class FileViewerActivity : AppCompatActivity() {
     }
 }
 
-data class FileModel(val name: String, val size: String, val type: String)
+data class FileModel(val name: String, val size: String, val type: String, val path: String)
 
 class FileAdapter(private val onClick: (FileModel) -> Unit) : RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
     
@@ -128,7 +185,9 @@ class FileAdapter(private val onClick: (FileModel) -> Unit) : RecyclerView.Adapt
             
             // Icon
             when(file.type) {
-                "PDF" -> binding.ivIcon.setImageResource(R.drawable.ic_pdf_tool) // reuse tool icon for now? or ic_picture_as_pdf if exists. Using generic doc for now.
+                "PDF" -> binding.ivIcon.setImageResource(R.drawable.ic_pdf_tool)
+                "XLS", "XLSX" -> binding.ivIcon.setImageResource(R.drawable.ic_scan_doc) // Using scan icon as placeholder for xls
+                "DOC", "DOCX" -> binding.ivIcon.setImageResource(R.drawable.ic_upload)
                 else -> binding.ivIcon.setImageResource(R.drawable.ic_scan_doc)
             }
         }

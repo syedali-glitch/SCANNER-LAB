@@ -81,6 +81,11 @@
             android:exported="false"
             android:label="File Viewer"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ScannerLab" />
+            
     </application>
 
 </manifest>

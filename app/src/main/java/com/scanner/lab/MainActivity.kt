@@ -156,11 +156,25 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun setupBottomNav() {
-        // Since we are using a custom LinearLayout for bottom nav, we bind by child index or ID if we assigned them
-        // For simplicity, let's assume we can get them by child index from the parent LinearLayout
-        // But better to use IDs if we can. In xml we didn't assign IDs to the bottom nav items yet, 
-        // let's just leave it for now or use the "Home" one which effectively does nothing (already here)
-        // We will need to update XML to give IDs to bottom nav items for proper handling.
+        binding.navHome.setOnClickListener {
+            it.performHapticFeedback()
+            it.animatePulse()
+            // Already on home, scroll to top
+            binding.nestedScrollView.smoothScrollTo(0, 0)
+        }
+
+        binding.navHistory.setOnClickListener {
+            it.performHapticFeedback()
+            it.animatePulse()
+            // History opens the File Viewer
+            startActivity(Intent(this, FileViewerActivity::class.java))
+        }
+
+        binding.navSettings.setOnClickListener {
+            it.performHapticFeedback()
+            it.animatePulse()
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
     }
 
     private fun setupGestures() {

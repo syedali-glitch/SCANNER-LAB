@@ -548,13 +548,13 @@
 
     <!-- Custom Bottom Navigation -->
     <LinearLayout
+        android:id="@+id/bottomNavParent"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="bottom"
-
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:weightSum="4"
+        android:weightSum="3"
         android:paddingHorizontal="16dp"
         android:background="@drawable/ref_card_bg"
         android:backgroundTint="#FAFAFA"
@@ -563,11 +563,15 @@
         
         <!-- Home -->
         <LinearLayout
+            android:id="@+id/navHome"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
             
             <ImageView
                 android:layout_width="48dp"
@@ -588,67 +592,23 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- QR Scan -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_qr_code"
-                app:tint="@color/ref_gradient_scanner_start"
-                android:padding="2dp"/>
-                
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="QR Scan"
-                android:textSize="10sp"
-                android:textColor="#E0E0E0"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
-
-        <!-- Doc Scan -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_scan_doc"
-                app:tint="@color/ref_gradient_scanner_start"
-                android:padding="2dp"/>
-                
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Doc Scan"
-                android:textSize="10sp"
-                android:textColor="#E0E0E0"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
-
         <!-- History -->
          <LinearLayout
+            android:id="@+id/navHistory"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
             
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_history"
-                app:tint="@color/ref_gradient_scanner_start"
+                app:tint="@color/ref_gradient_tools_start"
                 android:padding="2dp"/>
                 
             <TextView
@@ -659,6 +619,35 @@
                 android:textColor="#E0E0E0"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
+
+        <!-- Settings -->
+        <LinearLayout
+            android:id="@+id/navSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/ref_text_secondary"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
