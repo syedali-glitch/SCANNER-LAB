@@ -1,82 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme - Material Components for modern design + stability -->
-    <style name="Theme.QRPDFTools" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <!-- Base application theme - Light Mode -->
+    <style name="Theme.ScannerLab" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color -->
-        <item name="colorPrimary">@color/primary_blue</item>
-        <item name="colorPrimaryDark">@color/primary_blue_dark</item>
-        <item name="colorAccent">@color/favorite_yellow</item>
-        <item name="colorSecondary">@color/favorite_yellow</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
         
-        <!-- Status bar and navigation bar -->
-        <item name="android:statusBarColor">@color/status_bar</item>
-        <item name="android:navigationBarColor">@color/white</item>
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
         
-        <!-- Background color -->
-        <item name="android:windowBackground">@color/white</item>
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnBackground">@color/text_primary_light</item>
+        <item name="colorOnSurface">@color/text_primary_light</item>
         
-        <!-- Text colors -->
-        <item name="android:textColorPrimary">@color/text_dark</item>
-        <item name="android:textColorSecondary">@color/text_gray</item>
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
         
-         <!-- Premium Window Animations -->
-        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
-    </style>
-
-    <!-- Splash Screen Theme -->
-    <style name="Theme.QRPDFTools.Splash" parent="Theme.QRPDFTools">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-    </style>
-    
-    <style name="WindowAnimationTransition">
-        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
-        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
-        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
-        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">@color/background_light</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        
+        <!-- Window attributes -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
     </style>
     
-    <!-- FAB Style - Material Design -->
-    <style name="Widget.QRPDFTools.FAB" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="tint">@color/white</item>
-        <item name="backgroundTint">@color/primary_blue</item>
-        <item name="elevation">8dp</item>
+    <!-- Premium Button Style -->
+    <style name="PremiumButton" parent="Widget.Material3.Button">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
     
-    <!-- Button Styles - Material Design -->
-    <style name="Widget.QRPDFTools.Button" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/primary_blue</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="elevation">4dp</item>
+    <!-- Glass Card Style -->
+    <style name="GlassCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/glass_light</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="strokeColor">@color/glass_border_light</item>
+        <item name="strokeWidth">1dp</item>
     </style>
     
-    <style name="Widget.QRPDFTools.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="strokeColor">@color/primary_blue</item>
-        <item name="android:textColor">@color/primary_blue</item>
-        <item name="cornerRadius">12dp</item>
+    <!-- Premium Text Styles -->
+    <style name="TextHeadline" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/text_primary_light</item>
+        <item name="android:textStyle">bold</item>
     </style>
     
-    <!-- Toolbar Button Style -->
-    <style name="Widget.QRPDFTools.IconButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="iconTint">@color/text_dark</item>
-    </style>
-
-    <!-- Bottom Sheet Dialog - Material Design -->
-    <style name="Theme.QRPDFTools.BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/Widget.QRPDFTools.BottomSheet</item>
-    </style>
-
-    <style name="Widget.QRPDFTools.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.QRPDFTools.BottomSheet</item>
-        <item name="android:background">@android:color/transparent</item>
+    <style name="TextTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/text_primary_light</item>
+        <item name="android:textStyle">bold</item>
     </style>
     
-    <!-- Rounded corners for bottom sheets -->
-    <style name="ShapeAppearance.QRPDFTools.BottomSheet" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">16dp</item>
-        <item name="cornerSizeTopRight">16dp</item>
+    <style name="TextBody" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/text_secondary_light</item>
     </style>
 </resources>
