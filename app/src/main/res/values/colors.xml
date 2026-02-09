@@ -1,91 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- PlainLabs Proprietary Palette -->
-    <color name="primary_cyan">#008B8B</color>
-    <color name="primary_cyan_dark">#006060</color>
-    <color name="primary_cyan_light">#00B3B3</color>
+    <!-- Primary Brand Colors - Premium Indigo -->
+    <color name="primary">#6366F1</color>
+    <color name="primary_dark">#4F46E5</color>
+    <color name="primary_light">#818CF8</color>
     
-    <!-- Mapped Colors -->
-    <color name="primary">@color/primary_cyan</color>
-    <color name="primary_dark">@color/primary_cyan_dark</color>
-    <color name="primary_light">@color/primary_cyan_light</color>
-    
-    <color name="secondary">#00CED1</color>
-    <color name="secondary_dark">#008B8B</color>
-    <color name="secondary_light">#40E0D0</color>
-    
-    <color name="tertiary">#4F4F4F</color>
-    <color name="tertiary_dark">#2F2F2F</color>
-    
-    <color name="gradient_middle">#007A7A</color>
-
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- MUTED PREMIUM GRADIENTS (Architect Rule) -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    
-    <!-- Scanner Gradient (Deep Cyan/Charcoal) -->
-    <color name="scanner_start">#008B8B</color>
-    <color name="scanner_end">#121212</color>
-    
-    <!-- Converter Gradient (Steel/Cyan) -->
-    <color name="converter_start">#334E4E</color>
-    <color name="converter_end">#008B8B</color>
-    
-    <!-- Viewer Gradient (Charcoal/Glass) -->
-    <color name="viewer_start">#121212</color>
-    <color name="viewer_end">#15FFFFFF</color>
-    
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- GLASSMORPHISM THEME COLORS (PlainLabs Signature) -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    
-    <!-- Dark Surface Background -->
-    <color name="surface_dark">#121212</color>
-    <color name="surface_dark_elevated">#181818</color>
-    
-    <!-- Glass Effect Colors -->
-    <color name="glass_background">#15FFFFFF</color>
-    <color name="glass_border">#25FFFFFF</color>
-    <color name="glass_light">#30FFFFFF</color>
-    <color name="glass_border_light">#50FFFFFF</color>
-    <color name="glass_fallback">#D9121212</color>
-    
-    <!-- Text Colors -->
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#99FFFFFF</color>
-    <color name="text_tertiary">#66FFFFFF</color>
-    <color name="text_light_gray">#999999</color>
-    
-    <!-- Ripple Colors -->
-    <color name="primary_ripple">#33008B8B</color>
-    <color name="secondary_ripple">#3300CED1</color>
-    
-    <!-- Background Colors -->
-    <color name="white">#FFFFFF</color>
-    <color name="background_gray">#F0F0F0</color>
+    <!-- Secondary Brand Colors - Premium Pink -->
+    <color name="secondary">#EC4899</color>
+    <color name="secondary_dark">#DB2777</color>
+    <color name="secondary_light">#F472B6</color>
     
     <!-- Accent Colors -->
-    <color name="favorite_yellow">#FFD700</color>
-    <color name="success_green">#4CAF50</color>
-    <color name="error_red">#F44336</color>
+    <color name="accent">#10B981</color>
+    <color name="accent_orange">#F59E0B</color>
     
-    <!-- Status Bar and Navigation Bar -->
-    <color name="status_bar">#000000</color>
+    <!-- Background Colors - Light Mode -->
+    <color name="background_light">#F8FAFC</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_variant_light">#F1F5F9</color>
     
-    <!-- Transparent -->
+    <!-- Background Colors - Dark Mode -->
+    <color name="background_dark">#0F172A</color>
+    <color name="surface_dark">#1E293B</color>
+    <color name="surface_variant_dark">#334155</color>
+    
+    <!-- Text Colors - Light Mode -->
+    <color name="text_primary_light">#0F172A</color>
+    <color name="text_secondary_light">#64748B</color>
+    <color name="text_tertiary_light">#94A3B8</color>
+    
+    <!-- Text Colors - Dark Mode -->
+    <color name="text_primary_dark">#F8FAFC</color>
+    <color name="text_secondary_dark">#CBD5E1</color>
+    <color name="text_tertiary_dark">#94A3B8</color>
+    
+    <!-- Glassmorphism Colors -->
+    <color name="glass_light">#F0FFFFFF</color>        <!-- 94% white -->
+    <color name="glass_dark">#D01E293B</color>          <!-- 82% dark surface -->
+    <color name="glass_border_light">#33FFFFFF</color>  <!-- 20% white border -->
+    <color name="glass_border_dark">#33FFFFFF</color>   <!-- 20% white border -->
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#6366F1</color>
+    <color name="gradient_middle">#8B5CF6</color>
+    <color name="gradient_end">#EC4899</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#10B981</color>
+    <color name="warning">#F59E0B</color>
+    <color name="error">#EF4444</color>
+    <color name="info">#3B82F6</color>
+    
+    <!-- Utility Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
-    <color name="semi_transparent_dark">#80000000</color>
     
-    <!-- Material Design defaults -->
-    <color name="black">#FF000000</color>
-
-    <!-- Compatibility mappings for legacy theme references -->
-    <color name="primary_blue">#008B8B</color>
-    <color name="primary_blue_dark">#006060</color>
-    <color name="text_dark">#212121</color>
-    <color name="text_gray">#757575</color>
-
-    <!-- PlainLabs Premium Palette -->
-    <color name="plain_deep_charcoal">#121212</color>
-    <color name="plain_muted_cyan">#008B8B</color>
+    <!-- Shadow Colors -->
+    <color name="shadow_light">#1A000000</color>        <!-- 10% black -->
+    <color name="shadow_dark">#40000000</color>         <!-- 25% black -->
+    
+    <!-- Overlay Colors -->
+    <color name="overlay_light">#80000000</color>       <!-- 50% black -->
+    <color name="overlay_dark">#CCFFFFFF</color>        <!-- 80% white -->
+    
+    <!-- ================================================== -->
+    <!-- Material Design 3 Theme Colors - Light Mode        -->
+    <!-- ================================================== -->
+    <color name="md_theme_light_primary">#6366F1</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#E0E7FF</color>
+    <color name="md_theme_light_onPrimaryContainer">#312E81</color>
+    <color name="md_theme_light_secondary">#EC4899</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#FCE7F3</color>
+    <color name="md_theme_light_onSecondaryContainer">#831843</color>
+    <color name="md_theme_light_tertiary">#10B981</color>
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="md_theme_light_tertiaryContainer">#D1FAE5</color>
+    <color name="md_theme_light_onTertiaryContainer">#064E3B</color>
+    <color name="md_theme_light_error">#EF4444</color>
+    <color name="md_theme_light_onError">#FFFFFF</color>
+    <color name="md_theme_light_errorContainer">#FEE2E2</color>
+    <color name="md_theme_light_onErrorContainer">#7F1D1D</color>
+    <color name="md_theme_light_outline">#94A3B8</color>
+    <color name="md_theme_light_background">#F8FAFC</color>
+    <color name="md_theme_light_onBackground">#0F172A</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#0F172A</color>
+    <color name="md_theme_light_surfaceVariant">#F1F5F9</color>
+    <color name="md_theme_light_onSurfaceVariant">#475569</color>
+    <color name="md_theme_light_inverseSurface">#1E293B</color>
+    <color name="md_theme_light_inverseOnSurface">#F8FAFC</color>
+    <color name="md_theme_light_inversePrimary">#A5B4FC</color>
+    
+    <!-- ================================================== -->
+    <!-- Material Design 3 Theme Colors - Dark Mode         -->
+    <!-- ================================================== -->
+    <color name="md_theme_dark_primary">#A5B4FC</color>
+    <color name="md_theme_dark_onPrimary">#312E81</color>
+    <color name="md_theme_dark_primaryContainer">#4338CA</color>
+    <color name="md_theme_dark_onPrimaryContainer">#E0E7FF</color>
+    <color name="md_theme_dark_secondary">#F9A8D4</color>
+    <color name="md_theme_dark_onSecondary">#831843</color>
+    <color name="md_theme_dark_secondaryContainer">#BE185D</color>
+    <color name="md_theme_dark_onSecondaryContainer">#FCE7F3</color>
+    <color name="md_theme_dark_tertiary">#6EE7B7</color>
+    <color name="md_theme_dark_onTertiary">#064E3B</color>
+    <color name="md_theme_dark_tertiaryContainer">#047857</color>
+    <color name="md_theme_dark_onTertiaryContainer">#D1FAE5</color>
+    <color name="md_theme_dark_error">#FCA5A5</color>
+    <color name="md_theme_dark_onError">#7F1D1D</color>
+    <color name="md_theme_dark_errorContainer">#B91C1C</color>
+    <color name="md_theme_dark_onErrorContainer">#FEE2E2</color>
+    <color name="md_theme_dark_outline">#64748B</color>
+    <color name="md_theme_dark_background">#0F172A</color>
+    <color name="md_theme_dark_onBackground">#F8FAFC</color>
+    <color name="md_theme_dark_surface">#1E293B</color>
+    <color name="md_theme_dark_onSurface">#F8FAFC</color>
+    <color name="md_theme_dark_surfaceVariant">#334155</color>
+    <color name="md_theme_dark_onSurfaceVariant">#CBD5E1</color>
+    <color name="md_theme_dark_inverseSurface">#F8FAFC</color>
+    <color name="md_theme_dark_inverseOnSurface">#1E293B</color>
+    <color name="md_theme_dark_inversePrimary">#6366F1</color>
 </resources>
