@@ -86,14 +86,14 @@ android {
 
     buildTypes {
         // Debug uses default Android debug signing (works out of the box)
-        debug {
+        getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             isShrinkResources = false
             isDebuggable = true
         }
         
-        release {
+        getByName("release") {
             // Use release signing if configured, otherwise fall back to debug
             // This ensures APKs are ALWAYS signed (never unsigned)
             val releaseConfig = signingConfigs.getByName("release")
