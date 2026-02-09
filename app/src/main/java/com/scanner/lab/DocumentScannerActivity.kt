@@ -86,18 +86,20 @@ class DocumentScannerActivity : AppCompatActivity() {
     }
     
     private fun setupUI() {
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
+        // New Layout does not have btnBack
         
         binding.btnCapture.setOnClickListener {
             captureImage()
         }
         
         binding.btnRetake.setOnClickListener {
-            binding.layoutActions.visibility = View.GONE
+            // Reset to Capture Mode
             binding.btnCapture.visibility = View.VISIBLE
-            binding.cardInstructions.visibility = View.VISIBLE
+            binding.btnSave.visibility = View.GONE
+            binding.btnRetake.visibility = View.GONE
+            binding.imgPreview.visibility = View.GONE
+            binding.viewFinder.visibility = View.VISIBLE
+            
             capturedBitmap?.recycle()
             capturedBitmap = null
         }
@@ -116,7 +118,7 @@ class DocumentScannerActivity : AppCompatActivity() {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(binding.previewView.surfaceProvider)
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
             
             imageCapture = ImageCapture.Builder()
@@ -139,8 +141,6 @@ class DocumentScannerActivity : AppCompatActivity() {
     private fun captureImage() {
         val imageCapture = imageCapture ?: return
         
-        binding.btnCapture.animatePulse()
-        
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageCapturedCallback() {
@@ -149,16 +149,14 @@ class DocumentScannerActivity : AppCompatActivity() {
                     image.close()
                     
                     runOnUiThread {
+                        // Switch to Review Mode
+                        binding.viewFinder.visibility = View.GONE
+                        binding.imgPreview.visibility = View.VISIBLE
+                        binding.imgPreview.setImageBitmap(capturedBitmap)
+                        
                         binding.btnCapture.visibility = View.GONE
-                        binding.cardInstructions.visibility = View.GONE
-                        binding.layoutActions.visibility = View.VISIBLE
-                        binding.layoutActions.startAnimation(
-                            android.view.animation.AnimationUtils.loadAnimation(
-                                this@DocumentScannerActivity,
-                                R.anim.slide_in_bottom
-                            )
-                        )
-                        binding.btnSave.animateSuccess()
+                        binding.btnSave.visibility = View.VISIBLE
+                        binding.btnRetake.visibility = View.VISIBLE
                     }
                 }
                 
@@ -172,6 +170,18 @@ class DocumentScannerActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
+        val buffer = image.planes[0].buffer
+        val bytes = ByteArray(buffer.remaining())
+        buffer.get(bytes)
+        val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        
+        // Handle rotation
+        val matrix = android.graphics.Matrix()
+        matrix.postRotate(image.imageInfo.rotationDegrees.toFloat())
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
     
     private fun saveDocument() {
@@ -242,33 +252,10 @@ class DocumentScannerActivity : AppCompatActivity() {
         }
     }
     
-    private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
-        val buffer = image.planes[0].buffer
-        val bytes = ByteArray(buffer.remaining())
-        buffer.get(bytes)
-        return android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-    }
-    
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
         textRecognizer.close()
         capturedBitmap?.recycle()
-    }
-}
-
-// Extension function for Task<T>.await()
-@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
-suspend fun <T> com.google.android.gms.tasks.Task<T>.await(): T {
-    return kotlinx.coroutines.suspendCancellableCoroutine { cont ->
-        addOnSuccessListener { result ->
-            cont.resume(result) {}
-        }
-        addOnFailureListener { exception ->
-            cont.cancel(exception)
-        }
-        cont.invokeOnCancellation {
-            // Task cannot be cancelled, but we handle this for cleanup
-        }
     }
 }

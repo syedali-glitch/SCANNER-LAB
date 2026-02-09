@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import com.lowagie.text.Document
+import com.lowagie.text.Element
 import com.lowagie.text.pdf.*
 import java.io.File
 import java.io.FileOutputStream

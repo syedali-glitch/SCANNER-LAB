@@ -31,9 +31,10 @@ class MainActivity : AppCompatActivity() {
     }
     
     private val storagePermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val allGranted = permissions.entries.all { it.value }
+        if (allGranted) {
             // Permission granted
         } else {
             Toast.makeText(this, R.string.error_storage_permission, Toast.LENGTH_SHORT).show()

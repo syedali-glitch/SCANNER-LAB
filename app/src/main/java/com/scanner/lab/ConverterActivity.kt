@@ -16,7 +16,7 @@ import com.scanner.lab.utils.UserPremiums
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
@@ -77,7 +77,8 @@ class ConverterActivity : AppCompatActivity() {
                 uris.forEach { uri ->
                     try {
                         val inputImage = InputImage.fromFilePath(this@ConverterActivity, uri)
-                        val result = recognizer.process(inputImage).await()
+                        // Use Tasks.await directly since we lack coroutines-play-services dependency
+                        val result = com.google.android.gms.tasks.Tasks.await(recognizer.process(inputImage))
                         extractedTexts.add(result.text)
                     } catch (e: Exception) {
                         e.printStackTrace()
