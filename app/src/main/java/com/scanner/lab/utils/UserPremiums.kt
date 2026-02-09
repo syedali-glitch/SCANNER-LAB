@@ -17,7 +17,7 @@ object UserPremiums {
 
     fun init(context: Context) {
         val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        isPro = prefs.getBoolean(KEY_IS_PRO, false) // Default to free
+        isPro = prefs.getBoolean(KEY_IS_PRO, true) // Default to TRUE (Unlocked/Pro)
     }
 
     fun setProStatus(context: Context, status: Boolean) {
