@@ -24,9 +24,10 @@ android {
         // vectorDrawables.useSupportLibrary = true
         
         // Resource optimization: Only keep English resources
+        // Resource optimization: Only keep English resources
         resourceConfigurations.add("en")
         
-        multiDexEnabled = true
+        // multiDexEnabled = true  // Native on minSdk 26+
         
         ndk {
             // STRICTLY limit to physical devices. Drop x86/x86_64 (Emulators).
