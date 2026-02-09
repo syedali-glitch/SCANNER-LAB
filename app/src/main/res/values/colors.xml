@@ -60,6 +60,20 @@
     <color name="shadow_light">#1A000000</color>        <!-- 10% black -->
     <color name="shadow_dark">#40000000</color>         <!-- 25% black -->
     
+    <!-- Feature Gradient Colors -->
+    <color name="converter_start">#4CAF50</color>
+    <color name="converter_end">#81C784</color>
+    <color name="scanner_start">#2196F3</color>
+    <color name="scanner_end">#64B5F6</color>
+    <color name="viewer_start">#9C27B0</color>
+    <color name="viewer_end">#BA68C8</color>
+    
+    <!-- UI Element Colors -->
+    <color name="text_gray">#757575</color>
+    <color name="text_dark">#212121</color>
+    <color name="primary_blue">#1976D2</color>
+    <color name="background_gray">#F5F5F5</color>
+    
     <!-- Overlay Colors -->
     <color name="overlay_light">#80000000</color>       <!-- 50% black -->
     <color name="overlay_dark">#CCFFFFFF</color>        <!-- 80% white -->

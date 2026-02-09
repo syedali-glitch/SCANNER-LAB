@@ -65,6 +65,13 @@
     <string name="success_saved">File saved successfully</string>
     <string name="success_converted">Converted successfully</string>
     
+    <!-- History & Settings -->
+    <string name="history">History</string>
+    <string name="search_history">Search History</string>
+    <string name="no_history">No history available</string>
+    <string name="swipe_left_delete">Swipe left to delete</string>
+    <string name="close">Close</string>
+    
     <!-- Actions -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>

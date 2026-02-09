@@ -54,6 +54,13 @@ android {
     
     kotlinOptions {
         jvmTarget = "17"
+        allWarningsAsErrors = true
+    }
+    
+    lint {
+        abortOnError = true
+        checkReleaseBuilds = true
+        ignoreTestSources = true
     }
     
     buildFeatures {
