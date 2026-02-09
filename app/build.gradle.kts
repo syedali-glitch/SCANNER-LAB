@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.scanner.lab"
-        minSdk = 26  // Required for Apache POI and Log4j (MethodHandle support)
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
@@ -20,11 +20,7 @@ android {
             useSupportLibrary = true
         }
         
-    }
-    
-    // Resource optimization - only include necessary languages
-    androidResources {
-        localeFilters += "en"
+        resourceConfigurations += setOf("en")
     }
 
     buildTypes {
