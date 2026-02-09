@@ -202,6 +202,7 @@ class DocumentScannerActivity : AppCompatActivity() {
 }
 
 // Extension function for Task<T>.await()
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 suspend fun <T> com.google.android.gms.tasks.Task<T>.await(): T {
     return kotlinx.coroutines.suspendCancellableCoroutine { cont ->
         addOnSuccessListener { result ->
