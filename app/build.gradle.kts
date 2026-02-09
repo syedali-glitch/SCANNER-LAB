@@ -20,8 +20,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        // Vector drawables support for older Android versions
-        vectorDrawables.useSupportLibrary = true
+        // Vector drawables support (native on minSdk 26+)
+        // vectorDrawables.useSupportLibrary = true
         
         // Resource optimization: Only keep English resources
         resourceConfigurations.add("en")
