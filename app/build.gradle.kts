@@ -20,8 +20,11 @@ android {
             useSupportLibrary = true
         }
         
-        // Resource optimization - only include necessary languages
-        resourceConfigurations.addAll(listOf("en"))
+    }
+    
+    // Resource optimization - only include necessary languages
+    androidResources {
+        localeFilters += "en"
     }
 
     buildTypes {
@@ -98,9 +101,7 @@ dependencies {
     implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5")
     
-    // HTML to PDF - iText
-    implementation("com.itextpdf:itext7-core:7.2.5")
-    implementation("com.itextpdf:html2pdf:4.0.5")
+
     
     // QR Code Scanner - ML Kit
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
