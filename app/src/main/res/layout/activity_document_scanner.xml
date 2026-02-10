@@ -11,6 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.scanner.lab.ui.ScannerOverlayView
+        android:id="@+id/scannerOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ImageView
         android:id="@+id/imgPreview"
         android:layout_width="match_parent"
@@ -29,13 +34,12 @@
         
        <ImageView
            android:id="@+id/btnBack"
-           android:layout_width="40dp"
-           android:layout_height="40dp"
-           android:src="@drawable/ic_play_arrow"
-           android:rotation="180"
-           app:tint="@color/black"
-           android:background="@drawable/outline_glass_background"
-           android:padding="8dp"/>
+           android:layout_width="48dp"
+           android:layout_height="48dp"
+           android:src="@drawable/ic_back"
+           app:tint="@color/white"
+           android:background="@drawable/bg_circle_outline"
+           android:padding="12dp"/>
     </FrameLayout>
         
     <!-- Controls Layout (Bottom) -->
@@ -61,9 +65,9 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="@color/black" 
+                app:tint="@color/white" 
                 android:padding="12dp"
-                android:background="@drawable/outline_glass_background" 
+                android:background="@drawable/bg_circle_outline" 
                 android:contentDescription="Retake"/>
         </FrameLayout>
 
@@ -75,7 +79,7 @@
             android:contentDescription="Capture"
             android:src="@drawable/ic_scan_doc"
             android:padding="16dp"
-            app:tint="@color/black"
+            app:tint="@color/white"
             android:background="@drawable/outline_ref_bg_scanner"/>
 
         <!-- Save Button (Hidden initially) -->
@@ -90,9 +94,9 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:src="@android:drawable/ic_menu_save"
-                app:tint="@color/black"
+                app:tint="@color/white"
                 android:padding="12dp"
-                android:background="@drawable/outline_glass_background"
+                android:background="@drawable/bg_circle_outline"
                 android:contentDescription="Save PDF"/>
         </FrameLayout>
 

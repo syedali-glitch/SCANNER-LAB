@@ -18,7 +18,7 @@ import java.util.concurrent.Executors
 /**
  * QR Scanner Activity with ML Kit
  */
-class QRScannerActivity : AppCompatActivity() {
+class QRScannerActivity : BaseActivity() {
     
     private lateinit var binding: ActivityQrScannerBinding
     private lateinit var cameraExecutor: ExecutorService
@@ -33,7 +33,19 @@ class QRScannerActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         
         setupUI()
+        handleScanMode()
         checkCameraPermission()
+    }
+    
+    private fun handleScanMode() {
+        val mode = intent.getStringExtra("SCAN_MODE") ?: "QR"
+        if (mode == "BARCODE") {
+            binding.tvTitle.text = "Scan Barcode"
+            binding.scannerOverlay.setScanMode(com.scanner.lab.ui.ScannerOverlayView.ScanMode.BARCODE)
+        } else {
+            binding.tvTitle.text = getString(R.string.scan_qr)
+            binding.scannerOverlay.setScanMode(com.scanner.lab.ui.ScannerOverlayView.ScanMode.QR)
+        }
     }
     
     private val requestPermissionLauncher = registerForActivityResult(

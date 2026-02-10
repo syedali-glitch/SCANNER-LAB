@@ -16,7 +16,7 @@ import com.scanner.lab.ui.GestureHandler
 /**
  * Main activity with premium glassmorphism UI
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     
     private lateinit var binding: ActivityMainBinding
     
@@ -110,7 +110,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnShortcutQr.setOnClickListener {
             it.performHapticFeedback()
             checkCameraPermissionAndLaunch {
-                startActivity(Intent(this, QRScannerActivity::class.java))
+                val intent = Intent(this, QRScannerActivity::class.java)
+                intent.putExtra("SCAN_MODE", "QR")
+                startActivity(intent)
             }
         }
 
@@ -122,11 +124,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Shortcut: Barcode (re-using QR activity for now)
+        // Shortcut: Barcode
         binding.btnShortcutBarcode.setOnClickListener {
             it.performHapticFeedback()
             checkCameraPermissionAndLaunch {
-                startActivity(Intent(this, QRScannerActivity::class.java))
+                val intent = Intent(this, QRScannerActivity::class.java)
+                intent.putExtra("SCAN_MODE", "BARCODE")
+                startActivity(intent)
             }
         }
         
@@ -168,6 +172,12 @@ class MainActivity : AppCompatActivity() {
             it.animatePulse()
             // History opens the File Viewer
             startActivity(Intent(this, FileViewerActivity::class.java))
+        }
+
+        binding.navTools.setOnClickListener {
+            it.performHapticFeedback()
+            it.animatePulse()
+            startActivity(Intent(this, ToolsActivity::class.java))
         }
 
         binding.navSettings.setOnClickListener {

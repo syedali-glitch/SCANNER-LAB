@@ -15,6 +15,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.scanner.lab.converters.TextConverter
 import com.scanner.lab.databinding.ActivityDocumentScannerBinding
+import com.scanner.lab.ui.ScannerOverlayView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ import java.util.concurrent.Executors
 /**
  * Document Scanner Activity with OCR
  */
-class DocumentScannerActivity : AppCompatActivity() {
+class DocumentScannerActivity : BaseActivity() {
     
     private lateinit var binding: ActivityDocumentScannerBinding
     private lateinit var cameraExecutor: ExecutorService
@@ -45,6 +46,9 @@ class DocumentScannerActivity : AppCompatActivity() {
         
         binding = ActivityDocumentScannerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Set Scanner Overlay to Document Mode (3x3 Grid)
+        binding.scannerOverlay.setScanMode(ScannerOverlayView.ScanMode.DOCUMENT)
         
         // Apply Insets
         androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->

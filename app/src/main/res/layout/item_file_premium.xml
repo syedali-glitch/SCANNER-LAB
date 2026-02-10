@@ -7,7 +7,10 @@
     android:background="@drawable/ref_card_bg"
     android:padding="12dp"
     android:layout_marginBottom="8dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
     
     <ImageView
         android:id="@+id/ivIcon"

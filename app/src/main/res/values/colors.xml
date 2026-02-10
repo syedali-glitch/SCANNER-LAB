@@ -1,161 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Brand Colors - PlainLabs Muted Cyan -->
-    <color name="primary">#008B8B</color>
-    <color name="primary_dark">#006B6B</color>
-    <color name="primary_light">#20B2AA</color>
+    <!-- ================================================== -->
+    <!-- NEW BRAND PALETTE: "Stealth" / Obsidian            -->
+    <!-- ================================================== -->
     
-    <!-- Secondary Brand Colors - Complementary Teal -->
-    <color name="secondary">#008080</color>
-    <color name="secondary_dark">#004d4d</color>
-    <color name="secondary_light">#66CDAA</color>
+    <!-- Foundation -->
+    <color name="obsidian_black">#020617</color> <!-- Main Background -->
+    <color name="deep_slate">#0F172A</color>     <!-- Surface / Cards / Nav -->
+    <color name="midnight_grey">#1E293B</color>  <!-- Secondary Surface / Inputs -->
+    <color name="steel_border">#475569</color>   <!-- Dividers / Borders -->
+    <color name="silver_glow">#94A3B8</color>    <!-- Muted Text / Icons -->
+    <color name="pure_white">#FFFFFF</color>     <!-- Primary Action -->
+    <color name="crisp_white">#F8FAFC</color>    <!-- Headings -->
+
+    <!-- Functional / Accents -->
+    <color name="emerald_signal">#10B981</color> <!-- Success -->
+    <color name="laser_red">#F43F5E</color>      <!-- Error -->
+    <color name="amber_light">#F59E0B</color>    <!-- Warning -->
+    <color name="electric_sky">#38BDF8</color>   <!-- Interaction / Focus -->
     
-    <!-- Accent Colors -->
-    <color name="accent">#40E0D0</color>
-    <color name="accent_orange">#FF8C00</color>
+    <!-- Overlays -->
+    <!-- Glass Overlay: #1E293B at 60% opacity (approx 99 hex) -->
+    <color name="glass_overlay_stealth">#991E293B</color>
+
+    <!-- ================================================== -->
+    <!-- MAPPING: Reference Design (Semantic Names)         -->
+    <!-- ================================================== -->
+    <color name="ref_background">@color/obsidian_black</color>
+    <color name="ref_surface">@color/deep_slate</color>
+    <color name="ref_text_primary">@color/crisp_white</color>
+    <color name="ref_text_secondary">@color/silver_glow</color>
+    <color name="ref_chip_bg">@color/midnight_grey</color>
+    <color name="ref_divider">@color/steel_border</color>
+
+    <!-- Gradients (Mapped to closest Brand Accents + variations) -->
+    <!-- Scanner (Teal/Sky vibe) -->
+    <color name="ref_gradient_scanner_start">@color/electric_sky</color>
+    <color name="ref_gradient_scanner_end">#0EA5E9</color> <!-- Slightly darker sky -->
     
-    <!-- Background Colors - Light Mode -->
-    <color name="background_light">#F5F5F5</color>
-    <color name="surface_light">#FFFFFF</color>
-    <color name="surface_variant_light">#E0F7FA</color>
+    <!-- Converter (Emerald vibe) -->
+    <color name="ref_gradient_converter_start">@color/emerald_signal</color>
+    <color name="ref_gradient_converter_end">#059669</color> <!-- Slightly darker emerald -->
     
-    <!-- Background Colors - Dark Mode (Deep Charcoal) -->
-    <color name="background_dark">#121212</color>
-    <color name="surface_dark">#1E1E1E</color>
-    <color name="surface_variant_dark">#2C2C2C</color>
+    <!-- Tools (Purple changed to Amber/Warm or keep Purple? User didn't specify tools color.
+         Let's stick to the prompt's accents. "Interaction" is Electric Sky. 
+         Maybe Tools can be Amber for "Warning/Attention" or just keep a cool accent.
+         Let's wait. Actually user gave "Amber Light" for Warning. 
+         Let's keep Tools distinct. Maybe use Electric Sky for tools too or a variant.
+         Actually, let's use the old Purple but desaturated to match Stealth? 
+         No, let's strictly follow the palette. 
+         Let's make Tools = Amber/Orange to fit the 'Amber Light' accent available. -->
+    <color name="ref_gradient_tools_start">@color/amber_light</color>
+    <color name="ref_gradient_tools_end">#D97706</color>
+
+    <!-- Viewer (Neutral/Slate) -->
+    <color name="ref_gradient_viewer_start">@color/silver_glow</color>
+    <color name="ref_gradient_viewer_end">@color/steel_border</color>
+
+    <!-- ================================================== -->
+    <!-- Material Design 3 Theme Mappings                   -->
+    <!-- ================================================== -->
     
-    <!-- Text Colors - Light Mode -->
-    <color name="text_primary_light">#0F172A</color>
-    <color name="text_secondary_light">#64748B</color>
-    <color name="text_tertiary_light">#94A3B8</color>
-    
-    <!-- Text Colors - Dark Mode -->
-    <color name="text_primary_dark">#F8FAFC</color>
-    <color name="text_secondary_dark">#CBD5E1</color>
-    <color name="text_tertiary_dark">#94A3B8</color>
-    
-    <!-- Glassmorphism Colors -->
-    <color name="glass_light">#F0FFFFFF</color>        <!-- 94% white -->
-    <color name="glass_dark">#D01E293B</color>          <!-- 82% dark surface -->
-    <color name="glass_border_light">#33FFFFFF</color>  <!-- 20% white border -->
-    <color name="glass_border_dark">#33FFFFFF</color>   <!-- 20% white border -->
-    
-    <!-- Gradient Colors -->
-    <color name="gradient_start">#6366F1</color>
-    <color name="gradient_middle">#8B5CF6</color>
-    <color name="gradient_end">#EC4899</color>
-    
-    <!-- Status Colors -->
-    <color name="success">#10B981</color>
-    <color name="warning">#F59E0B</color>
-    <color name="error">#EF4444</color>
-    <color name="info">#3B82F6</color>
-    
-    <!-- Utility Colors -->
+    <!-- Light Mode (Mapped to Stealth anyway for consistency or keep separated? 
+         User said "Use these for your app's foundation". implied dark mode default. 
+         Let's map Dark Theme to these. Light theme might look weird with obsidian but let's try to map logically.) -->
+         
+    <!-- Standard Colors -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="transparent">#00000000</color>
+    <!-- Legacy / Base Colors (Restored & Mapped) -->
+    <color name="primary">@color/pure_white</color>
+    <color name="primary_light">@color/crisp_white</color>
+    <color name="primary_dark">@color/silver_glow</color>
+    <color name="accent">@color/electric_sky</color>
     
-    <!-- Shadow Colors -->
-    <color name="shadow_light">#1A000000</color>        <!-- 10% black -->
-    <color name="shadow_dark">#40000000</color>         <!-- 25% black -->
+    <color name="secondary">@color/silver_glow</color>
+    <color name="secondary_dark">@color/midnight_grey</color>
+    <color name="secondary_light">@color/crisp_white</color>
     
-    <!-- Feature Gradient Colors -->
-    <color name="converter_start">#4CAF50</color>
-    <color name="converter_end">#81C784</color>
-    <color name="scanner_start">#2196F3</color>
-    <color name="scanner_end">#64B5F6</color>
-    <color name="viewer_start">#9C27B0</color>
-    <color name="viewer_end">#BA68C8</color>
+    <!-- Restored Gradients -->
+    <color name="gradient_start">@color/electric_sky</color>
+    <color name="gradient_middle">#0EA5E9</color> <!-- Sky 500 -->
+    <color name="gradient_end">@color/emerald_signal</color>
+
+    <!-- MD3 Dark Mappings -->
+    <color name="md_theme_dark_primary">@color/pure_white</color>
+    <color name="md_theme_dark_onPrimary">@color/obsidian_black</color>
+    <color name="md_theme_dark_primaryContainer">@color/midnight_grey</color>
+    <color name="md_theme_dark_onPrimaryContainer">@color/pure_white</color>
+    <color name="md_theme_dark_secondary">@color/silver_glow</color>
+    <color name="md_theme_dark_onSecondary">@color/obsidian_black</color>
+    <color name="md_theme_dark_secondaryContainer">@color/midnight_grey</color>
+    <color name="md_theme_dark_onSecondaryContainer">@color/pure_white</color>
     
-    <!-- UI Element Colors -->
-    <color name="text_gray">#757575</color>
-    <color name="text_dark">#212121</color>
-    <color name="primary_blue">#1976D2</color>
-    <color name="background_gray">#F5F5F5</color>
+    <color name="md_theme_dark_background">@color/obsidian_black</color>
+    <color name="md_theme_dark_onBackground">@color/crisp_white</color>
+    <color name="md_theme_dark_surface">@color/deep_slate</color>
+    <color name="md_theme_dark_onSurface">@color/crisp_white</color>
+    <color name="md_theme_dark_surfaceVariant">@color/midnight_grey</color>
+    <color name="md_theme_dark_onSurfaceVariant">@color/silver_glow</color>
+    <color name="md_theme_dark_outline">@color/steel_border</color>
+    <color name="md_theme_dark_error">@color/laser_red</color>
+    <color name="md_theme_dark_onError">@color/obsidian_black</color>
+    <color name="md_theme_dark_errorContainer">@color/midnight_grey</color>
+    <color name="md_theme_dark_onErrorContainer">@color/laser_red</color>
     
-    <!-- Overlay Colors -->
-    <color name="overlay_light">#80000000</color>       <!-- 50% black -->
-    <color name="overlay_dark">#CCFFFFFF</color>        <!-- 80% white -->
+    <color name="md_theme_dark_tertiary">@color/emerald_signal</color>
+    <color name="md_theme_dark_onTertiary">@color/obsidian_black</color>
+    <color name="md_theme_dark_tertiaryContainer">@color/midnight_grey</color>
+    <color name="md_theme_dark_onTertiaryContainer">@color/emerald_signal</color>
     
-    <!-- ================================================== -->
-    <!-- Material Design 3 Theme Colors - Light Mode        -->
-    <!-- ================================================== -->
-    <color name="md_theme_light_primary">#008B8B</color>
-    <color name="md_theme_light_onPrimary">#FFFFFF</color>
-    <color name="md_theme_light_primaryContainer">#E0F2F1</color>
-    <color name="md_theme_light_onPrimaryContainer">#004D40</color>
-    <color name="md_theme_light_secondary">#008080</color>
-    <color name="md_theme_light_onSecondary">#FFFFFF</color>
-    <color name="md_theme_light_secondaryContainer">#B2DFDB</color>
-    <color name="md_theme_light_onSecondaryContainer">#004D40</color>
-    <color name="md_theme_light_tertiary">#10B981</color>
-    <color name="md_theme_light_onTertiary">#FFFFFF</color>
-    <color name="md_theme_light_tertiaryContainer">#D1FAE5</color>
-    <color name="md_theme_light_onTertiaryContainer">#064E3B</color>
-    <color name="md_theme_light_error">#EF4444</color>
-    <color name="md_theme_light_onError">#FFFFFF</color>
-    <color name="md_theme_light_errorContainer">#FEE2E2</color>
-    <color name="md_theme_light_onErrorContainer">#7F1D1D</color>
-    <color name="md_theme_light_outline">#94A3B8</color>
-    <color name="md_theme_light_background">#F8FAFC</color>
-    <color name="md_theme_light_onBackground">#0F172A</color>
-    <color name="md_theme_light_surface">#FFFFFF</color>
-    <color name="md_theme_light_onSurface">#0F172A</color>
-    <color name="md_theme_light_surfaceVariant">#F1F5F9</color>
-    <color name="md_theme_light_onSurfaceVariant">#475569</color>
-    <color name="md_theme_light_inverseSurface">#1E293B</color>
-    <color name="md_theme_light_inverseOnSurface">#F8FAFC</color>
-    <color name="md_theme_light_inversePrimary">#A5B4FC</color>
+    <color name="md_theme_dark_inverseSurface">@color/pure_white</color>
+    <color name="md_theme_dark_inverseOnSurface">@color/obsidian_black</color>
+    <color name="md_theme_dark_inversePrimary">@color/deep_slate</color>
+
+    <!-- MD3 Light Mappings (Forced to Stealth/Dark per Brand Guidelines) -->
+    <color name="md_theme_light_primary">@color/pure_white</color>
+    <color name="md_theme_light_onPrimary">@color/obsidian_black</color>
+    <color name="md_theme_light_primaryContainer">@color/midnight_grey</color>
+    <color name="md_theme_light_onPrimaryContainer">@color/pure_white</color>
+    <color name="md_theme_light_secondary">@color/silver_glow</color>
+    <color name="md_theme_light_onSecondary">@color/obsidian_black</color>
+    <color name="md_theme_light_secondaryContainer">@color/midnight_grey</color>
+    <color name="md_theme_light_onSecondaryContainer">@color/pure_white</color>
+
+    <color name="md_theme_light_background">@color/obsidian_black</color> <!-- FORCE DARK -->
+    <color name="md_theme_light_onBackground">@color/crisp_white</color>
+    <color name="md_theme_light_surface">@color/deep_slate</color> <!-- FORCE DARK -->
+    <color name="md_theme_light_onSurface">@color/crisp_white</color>
+    <color name="md_theme_light_surfaceVariant">@color/midnight_grey</color>
+    <color name="md_theme_light_onSurfaceVariant">@color/silver_glow</color>
+    <color name="md_theme_light_outline">@color/steel_border</color>
+    <color name="md_theme_light_error">@color/laser_red</color>
+    <color name="md_theme_light_onError">@color/obsidian_black</color>
+    <color name="md_theme_light_errorContainer">@color/midnight_grey</color>
+    <color name="md_theme_light_onErrorContainer">@color/laser_red</color>
+
+    <color name="md_theme_light_tertiary">@color/emerald_signal</color>
+    <color name="md_theme_light_onTertiary">@color/obsidian_black</color>
+    <color name="md_theme_light_tertiaryContainer">@color/midnight_grey</color>
+    <color name="md_theme_light_onTertiaryContainer">@color/emerald_signal</color>
+
+    <color name="md_theme_light_inverseSurface">@color/pure_white</color>
+    <color name="md_theme_light_inverseOnSurface">@color/obsidian_black</color>
+    <color name="md_theme_light_inversePrimary">@color/deep_slate</color>
     
-    <!-- ================================================== -->
-    <!-- Material Design 3 Theme Colors - Dark Mode         -->
-    <!-- ================================================== -->
-    <color name="md_theme_dark_primary">#4DB6AC</color>
-    <color name="md_theme_dark_onPrimary">#004D40</color>
-    <color name="md_theme_dark_primaryContainer">#00695C</color>
-    <color name="md_theme_dark_onPrimaryContainer">#B2DFDB</color>
-    <color name="md_theme_dark_secondary">#80CBC4</color>
-    <color name="md_theme_dark_onSecondary">#004D40</color>
-    <color name="md_theme_dark_secondaryContainer">#00695C</color>
-    <color name="md_theme_dark_onSecondaryContainer">#B2DFDB</color>
-    <color name="md_theme_dark_tertiary">#6EE7B7</color>
-    <color name="md_theme_dark_onTertiary">#064E3B</color>
-    <color name="md_theme_dark_tertiaryContainer">#047857</color>
-    <color name="md_theme_dark_onTertiaryContainer">#D1FAE5</color>
-    <color name="md_theme_dark_error">#FCA5A5</color>
-    <color name="md_theme_dark_onError">#7F1D1D</color>
-    <color name="md_theme_dark_errorContainer">#B91C1C</color>
-    <color name="md_theme_dark_onErrorContainer">#FEE2E2</color>
-    <color name="md_theme_dark_outline">#64748B</color>
-    <color name="md_theme_dark_background">#121212</color>
-    <color name="md_theme_dark_onBackground">#E0F2F1</color>
-    <color name="md_theme_dark_surface">#1E1E1E</color>
-    <color name="md_theme_dark_onSurface">#E0F2F1</color>
-    <color name="md_theme_dark_surfaceVariant">#2C2C2C</color>
-    <color name="md_theme_dark_onSurfaceVariant">#CBD5E1</color>
-    <color name="md_theme_dark_inverseSurface">#F8FAFC</color>
-    <color name="md_theme_dark_inverseOnSurface">#1E293B</color>
-    <color name="md_theme_dark_inversePrimary">#6366F1</color>
-    <!-- ================================================== -->
-    <!-- Reference Design Colors (Dark Premium)             -->
-    <!-- ================================================== -->
-    <color name="ref_background">#121212</color>
-    <color name="ref_surface">#1E1E1E</color>
-    <color name="ref_text_primary">#FFFFFF</color>
-    <color name="ref_text_secondary">#AAAAAA</color>
-    <color name="ref_chip_bg">#2C2C2C</color>
-    
-    <!-- Icon Gradients -->
-    <color name="ref_gradient_scanner_start">#00BFA5</color> <!-- Teal -->
-    <color name="ref_gradient_scanner_end">#00897B</color>
-    
-    <color name="ref_gradient_converter_start">#26A69A</color> <!-- Emerald -->
-    <color name="ref_gradient_converter_end">#00695C</color>
-    
-    <color name="ref_gradient_tools_start">#AB47BC</color>   <!-- Purple -->
-    <color name="ref_gradient_tools_end">#7B1FA2</color>
-    
-    <color name="ref_gradient_viewer_start">#424242</color>  <!-- Dark Grey -->
-    <color name="ref_gradient_viewer_end">#212121</color>
+    <!-- Glassmorphism -->
+    <color name="glass_light">@color/glass_overlay_stealth</color> 
+    <color name="glass_dark">@color/glass_overlay_stealth</color>
+    <color name="glass_border_light">@color/steel_border</color>
+    <color name="glass_border_dark">@color/steel_border</color>
+
 </resources>

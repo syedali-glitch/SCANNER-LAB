@@ -3,17 +3,6 @@ package com.scanner.lab
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.scanner.lab.databinding.ActivityFileViewerBinding
-import com.scanner.lab.databinding.ItemFilePremiumBinding
-import java.io.File
-
 import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
@@ -29,7 +18,7 @@ import com.scanner.lab.databinding.ItemFilePremiumBinding
 import java.io.File
 import java.util.Locale
 
-class FileViewerActivity : AppCompatActivity() {
+class FileViewerActivity : BaseActivity() {
 
     private lateinit var binding: ActivityFileViewerBinding
     private val fileAdapter = FileAdapter { file -> openFile(file) }
@@ -62,6 +51,10 @@ class FileViewerActivity : AppCompatActivity() {
         }
 
         setupUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
         scanFiles()
     }
 
@@ -115,9 +108,9 @@ class FileViewerActivity : AppCompatActivity() {
     private fun scanFiles() {
         allFiles.clear()
         
-        // Scan Documents folder
+        // Scan Documents folder for PlainLabsScanner
         val docDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val scannerDir = File(docDir, "ScannerLab")
+        val scannerDir = File(docDir, "PlainLabsScanner")
         
         val filesToScan = mutableListOf<File>()
         if (scannerDir.exists()) {
@@ -131,9 +124,12 @@ class FileViewerActivity : AppCompatActivity() {
             if (file.isFile) {
                 val ext = file.extension.uppercase()
                 val size = String.format("%.1f MB", file.length() / (1024.0 * 1024.0))
-                allFiles.add(FileModel(file.name, size, ext, file.absolutePath))
+                allFiles.add(FileModel(file.name, size, ext, file.absolutePath, file.lastModified()))
             }
         }
+        
+        // Sort by Date Modified (Newest First)
+        allFiles.sortByDescending { it.dateModified }
         
         applyFilters()
     }
@@ -145,7 +141,7 @@ class FileViewerActivity : AppCompatActivity() {
     
     private fun openFileUri(uri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = uri
+        intent.setDataAndType(uri, getContentResolver().getType(uri) ?: "*/*")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         try {
             startActivity(intent)
@@ -155,7 +151,7 @@ class FileViewerActivity : AppCompatActivity() {
     }
 }
 
-data class FileModel(val name: String, val size: String, val type: String, val path: String)
+data class FileModel(val name: String, val size: String, val type: String, val path: String, val dateModified: Long)
 
 class FileAdapter(private val onClick: (FileModel) -> Unit) : RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
     
@@ -180,7 +176,9 @@ class FileAdapter(private val onClick: (FileModel) -> Unit) : RecyclerView.Adapt
     inner class FileViewHolder(private val binding: ItemFilePremiumBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(file: FileModel) {
             binding.tvFileName.text = file.name
-            binding.tvFileSize.text = "${file.size} • ${file.type}"
+            val dateFormat = java.text.SimpleDateFormat("MMM dd, yyyy HH:mm", java.util.Locale.getDefault())
+            val dateStr = dateFormat.format(java.util.Date(file.dateModified))
+            binding.tvFileSize.text = "${file.size} • $dateStr"
             binding.root.setOnClickListener { onClick(file) }
             
             // Icon

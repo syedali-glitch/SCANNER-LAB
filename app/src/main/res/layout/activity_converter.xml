@@ -51,15 +51,24 @@
                 android:textSize="14sp"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- Grid of Cards -->
+            <!-- Section: From Image -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From Image"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp"/>
+
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnCount="2"
-                android:rowCount="3"
                 android:alignmentMode="alignMargins"
                 android:columnOrderPreserved="false"
-                android:useDefaultMargins="true">
+                android:useDefaultMargins="false">
 
                 <!-- 1. Image to PDF -->
                 <FrameLayout
@@ -67,8 +76,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="6dp"
                     android:background="@drawable/ref_card_bg"
                     android:padding="16dp">
                     
@@ -79,12 +88,12 @@
                         android:gravity="center">
                         
                         <ImageView
+                            android:id="@+id/iconImgToPdf"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_scan_doc"
+                            android:src="@drawable/ic_pdf_tool"
                             app:tint="@color/ref_gradient_converter_start"
                             android:background="@drawable/ref_bg_converter"
-                            android:id="@+id/iconImgToPdf"
                             android:padding="10dp"
                             android:layout_marginBottom="12dp"/>
                             
@@ -104,8 +113,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="6dp"
                     android:background="@drawable/ref_card_bg"
                     android:padding="16dp">
                     
@@ -140,8 +149,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="6dp"
                     android:background="@drawable/ref_card_bg"
                     android:padding="16dp">
                     
@@ -169,6 +178,26 @@
                             android:textSize="14sp"/>
                     </LinearLayout>
                 </FrameLayout>
+            </GridLayout>
+
+            <!-- Section: From PDF -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From PDF"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"/>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:alignmentMode="alignMargins"
+                android:columnOrderPreserved="false"
+                android:useDefaultMargins="false">
                 
                 <!-- 4. PDF to Image -->
                 <FrameLayout
@@ -176,8 +205,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="6dp"
                     android:background="@drawable/ref_card_bg"
                     android:padding="16dp">
                     
@@ -206,14 +235,14 @@
                     </LinearLayout>
                 </FrameLayout>
 
-                 <!-- 5. PDF to Text -->
+                <!-- 5. PDF to Text -->
                 <FrameLayout
                     android:id="@+id/cardPdfToText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="6dp"
                     android:background="@drawable/ref_card_bg"
                     android:padding="16dp">
                     
@@ -242,6 +271,42 @@
                     </LinearLayout>
                 </FrameLayout>
                 
+                 <!-- 6. PDF to Word (new) -->
+                <FrameLayout
+                    android:id="@+id/cardPdfToWord"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/ref_card_bg"
+                    android:padding="16dp">
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_scan_doc"
+                            app:tint="@color/ref_gradient_tools_start"
+                            android:background="@drawable/ref_bg_tools"
+                            android:padding="10dp"
+                            android:layout_marginBottom="12dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PDF to Word"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                </FrameLayout>
+
             </GridLayout>
 
             <!-- Progress Overlay -->

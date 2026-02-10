@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ref_background">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="100dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/ref_card_bg"
+                android:padding="24dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="24dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_settings"
+                    android:padding="10dp"
+                    android:background="@drawable/ref_bg_tools"
+                    app:tint="@color/white"
+                    android:layout_marginEnd="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tools &amp; Engines"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/ref_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Professional Utilities"
+                        android:textSize="12sp"
+                        android:textColor="@color/ref_text_secondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- SECTION 1: CORE SCANNING ENGINE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Core Scanning Engine"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolAutoEdge" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPerspective" />
+            </LinearLayout>
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolMagicFilter" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolShadowRemoval" />
+            </LinearLayout>
+
+            <!-- SECTION 2: INTELLIGENT OCR -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Intelligent OCR &amp; Conversion"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolOcr" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolExcel" />
+            </LinearLayout>
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolWord" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPpt" />
+            </LinearLayout>
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolHandwriting" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolSearchablePdf" />
+            </LinearLayout>
+
+            <!-- SECTION 3: SPECIALIZED MODES -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Specialized Modes"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolIdCard" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPassport" />
+            </LinearLayout>
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolBookMode" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolFingerRemoval" />
+            </LinearLayout>
+
+            <!-- SECTION 4: SECURITY & MANAGEMENT -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Security &amp; Management"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolEncryption" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolSignature" />
+            </LinearLayout>
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="32dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPrivateSpace" />
+                 <!-- Spacer for grid alignment-->
+                 <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                 <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:id="@+id/bottomNavParent"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:weightSum="4"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/ref_card_bg"
+        android:backgroundTint="@color/ref_surface"
+        android:layout_margin="16dp"
+        android:elevation="12dp">
+        
+        <!-- Home -->
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_scan_doc"
+                app:tint="@color/ref_text_secondary"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- History -->
+        <LinearLayout
+            android:id="@+id/navHistory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_history"
+                app:tint="@color/ref_text_secondary"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="History"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+        
+        <!-- Tools (Active) -->
+        <LinearLayout
+            android:id="@+id/navTools"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+            
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_settings" 
+                android:background="@drawable/ref_chip_bg"
+                android:backgroundTint="#424242"
+                android:padding="6dp"
+                app:tint="@color/ref_gradient_scanner_start"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tools"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Settings -->
+        <LinearLayout
+            android:id="@+id/navSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/ref_text_secondary"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

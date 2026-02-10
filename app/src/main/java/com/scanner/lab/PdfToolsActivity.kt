@@ -21,7 +21,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PdfToolsActivity : AppCompatActivity() {
+class PdfToolsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPdfToolsBinding
     private var isMerging = false

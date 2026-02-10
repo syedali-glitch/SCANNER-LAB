@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scanner Lab</string>
+    
+    <!-- Main Screen -->
+    <string name="main_title">Scanner Lab</string>
+    <string name="qr_scanner">QR سکینر</string>
+    <string name="document_scanner">دستاویز سکینر</string>
+    <string name="file_converter">فائل کنورٹر</string>
+    <string name="pdf_tools">PDF ٹولز</string>
+    
+    <!-- QR Scanner -->
+    <string name="scan_qr">QR کوڈ سکین کریں</string>
+    <string name="qr_result">QR نتیجہ:</string>
+    <string name="scan_another">دوبارہ سکین کریں</string>
+    
+    <!-- Document Scanner -->
+    <string name="scan_document">دستاویز سکین کریں</string>
+    <string name="capture">تصویر لیں</string>
+    <string name="retake">دوبارہ لیں</string>
+    <string name="save_document">دستاویز محفوظ کریں</string>
+    
+    <!-- File Converter -->
+    <string name="select_file">فائل منتخب کریں</string>
+    <string name="convert_to">تبدیل کریں</string>
+    <string name="converting">تبدیلی جاری ہے…</string>
+    <string name="conversion_complete">تبدیلی مکمل!</string>
+    <string name="conversion_failed">تبدیلی ناکام</string>
+    
+    <!-- Conversion Types -->
+    <string name="pdf_to_docx">PDF → DOCX</string>
+    <string name="pdf_to_xlsx">PDF → XLSX</string>
+    <string name="pdf_to_pptx">PDF → PPTX</string>
+    <string name="pdf_to_image">PDF → Image</string>
+    <string name="pdf_to_text">PDF → Text</string>
+    <string name="pdf_to_html">PDF → HTML</string>
+    <string name="docx_to_pdf">DOCX → PDF</string>
+    <string name="xlsx_to_pdf">XLSX → PDF</string>
+    <string name="pptx_to_pdf">PPTX → PDF</string>
+    <string name="image_to_pdf">Image → PDF</string>
+    <string name="text_to_pdf">Text → PDF</string>
+    <string name="html_to_pdf">HTML → PDF</string>
+    
+    <!-- PDF Tools -->
+    <string name="merge_pdf">PDF ضم کریں</string>
+    <string name="split_pdf">PDF تقسیم کریں</string>
+    <string name="compress_pdf">PDF سکیڑیں</string>
+    <string name="watermark_pdf">PDF واٹر مارک</string>
+    <string name="protect_pdf">پاس ورڈ لگائیں</string>
+    <string name="rotate_pdf">صفحات گھمائیں</string>
+    <string name="extract_pages">صفحات نکالیں</string>
+    
+    <!-- Progress -->
+    <string name="processing">پروسیسنگ…</string>
+    <string name="please_wait">براہ کرم انتظار کریں</string>
+    <string name="progress_format">%1$d%%</string>
+    
+    <!-- Errors -->
+    <string name="error_camera_permission">کیمرے کی اجازت درکار ہے</string>
+    <string name="error_storage_permission">سٹوریج کی اجازت درکار ہے</string>
+    <string name="error_file_not_found">فائل نہیں ملی</string>
+    <string name="error_conversion">تبدیلی میں خرابی پیش آگئی</string>
+    <string name="error_invalid_file">غلط فائل فارمیٹ</string>
+    
+    <!-- Success -->
+    <string name="success_saved">فائل کامیابی سے محفوظ ہوگئی</string>
+    <string name="success_converted">کامیابی سے تبدیل ہوگیا</string>
+    
+    <!-- History & Settings -->
+    <string name="history">ہسٹری</string>
+    <string name="search_history">ہسٹری تلاش کریں</string>
+    <string name="no_history">کوئی ہسٹری موجود نہیں</string>
+    <string name="swipe_left_delete">حذف کرنے کے لیے بائیں سوائپ کریں</string>
+    <string name="close">بند کریں</string>
+    
+    <!-- Actions -->
+    <string name="ok">ٹھیک ہے</string>
+    <string name="cancel">منسوخ کریں</string>
+    <string name="save">محفوظ کریں</string>
+    <string name="share">شیئر کریں</string>
+    <string name="delete">حذف کریں</string>
+    <string name="retry">دوبارہ کوشش کریں</string>
+    
+    <!-- Settings -->
+    <string name="settings">سیٹنگز</string>
+    <string name="language">زبان</string>
+    <string name="change_language">زبان تبدیل کریں</string>
+    <string name="select_language">زبان منتخب کریں</string>
+    <string name="english">انگریزی</string>
+    <string name="urdu">اردو</string>
+    <string name="dark_mode">ڈارک موڈ</string>
+    <string name="image_quality">تصویر کا معیار</string>
+    <string name="compression_level">کمپریشن لیول</string>
+
+    <!-- QR Result Actions -->
+    <string name="copy_result">کاپی کریں</string>
+    <string name="open_link">لنک کھولیں</string>
+    <string name="copied_to_clipboard">کلپ بورڈ پر کاپی ہو گیا</string>
+    <string name="url_warning_title">سیکیورٹی الرٹ</string>
+    <string name="url_warning_message">یہ لنک آپ کے براؤزر میں کھلے گا۔ کیا آپ جاری رکھنا چاہتے ہیں؟</string>
+    <string name="open">کھولیں</string>
+
+</resources>

@@ -25,16 +25,18 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="24dp">
 
-            <com.scanner.lab.ui.PremiumButton
+            <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:text="←"
-                android:textSize="24sp"
-                android:background="@drawable/button_glass_morphism"
-                android:textColor="@color/white" />
+                android:src="@drawable/ic_back"
+                android:padding="12dp"
+                android:background="@drawable/bg_circle_outline"
+                app:tint="@color/white"
+                android:contentDescription="Back" />
 
             <TextView
+                android:id="@+id/tvTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -47,9 +49,10 @@
                 android:layout_marginEnd="64dp" />
         </LinearLayout>
 
-        <!-- Scanner Frame -->
-        <View
-            android:layout_width="0dp"
+        <!-- Scanner Overlay -->
+        <com.scanner.lab.ui.ScannerOverlayView
+            android:id="@+id/scannerOverlay"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 

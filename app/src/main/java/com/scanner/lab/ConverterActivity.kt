@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ConverterActivity : AppCompatActivity() {
+class ConverterActivity : BaseActivity() {
 
     private lateinit var binding: ActivityConverterBinding
     
@@ -29,7 +29,7 @@ class ConverterActivity : AppCompatActivity() {
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     
     private enum class ConversionType {
-        IMG_TO_EXCEL, IMG_TO_PDF, IMG_TO_WORD, PDF_TO_IMG, PDF_TO_TEXT
+        IMG_TO_EXCEL, IMG_TO_PDF, IMG_TO_WORD, PDF_TO_IMG, PDF_TO_TEXT, PDF_TO_WORD
     }
     private var currentMode = ConversionType.IMG_TO_EXCEL
 
@@ -51,6 +51,7 @@ class ConverterActivity : AppCompatActivity() {
             when (currentMode) {
                 ConversionType.PDF_TO_IMG -> processPdfToImage(it)
                 ConversionType.PDF_TO_TEXT -> processPdfToText(it)
+                ConversionType.PDF_TO_WORD -> processPdfToWord(it)
                 else -> {}
             }
         }
@@ -107,6 +108,12 @@ class ConverterActivity : AppCompatActivity() {
              currentMode = ConversionType.PDF_TO_TEXT
              checkProAndPickDocument("application/pdf")
         }
+        
+        // 6. PDF to Word
+        binding.cardPdfToWord.setOnClickListener {
+             currentMode = ConversionType.PDF_TO_WORD
+             checkProAndPickDocument("application/pdf")
+        }
     }
     
     private fun checkProAndPickImages() {
@@ -127,16 +134,7 @@ class ConverterActivity : AppCompatActivity() {
         showProgress("Converting to Excel...")
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val extractedTexts = mutableListOf<String>()
-                uris.forEach { uri ->
-                    try {
-                        val inputImage = InputImage.fromFilePath(this@ConverterActivity, uri)
-                        val result = com.google.android.gms.tasks.Tasks.await(recognizer.process(inputImage))
-                        extractedTexts.add(result.text)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
+                val extractedTexts = extractTextFromImages(uris)
                 
                 val fileName = "Scan_Excel_${System.currentTimeMillis()}.xlsx"
                 val outputUri = ScopedStorageHelper.createDocumentUri(
@@ -157,26 +155,43 @@ class ConverterActivity : AppCompatActivity() {
         }
     }
     
+    // Extracted helper to reuse OCR logic
+    private suspend fun extractTextFromImages(uris: List<Uri>): List<String> {
+        val extractedTexts = mutableListOf<String>()
+        uris.forEach { uri ->
+            try {
+                val inputImage = InputImage.fromFilePath(this@ConverterActivity, uri)
+                val result = com.google.android.gms.tasks.Tasks.await(recognizer.process(inputImage))
+                extractedTexts.add(result.text)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return extractedTexts
+    }
+    
     private fun processImagesToPdf(uris: List<Uri>) {
         showProgress("Creating PDF...")
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // TODO: Real PDF Generation (using PDFBox or built-in PdfDocument)
-                // For now, simulate success
-                kotlinx.coroutines.delay(1000)
-                
-                 val fileName = "Scan_PDF_${System.currentTimeMillis()}.pdf"
-                 val outputUri = ScopedStorageHelper.createDocumentUri(
+                val fileName = "Scan_PDF_${System.currentTimeMillis()}.pdf"
+                val outputUri = ScopedStorageHelper.createDocumentUri(
                     this@ConverterActivity, 
                     fileName, 
                     "application/pdf"
+                ) ?: throw Exception("File creation failed")
+
+                // Use NativePdfGenerator
+                val result = com.scanner.lab.converters.NativePdfGenerator.generatePdf(
+                    this@ConverterActivity,
+                    uris,
+                    outputUri
                 )
                 
-                // Demo: Write dummy content
-                // contentResolver.openOutputStream(outputUri!!)?.write("Dummy PDF".toByteArray())
-                // ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
+                result.getOrThrow()
+                ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
 
-                onSuccess("PDF Saved (Demo)!")
+                onSuccess("PDF Saved Successfully!")
             } catch (e: Exception) {
                 onError(e.message)
             }
@@ -187,10 +202,36 @@ class ConverterActivity : AppCompatActivity() {
         showProgress("Converting to Word...")
         CoroutineScope(Dispatchers.IO).launch {
              try {
-                // TODO: Real Word Generation (using Apache POI XWPF)
-                // For now, simulate success
-                kotlinx.coroutines.delay(1500)
-                onSuccess("Word Doc Saved (Demo)!")
+                // 1. Extract Text
+                val extractedTexts = extractTextFromImages(uris)
+                val combinedText = extractedTexts.joinToString("\n\n")
+
+                if (combinedText.isBlank()) {
+                    throw Exception("No text detected in images")
+                }
+
+                // 2. Create File
+                val fileName = "Scan_Word_${System.currentTimeMillis()}.docx"
+                val outputUri = ScopedStorageHelper.createDocumentUri(
+                    this@ConverterActivity, 
+                    fileName, 
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                ) ?: throw Exception("File creation failed")
+
+                // 3. Write DOCX
+                // DocxConverter expects a File path or we can adapt it. 
+                // Since DocxConverter.textToDocx takes a String path, we need a temp file approach 
+                // OR we can update DocxConverter. For now, let's use a temp file and copy.
+                val tempFile = ScopedStorageHelper.createCacheFile(this@ConverterActivity, "docx")
+                com.scanner.lab.converters.DocxConverter.textToDocx(combinedText, tempFile.absolutePath).getOrThrow()
+
+                // Copy temp to uri
+                contentResolver.openOutputStream(outputUri)?.use { out ->
+                    java.io.FileInputStream(tempFile).copyTo(out)
+                }
+                
+                ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
+                onSuccess("Word Doc Saved!")
             } catch (e: Exception) {
                 onError(e.message)
             }
@@ -201,9 +242,42 @@ class ConverterActivity : AppCompatActivity() {
          showProgress("Extracting Images...")
         CoroutineScope(Dispatchers.IO).launch {
              try {
-                // TODO: Real PDF Render (using PdfRenderer)
-                kotlinx.coroutines.delay(1000)
-                onSuccess("Images Extracted (Demo)!")
+                // Copy PDF to cache for renderer
+                val pdfFile = ScopedStorageHelper.copyUriToCache(this@ConverterActivity, uri, "pdf") 
+                    ?: throw Exception("Could not access PDF")
+                
+                val renderer = android.graphics.pdf.PdfRenderer(
+                    android.os.ParcelFileDescriptor.open(pdfFile, android.os.ParcelFileDescriptor.MODE_READ_ONLY)
+                )
+
+                var count = 0
+                for (i in 0 until renderer.pageCount) {
+                    renderer.openPage(i).use { page ->
+                        val bitmap = android.graphics.Bitmap.createBitmap(
+                            page.width * 2, page.height * 2, android.graphics.Bitmap.Config.ARGB_8888
+                        )
+                        page.render(bitmap, null, null, android.graphics.pdf.PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                        
+                        // Save Image
+                        val fileName = "Page_${i+1}_${System.currentTimeMillis()}.jpg"
+                        val imgUri = ScopedStorageHelper.createDocumentUri(
+                            this@ConverterActivity, fileName, "image/jpeg"
+                        )
+                        
+                        imgUri?.let { u ->
+                            contentResolver.openOutputStream(u)?.use { out ->
+                                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, out)
+                            }
+                            ScopedStorageHelper.finalizeFile(this@ConverterActivity, u)
+                            count++
+                        }
+                        
+                        bitmap.recycle()
+                    }
+                }
+                renderer.close()
+
+                onSuccess("Extracted $count Images!")
             } catch (e: Exception) {
                 onError(e.message)
             }
@@ -214,15 +288,79 @@ class ConverterActivity : AppCompatActivity() {
          showProgress("Extracting Text...")
         CoroutineScope(Dispatchers.IO).launch {
              try {
-                // TODO: Real PDF Text Extraction (using PDFBox)
-                kotlinx.coroutines.delay(1000)
-                onSuccess("Text Extracted (Demo)!")
+                // Copy PDF to cache
+                val pdfFile = ScopedStorageHelper.copyUriToCache(this@ConverterActivity, uri, "pdf") 
+                    ?: throw Exception("Could not access PDF")
+
+                // Extract Text
+                val text = com.scanner.lab.converters.TextConverter.pdfToText(pdfFile.absolutePath).getOrThrow()
+
+                // 1. Save to TXT
+                val txtFileName = "Extracted_${System.currentTimeMillis()}.txt"
+                val txtUri = ScopedStorageHelper.createDocumentUri(
+                    this@ConverterActivity, txtFileName, "text/plain"
+                )
+                txtUri?.let { u ->
+                    contentResolver.openOutputStream(u)?.use { out ->
+                        out.write(text.toByteArray())
+                    }
+                    ScopedStorageHelper.finalizeFile(this@ConverterActivity, u)
+                }
+                
+                // 2. Save to DOCX using DocxConverter.textToDocx logic (allows opening in viewer as requested)
+                val docFileName = "Extracted_${System.currentTimeMillis()}.docx"
+                val docUri = ScopedStorageHelper.createDocumentUri(
+                    this@ConverterActivity, docFileName, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
+                docUri?.let { u ->
+                    val tempDocFile = ScopedStorageHelper.createCacheFile(this@ConverterActivity, "docx")
+                    com.scanner.lab.converters.DocxConverter.textToDocx(text, tempDocFile.absolutePath).getOrThrow()
+                    
+                    contentResolver.openOutputStream(u)?.use { out ->
+                        java.io.FileInputStream(tempDocFile).copyTo(out)
+                    }
+                    ScopedStorageHelper.finalizeFile(this@ConverterActivity, u)
+                }
+
+                onSuccess("Text Extracted to .txt and .docx!")
             } catch (e: Exception) {
                 onError(e.message)
             }
         }
     }
 
+    private fun processPdfToWord(uri: Uri) {
+         showProgress("Converting to Word...")
+        CoroutineScope(Dispatchers.IO).launch {
+             try {
+                // Copy PDF to cache
+                val pdfFile = ScopedStorageHelper.copyUriToCache(this@ConverterActivity, uri, "pdf") 
+                    ?: throw Exception("Could not access PDF")
+
+                // Convert PDF to DOCX using DocxConverter
+                val tempDocFile = ScopedStorageHelper.createCacheFile(this@ConverterActivity, "docx")
+                com.scanner.lab.converters.DocxConverter.pdfToDocx(pdfFile.absolutePath, tempDocFile.absolutePath).getOrThrow()
+
+                // Save Document
+                val fileName = "Converted_${System.currentTimeMillis()}.docx"
+                val outputUri = ScopedStorageHelper.createDocumentUri(
+                    this@ConverterActivity, 
+                    fileName, 
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                ) ?: throw Exception("File creation failed")
+                
+                contentResolver.openOutputStream(outputUri)?.use { out ->
+                    java.io.FileInputStream(tempDocFile).copyTo(out)
+                }
+                ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
+
+                onSuccess("Word Document Saved!")
+            } catch (e: Exception) {
+                onError(e.message)
+            }
+        }
+    }
+    
     // --- Helpers ---
 
     private fun showProgress(msg: String) {

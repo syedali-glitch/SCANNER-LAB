@@ -5,6 +5,7 @@
     android:background="@color/ref_background">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -22,30 +23,55 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:background="@drawable/ref_card_bg"
                 android:padding="24dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="24dp">
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/ref_text_primary"
-                    android:fontFamily="sans-serif-bold"
-                    android:layout_marginBottom="8dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- App Logo -->
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="@string/app_name" />
+                
+                <!-- Text Stack -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Scan • Convert • Create"
-                    android:textSize="14sp"
-                    android:textColor="@color/ref_text_secondary"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/ref_text_primary"
+                        android:fontFamily="sans-serif-bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Powered by PlainLabs"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:textColor="@color/ref_text_secondary"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_marginBottom="4dp"
+                        android:alpha="0.8"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Scan • Convert • Create"
+                        android:textSize="14sp"
+                        android:textColor="@color/ref_text_secondary"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- SECTION: Scan Anything -->
@@ -535,12 +561,13 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <!-- AdMob Banner Ad -->
+            <!-- AdMob Banner Ad (Hidden for now) -->
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:visibility="gone"
                 app:adSize="BANNER"
                 app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
         </LinearLayout>
@@ -554,10 +581,10 @@
         android:layout_gravity="bottom"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:weightSum="3"
+        android:weightSum="4"
         android:paddingHorizontal="16dp"
         android:background="@drawable/ref_card_bg"
-        android:backgroundTint="#FAFAFA"
+        android:backgroundTint="@color/ref_surface"
         android:layout_margin="16dp"
         android:elevation="12dp">
         
@@ -608,13 +635,41 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_history"
-                app:tint="@color/ref_gradient_tools_start"
+                app:tint="@color/ref_text_secondary"
                 android:padding="2dp"/>
                 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="History"
+                android:textSize="10sp"
+                android:textColor="#E0E0E0"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- Tools -->
+        <LinearLayout
+            android:id="@+id/navTools"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+            
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/ref_text_secondary"
+                android:padding="2dp"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tools"
                 android:textSize="10sp"
                 android:textColor="#E0E0E0"
                 android:layout_marginTop="4dp"/>
