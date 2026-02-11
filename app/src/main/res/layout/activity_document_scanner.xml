@@ -64,9 +64,9 @@
                 android:id="@+id/btnRetake"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="@color/white" 
-                android:padding="12dp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/laser_red" 
+                android:padding="14dp"
                 android:background="@drawable/bg_circle_outline" 
                 android:contentDescription="Retake"/>
         </FrameLayout>
@@ -74,13 +74,13 @@
         <!-- Capture Button -->
         <ImageView
             android:id="@+id/btnCapture"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="Capture"
-            android:src="@drawable/ic_scan_doc"
-            android:padding="16dp"
-            app:tint="@color/white"
-            android:background="@drawable/outline_ref_bg_scanner"/>
+            android:src="@drawable/btn_shutter_premium"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="0dp"
+            app:tint="@null"/>
 
         <!-- Save Button (Hidden initially) -->
          <FrameLayout
@@ -93,9 +93,9 @@
                 android:id="@+id/btnSave"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:src="@android:drawable/ic_menu_save"
-                app:tint="@color/white"
-                android:padding="12dp"
+                android:src="@drawable/ic_upload"
+                app:tint="@color/emerald_signal"
+                android:padding="14dp"
                 android:background="@drawable/bg_circle_outline"
                 android:contentDescription="Save PDF"/>
         </FrameLayout>

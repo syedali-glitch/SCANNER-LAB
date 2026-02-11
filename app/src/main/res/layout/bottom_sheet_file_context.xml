@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/ref_card_bg"
+    android:backgroundTint="@color/ref_surface"
+    android:paddingBottom="24dp">
+
+    <!-- Drag Handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:background="#66FFFFFF"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+        
+        <ImageView
+            android:id="@+id/ivSheetIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_scan_doc"
+            android:background="@drawable/ref_bg_tools"
+            android:backgroundTint="#22FFFFFF"
+            android:padding="12dp"
+            app:tint="@color/white"
+            android:layout_marginEnd="16dp"/>
+            
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            
+            <TextView
+                android:id="@+id/tvSheetName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cortex_scan.pdf"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/ref_text_primary"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+                
+            <TextView
+                android:id="@+id/tvSheetSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2.4 MB"
+                android:textSize="12sp"
+                android:textColor="@color/ref_text_secondary"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22FFFFFF" android:layout_marginBottom="16dp"/>
+
+    <!-- Smart Actions (Dynamic) -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Smart Actions"
+        android:textColor="@color/ref_text_secondary"
+        android:textSize="12sp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="12dp"/>
+    
+    <!-- Image Actions -->
+    <LinearLayout
+        android:id="@+id/llImageActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:visibility="gone">
+        
+        <!-- Convert to PDF -->
+        <LinearLayout
+            android:id="@+id/btnActionConvertToPdf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp">
+            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_upload" app:tint="@color/ref_gradient_converter_start"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="To PDF" android:textSize="12sp" android:textColor="@color/ref_text_primary" android:layout_marginTop="4dp"/>
+        </LinearLayout>
+        
+        <!-- OCR -->
+        <LinearLayout
+            android:id="@+id/btnActionOcr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp">
+            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tool_ocr" app:tint="@color/ref_office_green"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OCR Text" android:textSize="12sp" android:textColor="@color/ref_text_primary" android:layout_marginTop="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- PDF Actions -->
+    <LinearLayout
+        android:id="@+id/llPdfActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:visibility="gone">
+        
+        <!-- Sign -->
+        <LinearLayout
+            android:id="@+id/btnActionSign"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp">
+            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tool_signature" app:tint="@color/ref_gradient_scanner_start"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sign" android:textSize="12sp" android:textColor="@color/ref_text_primary" android:layout_marginTop="4dp"/>
+        </LinearLayout>
+        
+        <!-- Compress -->
+        <LinearLayout
+            android:id="@+id/btnActionCompress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp">
+            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tool_pdf_compress" app:tint="@color/ref_pdf_red"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Compress" android:textSize="12sp" android:textColor="@color/ref_text_primary" android:layout_marginTop="4dp"/>
+        </LinearLayout>
+        
+        <!-- Encrypt -->
+        <LinearLayout
+            android:id="@+id/btnActionEncrypt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp">
+            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_tool_private" app:tint="@color/ref_id_amber"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Encrypt" android:textSize="12sp" android:textColor="@color/ref_text_primary" android:layout_marginTop="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22FFFFFF" android:layout_marginTop="16dp" android:layout_marginBottom="16dp"/>
+
+    <!-- Common Actions (List) -->
+    <LinearLayout
+        android:id="@+id/btnCommonOpen"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_file_viewer" app:tint="@color/ref_text_primary" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Open File" android:textColor="@color/ref_text_primary" android:textSize="16sp"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/btnCommonShare"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_upload" app:tint="@color/ref_text_primary" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Share Helper" android:textColor="@color/ref_text_primary" android:textSize="16sp"/>
+    </LinearLayout>
+    
+     <LinearLayout
+        android:id="@+id/btnCommonPrint"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_scan_doc" app:tint="@color/ref_text_primary" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Print" android:textColor="@color/ref_text_primary" android:textSize="16sp"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/btnCommonDelete"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_delete" app:tint="#FF5252" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Delete" android:textColor="#FF5252" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22FFFFFF" android:layout_marginVertical="12dp"/>
+
+    <TextView
+        android:id="@+id/btnMoreTools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="More Tools..."
+        android:textColor="@color/ref_text_secondary"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="12dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"/>  
+
+
+</LinearLayout>

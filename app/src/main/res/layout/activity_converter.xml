@@ -91,7 +91,7 @@
                             android:id="@+id/iconImgToPdf"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_pdf_tool"
+                            android:src="@drawable/ic_tool_pdf_merge"
                             app:tint="@color/ref_gradient_converter_start"
                             android:background="@drawable/ref_bg_converter"
                             android:padding="10dp"
@@ -127,7 +127,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_upload"
+                            android:src="@drawable/ic_tool_excel"
                             app:tint="@color/ref_gradient_converter_start"
                             android:background="@drawable/ref_bg_converter"
                             android:padding="10dp"
@@ -163,7 +163,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_scan_doc"
+                            android:src="@drawable/ic_tool_word"
                             app:tint="@color/ref_gradient_converter_start"
                             android:background="@drawable/ref_bg_converter"
                             android:padding="10dp"

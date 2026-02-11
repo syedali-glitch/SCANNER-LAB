@@ -74,107 +74,120 @@ class ToolsActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        // --- Section 1: Core Scanning ---
-        setupTool(binding.toolAutoEdge.root, "Auto-Edge", R.drawable.ic_scan_doc, true) {
-            startActivity(Intent(this, DocumentScannerActivity::class.java))
-        }
-        setupTool(binding.toolPerspective.root, "Perspective", R.drawable.ic_scan_doc, true) {
-            startActivity(Intent(this, DocumentScannerActivity::class.java))
-        }
-        setupTool(binding.toolMagicFilter.root, "Magic Filter", R.drawable.ic_scan_doc, true) {
-            magicPicker.launch(arrayOf("image/*"))
-        }
-        setupTool(binding.toolShadowRemoval.root, "Shadow Remover", R.drawable.ic_scan_doc, true) {
-            shadowPicker.launch(arrayOf("image/*"))
-        }
-
-        // --- Section 2: Intelligent OCR ---
-        setupTool(binding.toolOcr.root, "Offline OCR", R.drawable.ic_file_viewer, true) {
+        // --- Section 1: Convert Files (Green) ---
+        setupTool(binding.toolOcr.root, "Extract Text", "Image -> Text", R.drawable.ic_tool_ocr, R.color.ref_office_green, true) {
             startActivity(Intent(this, ConverterActivity::class.java))
         }
-        setupTool(binding.toolExcel.root, "Scan to Excel", R.drawable.ic_upload, true) {
-            startActivity(Intent(this, ConverterActivity::class.java))
+        setupTool(binding.toolExcel.root, "Scan to Excel", "Image -> XLS", R.drawable.ic_tool_excel, R.color.ref_office_green, true) {
+            val intent = Intent(this, ConverterActivity::class.java)
+            intent.putExtra(ConverterActivity.EXTRA_CONVERSION_MODE, ConverterActivity.MODE_IMG_TO_EXCEL)
+            startActivity(intent)
         }
-        setupTool(binding.toolWord.root, "Scan to Word", R.drawable.ic_upload, true) {
-            startActivity(Intent(this, ConverterActivity::class.java))
+        setupTool(binding.toolWord.root, "Scan to Word", "Image -> DOCX", R.drawable.ic_tool_word, R.color.ref_office_green, true) {
+            val intent = Intent(this, ConverterActivity::class.java)
+            intent.putExtra(ConverterActivity.EXTRA_CONVERSION_MODE, ConverterActivity.MODE_IMG_TO_WORD)
+            startActivity(intent)
         }
-        setupTool(binding.toolPpt.root, "Scan to PPT", R.drawable.ic_upload, false) {
-            showEngineInfo("Scan to PowerPoint", "Engine: Layout Analysis & XML Generation.\n\nStatus: Placeholder for v1.0.1.")
+        // FIXED: PPT Wired
+        setupTool(binding.toolPpt.root, "Scan to PPT", "Image -> PPT", R.drawable.ic_tool_ppt, R.color.ref_office_green, true) {
+            val intent = Intent(this, ConverterActivity::class.java)
+            intent.putExtra(ConverterActivity.EXTRA_CONVERSION_MODE, ConverterActivity.MODE_IMG_TO_PPT)
+            startActivity(intent)
         }
-        setupTool(binding.toolHandwriting.root, "Handwriting", R.drawable.ic_file_viewer, true) {
+        setupTool(binding.toolHandwriting.root, "Handwriting", "Read Scripts", R.drawable.ic_tool_ocr, R.color.ref_ai_purple, true) {
             startActivity(Intent(this, com.scanner.lab.tools.HandwritingActivity::class.java))
         }
-        setupTool(binding.toolSearchablePdf.root, "Searchable PDF", R.drawable.ic_pdf_tool, true) {
-             showEngineInfo("Searchable PDF", "Engine: PDF/A Overlay (Text Layer).\n\nStatus: Placeholder for v1.0.1.")
+        // FIXED: Renamed to PDF to Text and Wired
+        setupTool(binding.toolSearchablePdf.root, "PDF to Text", "PDF -> TXT", R.drawable.ic_tool_ocr, R.color.ref_office_green, true) {
+            val intent = Intent(this, ConverterActivity::class.java)
+            intent.putExtra(ConverterActivity.EXTRA_CONVERSION_MODE, ConverterActivity.MODE_PDF_TO_TEXT)
+            startActivity(intent)
         }
-        setupTool(findViewById(R.id.toolTranslator), "Translator", R.drawable.ic_file_viewer, true) {
-             startActivity(Intent(this, com.scanner.lab.tools.TranslatorActivity::class.java))
+        // FIXED: Hide broken Translator
+        val toolTranslator = findViewById<View>(R.id.toolTranslator)
+        if (toolTranslator != null) {
+            toolTranslator.visibility = View.GONE
         }
 
-        // --- Section 3: PDF Tools & Utilities ---
-        setupTool(binding.toolPdfMerge.root, "Merge PDF", R.drawable.ic_pdf_tool, true) {
+        // --- Section 2: PDF Tools & Utilities (Red) ---
+        setupTool(binding.toolPdfMerge.root, "Merge PDF", "Combine Files", R.drawable.ic_tool_pdf_merge, R.color.ref_pdf_red, true) {
              val intent = Intent(this, PdfToolsActivity::class.java)
              intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_MERGE)
              startActivity(intent)
         }
-        setupTool(binding.toolPdfSplit.root, "Split PDF", R.drawable.ic_pdf_tool, true) {
+        setupTool(binding.toolPdfSplit.root, "Split PDF", "Extract Pages", R.drawable.ic_tool_pdf_split, R.color.ref_pdf_red, true) {
              val intent = Intent(this, PdfToolsActivity::class.java)
              intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_SPLIT)
              startActivity(intent)
         }
-        setupTool(binding.toolPdfCompress.root, "Compress PDF", R.drawable.ic_pdf_tool, true) {
+        setupTool(binding.toolPdfCompress.root, "Compress PDF", "Reduce Size", R.drawable.ic_tool_pdf_compress, R.color.ref_pdf_red, true) {
              val intent = Intent(this, PdfToolsActivity::class.java)
              intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_COMPRESS)
              startActivity(intent)
         }
-        setupTool(binding.toolPdfWatermark.root, "Watermark", R.drawable.ic_pdf_tool, true) {
+        setupTool(binding.toolPdfWatermark.root, "Watermark", "Add Stamp", R.drawable.ic_tool_pdf_watermark, R.color.ref_pdf_red, true) {
              val intent = Intent(this, PdfToolsActivity::class.java)
              intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_WATERMARK)
              startActivity(intent)
         }
-        setupTool(binding.toolPdfOrganize.root, "Organize Pages", R.drawable.ic_pdf_tool, true) {
+        setupTool(binding.toolPdfOrganize.root, "Organize Pages", "Reorder/Delete", R.drawable.ic_tool_pdf_organize, R.color.ref_pdf_red, true) {
              val intent = Intent(this, PdfToolsActivity::class.java)
              intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_ORGANIZE)
              startActivity(intent)
         }
-        setupTool(binding.toolPdfPassword.root, "PDF Password", R.drawable.ic_lock, true) {
+        setupTool(binding.toolPdfPassword.root, "PDF Password", "Lock/Unlock", R.drawable.ic_tool_pdf_password, R.color.ref_pdf_red, true) {
              val intent = Intent(this, PdfToolsActivity::class.java)
              intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_PASSWORD)
              startActivity(intent)
         }
 
-        // --- Section 4: Specialized Modes ---
-        setupTool(binding.toolIdCard.root, "ID Card Mode", R.drawable.ic_scan_doc, true) {
-            val intent = Intent(this, DocumentScannerActivity::class.java)
-            intent.putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.ID_CARD.ordinal)
+        // --- Section 3: Specialized Modes (Amber) ---
+        setupTool(binding.toolIdCard.root, "ID Card Mode", "Front & Back", R.drawable.ic_tool_id_card, R.color.ref_id_amber, true) {
+            val targetIntent = Intent(this, DocumentScannerActivity::class.java).apply {
+                putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.ID_CARD.ordinal)
+            }
+            val intent = Intent(this, com.scanner.lab.ui.IntroActivity::class.java).apply {
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TITLE, "ID Card Mode")
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_DESC, "Capture both sides of an ID card seamlessly. The app will automatically stitch them onto a single A4 page for easy printing.")
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_ICON, R.drawable.ic_tool_id_card)
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TARGET_INTENT, targetIntent)
+            }
             startActivity(intent)
         }
-        setupTool(binding.toolPassport.root, "Passport (MRZ)", R.drawable.ic_scan_doc, true) {
-            val intent = Intent(this, DocumentScannerActivity::class.java)
-            intent.putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.PASSPORT.ordinal)
+        setupTool(binding.toolPassport.root, "Passport Mode", "Read MRZ Code", R.drawable.ic_tool_passport, R.color.ref_id_amber, true) {
+            val targetIntent = Intent(this, DocumentScannerActivity::class.java).apply {
+                 putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.PASSPORT.ordinal)
+            }
+            val intent = Intent(this, com.scanner.lab.ui.IntroActivity::class.java).apply {
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TITLE, "Passport Mode")
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_DESC, "Align the passport data page within the frame. The app uses ML Kit to automatically extract MRZ data.")
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_ICON, R.drawable.ic_tool_passport)
+                putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TARGET_INTENT, targetIntent)
+            }
             startActivity(intent)
         }
-        setupTool(binding.toolBookMode.root, "Book Mode", R.drawable.ic_scan_doc, true) {
+        setupTool(binding.toolBookMode.root, "Book Mode", "Dual Page Scan", R.drawable.ic_scan_doc, R.color.ref_id_amber, true) {
              val intent = Intent(this, DocumentScannerActivity::class.java)
              intent.putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.BOOK.ordinal)
              startActivity(intent)
         }
-        setupTool(binding.toolFingerRemoval.root, "Finger Removal", R.drawable.ic_scan_doc, true) {
+        // Finger Removal -> Use Magic Icon for now
+        setupTool(binding.toolFingerRemoval.root, "Finger Removal", "Remove Fingers", R.drawable.ic_tool_magic, R.color.ref_ai_purple, true) {
              startActivity(Intent(this, com.scanner.lab.tools.FingerRemovalActivity::class.java))
         }
-        setupTool(findViewById(R.id.toolAnnotation), "Annotation", R.drawable.ic_file_viewer, true) {
+        // Annotation -> Use Signature/Pen icon?
+        setupTool(findViewById(R.id.toolAnnotation), "Annotation", "Draw on PDF", R.drawable.ic_tool_signature, R.color.ref_ai_purple, true) {
              annotationPicker.launch(arrayOf("image/*"))
         }
 
-        // --- Section 5: Security & Management ---
-        // Encryption moved to PDF Tools section
-        setupTool(binding.toolSignature.root, "E-Signature", R.drawable.ic_file_viewer, true) {
+        // --- Section 5: Security & Management (Amber) ---
+        setupTool(binding.toolSignature.root, "E-Signature", "Sign Docs", R.drawable.ic_tool_signature, R.color.ref_id_amber, true) {
             startActivity(Intent(this, com.scanner.lab.tools.SignatureActivity::class.java))
         }
-        setupTool(binding.toolPrivateSpace.root, "Private Space", R.drawable.ic_settings, true) {
+        setupTool(binding.toolPrivateSpace.root, "Private Space", "Secure Vault", R.drawable.ic_tool_private, R.color.ref_id_amber, true) {
              startActivity(Intent(this, com.scanner.lab.tools.PrivateSpaceActivity::class.java))
         }
-        setupTool(binding.toolAntiCounterfeit.root, "Anti-Counterfeit", R.drawable.ic_lock, true) {
+        setupTool(binding.toolAntiCounterfeit.root, "Anti-Counterfeit", "Verify Docs", R.drawable.ic_tool_private, R.color.ref_id_amber, true) {
              securityPicker.launch(arrayOf("image/*"))
         }
     }
@@ -259,11 +272,20 @@ class ToolsActivity : BaseActivity() {
          }
     }
 
-    private fun setupTool(view: View, title: String, iconRes: Int, isReady: Boolean, onClick: () -> Unit) {
+    private fun setupTool(view: View, title: String, desc: String, iconRes: Int, colorRes: Int, isReady: Boolean, onClick: () -> Unit) {
         val itemBinding = ItemToolCardBinding.bind(view)
         
         itemBinding.tvToolName.text = title
+        itemBinding.tvToolDesc.text = desc
         itemBinding.ivToolIcon.setImageResource(iconRes)
+        
+        // Dynamic Tinting
+        // 1. Tint the Background Circle
+        val color = androidx.core.content.ContextCompat.getColor(this, colorRes)
+        itemBinding.ivToolIcon.background.setTint(color)
+        
+        // 2. Icon stays white (defined in vector) or we force it:
+        itemBinding.ivToolIcon.setColorFilter(android.graphics.Color.WHITE)
         
         // Optional: Dim icon if not ready
         if (!isReady) {

@@ -23,7 +23,7 @@ class FileViewerActivity : BaseActivity() {
     private lateinit var binding: ActivityFileViewerBinding
     private val fileAdapter = FileAdapter(
         onClick = { file -> openFile(file) },
-        onMoreClick = { view, file -> showFileOptions(view, file) }
+        onMoreClick = { _, file -> showContextualSheet(file) }
     )
     
     private var allFiles = mutableListOf<FileModel>()
@@ -154,23 +154,88 @@ class FileViewerActivity : BaseActivity() {
     }
 
 
-    private fun showFileOptions(view: android.view.View, file: FileModel) {
-        val popup = androidx.appcompat.widget.PopupMenu(this, view)
-        popup.menu.add("Open")
-        popup.menu.add("Share")
-        popup.menu.add("Print")
-        popup.menu.add("Delete")
+    private fun showContextualSheet(file: FileModel) {
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        val sheetBinding = com.scanner.lab.databinding.BottomSheetFileContextBinding.inflate(layoutInflater)
+        dialog.setContentView(sheetBinding.root)
         
-        popup.setOnMenuItemClickListener { item ->
-            when (item.title) {
-                "Open" -> openFile(file)
-                "Share" -> shareFile(file)
-                "Print" -> printFile(file)
-                "Delete" -> deleteFile(file)
+        // Header Info
+        sheetBinding.tvSheetName.text = file.name
+        sheetBinding.tvSheetSize.text = file.size
+        
+        // Icon & Actions Logic
+        val isPdf = file.type.equals("PDF", ignoreCase = true)
+        val isImage = file.type.equals("JPG", ignoreCase = true) || file.type.equals("PNG", ignoreCase = true)
+        
+        if (isPdf) {
+            sheetBinding.ivSheetIcon.setImageResource(R.drawable.ic_pdf_tool)
+            sheetBinding.llPdfActions.visibility = android.view.View.VISIBLE
+            sheetBinding.llImageActions.visibility = android.view.View.GONE
+            
+            // PDF Actions
+            sheetBinding.btnActionSign.setOnClickListener {
+                dialog.dismiss()
+                startActivity(Intent(this, com.scanner.lab.tools.SignatureActivity::class.java))
             }
-            true
+            sheetBinding.btnActionCompress.setOnClickListener {
+                dialog.dismiss()
+                val intent = Intent(this, PdfToolsActivity::class.java)
+                intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_COMPRESS)
+                startActivity(intent)
+            }
+            sheetBinding.btnActionEncrypt.setOnClickListener {
+                dialog.dismiss()
+                val intent = Intent(this, PdfToolsActivity::class.java)
+                intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_PASSWORD)
+                startActivity(intent)
+            }
+        } else if (isImage) {
+            sheetBinding.ivSheetIcon.setImageResource(R.drawable.ic_scan_doc)
+            sheetBinding.llPdfActions.visibility = android.view.View.GONE
+            sheetBinding.llImageActions.visibility = android.view.View.VISIBLE
+            
+            // Image Actions
+            sheetBinding.btnActionConvertToPdf.setOnClickListener {
+                dialog.dismiss()
+                val intent = Intent(this, ConverterActivity::class.java)
+                intent.putExtra(ConverterActivity.EXTRA_CONVERSION_MODE, ConverterActivity.MODE_IMG_TO_PDF)
+                startActivity(intent)
+            }
+            sheetBinding.btnActionOcr.setOnClickListener {
+                dialog.dismiss()
+                // Default to OCR
+                startActivity(Intent(this, ConverterActivity::class.java))
+            }
+        } else {
+            // Other types (Word, Excel) -> No specific actions, or default
+            sheetBinding.ivSheetIcon.setImageResource(R.drawable.ic_upload)
+            sheetBinding.llPdfActions.visibility = android.view.View.GONE
+            sheetBinding.llImageActions.visibility = android.view.View.GONE
         }
-        popup.show()
+        
+        // Common Actions
+        sheetBinding.btnCommonOpen.setOnClickListener {
+            dialog.dismiss()
+            openFile(file)
+        }
+        sheetBinding.btnCommonShare.setOnClickListener {
+            dialog.dismiss()
+            shareFile(file)
+        }
+        sheetBinding.btnCommonPrint.setOnClickListener {
+             dialog.dismiss()
+             printFile(file)
+        }
+        sheetBinding.btnCommonDelete.setOnClickListener {
+             dialog.dismiss()
+             deleteFile(file)
+        }
+        sheetBinding.btnMoreTools.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, ToolsActivity::class.java))
+        }
+
+        dialog.show()
     }
 
     private fun shareFile(file: FileModel) {

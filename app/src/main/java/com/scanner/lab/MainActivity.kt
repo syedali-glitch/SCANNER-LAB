@@ -30,12 +30,15 @@ class MainActivity : BaseActivity() {
         }
     }
     
+    private val recentAdapter = com.scanner.lab.ui.RecentAdapter { file -> openRecentFile(file) }
+    
     private val storagePermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val allGranted = permissions.entries.all { it.value }
         if (allGranted) {
             // Permission granted
+            loadRecentScans()
         } else {
             Toast.makeText(this, R.string.error_storage_permission, Toast.LENGTH_SHORT).show()
         }
@@ -96,6 +99,43 @@ class MainActivity : BaseActivity() {
     }
     
     private fun setupUI() {
+        // --- Recent Scans ---
+        binding.rvRecentScans.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
+        binding.rvRecentScans.adapter = recentAdapter
+        
+        // --- Quick Start ---
+        binding.btnQuickScan.setOnClickListener {
+             it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                startActivity(Intent(this, DocumentScannerActivity::class.java))
+            }
+        }
+        
+        binding.btnQuickId.setOnClickListener {
+             it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                val targetIntent = Intent(this, DocumentScannerActivity::class.java).apply {
+                    putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.ID_CARD.ordinal)
+                }
+                val intent = Intent(this, com.scanner.lab.ui.IntroActivity::class.java).apply {
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TITLE, "ID Card Mode")
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_DESC, "Capture both sides of an ID card seamlessly.")
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_ICON, R.drawable.ic_tool_id_card)
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TARGET_INTENT, targetIntent)
+                }
+                startActivity(intent)
+            }
+        }
+        
+        binding.btnQuickQr.setOnClickListener {
+             it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                val intent = Intent(this, QRScannerActivity::class.java)
+                intent.putExtra("SCAN_MODE", "QR")
+                startActivity(intent)
+            }
+        }
+
         // --- Main Cards & Shortcuts ---
 
         // Scanner Hub (Large Card) -> defaults to Doc Scanner
@@ -106,33 +146,6 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        // Shortcut: QR Code
-        binding.btnShortcutQr.setOnClickListener {
-            it.performHapticFeedback()
-            checkCameraPermissionAndLaunch {
-                val intent = Intent(this, QRScannerActivity::class.java)
-                intent.putExtra("SCAN_MODE", "QR")
-                startActivity(intent)
-            }
-        }
-
-        // Shortcut: Document
-        binding.btnShortcutDoc.setOnClickListener {
-            it.performHapticFeedback()
-            checkCameraPermissionAndLaunch {
-                startActivity(Intent(this, DocumentScannerActivity::class.java))
-            }
-        }
-
-        // Shortcut: Barcode
-        binding.btnShortcutBarcode.setOnClickListener {
-            it.performHapticFeedback()
-            checkCameraPermissionAndLaunch {
-                val intent = Intent(this, QRScannerActivity::class.java)
-                intent.putExtra("SCAN_MODE", "BARCODE")
-                startActivity(intent)
-            }
-        }
         
         // File Converter Card
         binding.cardConverter.setOnClickListener {
@@ -263,5 +276,51 @@ class MainActivity : BaseActivity() {
                     .start()
             }
             .start()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadRecentScans()
+    }
+
+    private fun loadRecentScans() {
+        // Simple scan of Documents/PlainLabsScanner
+        val files = mutableListOf<java.io.File>()
+        val docDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOCUMENTS)
+        val scannerDir = java.io.File(docDir, "PlainLabsScanner")
+        
+        if (scannerDir.exists()) {
+             scannerDir.listFiles()?.let { files.addAll(it) }
+        }
+        
+        // Internal
+        getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS)?.listFiles()?.let { files.addAll(it) }
+        
+        // Sort DESC
+        files.sortByDescending { it.lastModified() }
+        
+        // Take 3
+        val recent = files.take(3)
+        
+        if (recent.isNotEmpty()) {
+            binding.tvRecentHeader.visibility = android.view.View.VISIBLE
+            binding.rvRecentScans.visibility = android.view.View.VISIBLE
+            recentAdapter.submitList(recent)
+        } else {
+            binding.tvRecentHeader.visibility = android.view.View.GONE
+            binding.rvRecentScans.visibility = android.view.View.GONE
+        }
+    }
+
+    private fun openRecentFile(file: java.io.File) {
+        val uri = androidx.core.content.FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri, contentResolver.getType(uri) ?: "*/*")
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "No app found to open this file", Toast.LENGTH_SHORT).show()
+        }
     }
 }

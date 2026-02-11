@@ -70,56 +70,14 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- SECTION 1: CORE SCANNING ENGINE -->
+            <!-- SECTION 1: CONVERT FILES (Moved to Top) -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Core Scanning Engine"
+                android:text="Convert Files"
                 android:textColor="@color/ref_text_primary"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_marginBottom="12dp" />
-
-            <LinearLayout 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
-                <include layout="@layout/item_tool_card" android:id="@+id/toolAutoEdge" />
-                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
-                <include layout="@layout/item_tool_card" android:id="@+id/toolPerspective" />
-            </LinearLayout>
-            
-            <LinearLayout 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
-                <include layout="@layout/item_tool_card" android:id="@+id/toolMagicFilter" />
-                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
-                <include layout="@layout/item_tool_card" android:id="@+id/toolShadowRemoval" />
-            </LinearLayout>
-            
-            <LinearLayout 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
-                <include layout="@layout/item_tool_card" android:id="@+id/toolAnnotation" />
-                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
-                 <!-- Placeholder -->
-                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
-            </LinearLayout>
-
-            <!-- SECTION 2: INTELLIGENT OCR -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Intelligent OCR &amp; Conversion"
-                android:textColor="@color/ref_text_primary"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="12dp" />
 
             <LinearLayout 
@@ -163,7 +121,7 @@
                 <include layout="@layout/item_tool_card" android:id="@+id/toolSearchablePdf" />
             </LinearLayout>
 
-            <!-- SECTION 3: PDF TOOLS & UTILITIES -->
+            <!-- SECTION 2: PDF TOOLS & UTILITIES -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -204,7 +162,7 @@
                 <include layout="@layout/item_tool_card" android:id="@+id/toolPdfPassword" />
             </LinearLayout>
 
-            <!-- SECTION 4: SPECIALIZED MODES -->
+            <!-- SECTION 3: SPECIALIZED MODES -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -235,7 +193,7 @@
                 <include layout="@layout/item_tool_card" android:id="@+id/toolFingerRemoval" />
             </LinearLayout>
 
-            <!-- SECTION 5: SECURITY & MANAGEMENT -->
+            <!-- SECTION 4: SECURITY & MANAGEMENT -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -263,8 +221,7 @@
                 android:layout_marginBottom="16dp">
                 <include layout="@layout/item_tool_card" android:id="@+id/toolAntiCounterfeit" />
                 <Space android:layout_width="16dp" android:layout_height="wrap_content" />
-                <!-- Placeholder for symmetry -->
-                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
+                <include layout="@layout/item_tool_card" android:id="@+id/toolAnnotation" />
             </LinearLayout>
 
             <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginBottom="32dp"/>

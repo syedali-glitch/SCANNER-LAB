@@ -28,6 +28,18 @@ class ConverterActivity : BaseActivity() {
     // ML Kit
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     
+    companion object {
+        const val EXTRA_CONVERSION_MODE = "extra_conversion_mode"
+        const val MODE_IMG_TO_EXCEL = "img_to_excel"
+        const val MODE_IMG_TO_PDF = "img_to_pdf"
+        const val MODE_IMG_TO_WORD = "img_to_word"
+        const val MODE_IMG_TO_PPT = "img_to_ppt"
+        const val MODE_PDF_TO_IMG = "pdf_to_img"
+        const val MODE_PDF_TO_TEXT = "pdf_to_text"
+        const val MODE_PDF_TO_WORD = "pdf_to_word"
+        const val MODE_PDF_TO_PPT = "pdf_to_ppt"
+    }
+
     private enum class ConversionType {
         IMG_TO_EXCEL, IMG_TO_PDF, IMG_TO_WORD, IMG_TO_PPT, PDF_TO_IMG, PDF_TO_TEXT, PDF_TO_WORD, PDF_TO_PPT
     }
@@ -76,6 +88,24 @@ class ConverterActivity : BaseActivity() {
         }
         
         setupListeners()
+        handleIntent()
+    }
+
+    private fun handleIntent() {
+        val mode = intent.getStringExtra(EXTRA_CONVERSION_MODE) ?: return
+        
+        binding.root.post {
+            when (mode) {
+                MODE_IMG_TO_EXCEL -> { currentMode = ConversionType.IMG_TO_EXCEL; checkProAndPickImages() }
+                MODE_IMG_TO_PDF -> { currentMode = ConversionType.IMG_TO_PDF; checkProAndPickImages() }
+                MODE_IMG_TO_WORD -> { currentMode = ConversionType.IMG_TO_WORD; checkProAndPickImages() }
+                MODE_IMG_TO_PPT -> { currentMode = ConversionType.IMG_TO_PPT; checkProAndPickImages() }
+                MODE_PDF_TO_IMG -> { currentMode = ConversionType.PDF_TO_IMG; checkProAndPickDocument("application/pdf") }
+                MODE_PDF_TO_TEXT -> { currentMode = ConversionType.PDF_TO_TEXT; checkProAndPickDocument("application/pdf") }
+                MODE_PDF_TO_WORD -> { currentMode = ConversionType.PDF_TO_WORD; checkProAndPickDocument("application/pdf") }
+                MODE_PDF_TO_PPT -> { currentMode = ConversionType.PDF_TO_PPT; checkProAndPickDocument("application/pdf") }
+            }
+        }
     }
     
     private fun setupListeners() {

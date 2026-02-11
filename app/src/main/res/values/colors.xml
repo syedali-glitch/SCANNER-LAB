@@ -23,6 +23,12 @@
     <!-- Glass Overlay: #1E293B at 60% opacity (approx 99 hex) -->
     <color name="glass_overlay_stealth">#991E293B</color>
 
+    <!-- Tools Page Color Coding -->
+    <color name="ref_ai_purple">#A855F7</color>
+    <color name="ref_office_green">#10B981</color>
+    <color name="ref_pdf_red">#F43F5E</color>
+    <color name="ref_id_amber">#F59E0B</color>
+
     <!-- ================================================== -->
     <!-- MAPPING: Reference Design (Semantic Names)         -->
     <!-- ================================================== -->

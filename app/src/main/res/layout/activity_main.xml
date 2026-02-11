@@ -74,15 +74,115 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- SECTION: Scan Anything -->
+            <!-- SECTION: Quick Actions (Glassmorphic) -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📷  Scan Anything"
+                android:text="Quick Actions"
                 android:textColor="@color/ref_text_primary"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <!-- 1. Document -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnQuickScan"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:text="Document"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_glass_cyan_border"
+                    android:drawableStart="@drawable/ic_scan_doc"
+                    android:paddingStart="16dp"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:elevation="4dp"/>
+
+                 <!-- 2. ID Card -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnQuickId"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:text="ID Card"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_glass_cyan_border"
+                    android:drawableStart="@drawable/ic_tool_id_card"
+                    android:paddingStart="16dp"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:elevation="4dp"/>
+
+                 <!-- 3. QR Code -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnQuickQr"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:text="QR Code"
+                    android:textSize="12sp"
+                    android:background="@drawable/bg_glass_cyan_border"
+                    android:drawableStart="@drawable/ic_qr_code"
+                    android:paddingStart="16dp"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:elevation="4dp"/>
+
+            </LinearLayout>
+
+            <!-- SECTION: Recent Scans -->
+            <TextView
+                android:id="@+id/tvRecentHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recent Scans"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp">
+                
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecentScans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:clipToPadding="false" />
+                    
+                <TextView
+                    android:id="@+id/tvRecentEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No recent files"
+                    android:textColor="@color/ref_text_secondary"
+                    android:fontFamily="sans-serif-medium"
+                    android:padding="16dp"
+                    android:background="@drawable/ref_card_bg"
+                    android:visibility="gone"
+                    android:gravity="center"/>
+            </FrameLayout>
+
+            <!-- SECTION: Scan Anything (Legacy Hub) -->
+
 
             <!-- Scanner Hub Card (Large) -->
             <FrameLayout
@@ -181,94 +281,8 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <!-- Shortcuts Row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false"
-                android:layout_marginBottom="24dp">
+            <!-- Shortcuts Row Removed in Stage 12 -->
 
-                <!-- QR Code Short -->
-                <LinearLayout
-                    android:id="@+id/btnShortcutQr"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:background="@drawable/ref_card_bg"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_marginEnd="8dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_qr_code"
-                        app:tint="@color/ref_gradient_scanner_start"
-                        android:layout_marginBottom="8dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="QR Code"
-                        android:textSize="12sp"
-                        android:textColor="@color/ref_text_primary"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-                
-                <!-- Document Short -->
-                <LinearLayout
-                    android:id="@+id/btnShortcutDoc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:background="@drawable/ref_card_bg"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_marginEnd="8dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_scan_doc"
-                        app:tint="@color/ref_gradient_scanner_start"
-                        android:layout_marginBottom="8dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Document"
-                        android:textSize="12sp"
-                        android:textColor="@color/ref_text_primary"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-                
-                <!-- Barcode Short -->
-                <LinearLayout
-                    android:id="@+id/btnShortcutBarcode"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:background="@drawable/ref_card_bg"
-                    android:padding="16dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_barcode"
-                         app:tint="@color/ref_text_secondary"
-                        android:layout_marginBottom="8dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Barcode"
-                        android:textSize="12sp"
-                        android:textColor="@color/ref_text_primary"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-            </LinearLayout>
 
             <!-- SECTION: Convert Files -->
             <TextView

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer Glow / Ring -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#20FFFFFF"/>
+            <stroke android:width="2dp" android:color="#FFFFFF"/>
+            <size android:width="72dp" android:height="72dp"/>
+        </shape>
+    </item>
+    
+    <!-- Inner Circle (Action) -->
+    <item android:top="8dp" android:bottom="8dp" android:left="8dp" android:right="8dp">
+        <shape android:shape="oval">
+            <gradient 
+                android:startColor="#FFFFFFFF" 
+                android:endColor="#E0E0E0E0" 
+                android:angle="270"/>
+            <stroke android:width="2dp" android:color="#33000000"/>
+        </shape>
+    </item>
+    
+    <!-- Inner Icon Tint (Optional - usually the icon is an ImageView on top) -->
+</layer-list>

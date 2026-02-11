@@ -26,8 +26,7 @@
             android:layout_height="48dp"
             android:src="@drawable/ic_scan_doc"
             android:padding="10dp"
-            android:background="@drawable/ref_bg_scanner"
-            app:tint="@color/white"
+            android:background="@drawable/tool_icon_bg"
             android:layout_marginBottom="12dp" />
 
         <TextView
@@ -36,11 +35,23 @@
             android:layout_height="wrap_content"
             android:text="Tool Name"
             android:textColor="@color/ref_text_primary"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:maxLines="2"
+            android:maxLines="1"
             android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvToolDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textColor="@color/ref_text_secondary"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginTop="2dp"/>
 
     </LinearLayout>
 
