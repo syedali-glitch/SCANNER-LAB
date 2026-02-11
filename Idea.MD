@@ -78,7 +78,7 @@ The application utilizes a dark, high-contrast aesthetic designed for prolonged 
 **Engine**: Custom Algorithms & ML Kit
 *   **Handwriting Recognition**:
     *   **Logic**: **ML Kit Digital Ink Recognition**. Captures touch strokes on a `HandwritingDrawingView` and converts them to digital text strings.
-*   **Finger/Blemish Removal (Inpainting)**:
+*   **Magic Eraser (Inpainting)**:
     *   **Logic**: **Fast Marching Method (FMM)** by Alexandru Telea (Custom Kotlin Implementation). Reconstructs masked areas using pixel information from the boundary inwards.
 *   **Anti-Counterfeit**:
     *   **Logic**: Overlays a repeating, semi-transparent pattern ("SECURE COPY") rotated at 45 degrees over the image bitmap.
