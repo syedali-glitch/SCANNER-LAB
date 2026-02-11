@@ -21,7 +21,10 @@ import java.util.Locale
 class FileViewerActivity : BaseActivity() {
 
     private lateinit var binding: ActivityFileViewerBinding
-    private val fileAdapter = FileAdapter { file -> openFile(file) }
+    private val fileAdapter = FileAdapter(
+        onClick = { file -> openFile(file) },
+        onMoreClick = { view, file -> showFileOptions(view, file) }
+    )
     
     private var allFiles = mutableListOf<FileModel>()
     private var currentFilter = "ALL"
@@ -149,11 +152,119 @@ class FileViewerActivity : BaseActivity() {
             Toast.makeText(this, "No app found to open this file", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    private fun showFileOptions(view: android.view.View, file: FileModel) {
+        val popup = androidx.appcompat.widget.PopupMenu(this, view)
+        popup.menu.add("Open")
+        popup.menu.add("Share")
+        popup.menu.add("Print")
+        popup.menu.add("Delete")
+        
+        popup.setOnMenuItemClickListener { item ->
+            when (item.title) {
+                "Open" -> openFile(file)
+                "Share" -> shareFile(file)
+                "Print" -> printFile(file)
+                "Delete" -> deleteFile(file)
+            }
+            true
+        }
+        popup.show()
+    }
+
+    private fun shareFile(file: FileModel) {
+        val uri = com.scanner.lab.utils.ScopedStorageHelper.getUriForFile(this, File(file.path))
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "*/*" // Or specific mime type
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        startActivity(Intent.createChooser(intent, "Share File"))
+    }
+
+    private fun printFile(file: FileModel) {
+        try {
+            val printManager = getSystemService(android.content.Context.PRINT_SERVICE) as android.print.PrintManager
+            val jobName = "${getString(R.string.app_name)} Document"
+            
+            // Native PDF Printing
+            if (file.type == "PDF") {
+                val printAdapter = object : android.print.PrintDocumentAdapter() {
+                    override fun onLayout(
+                        oldAttributes: android.print.PrintAttributes?,
+                        newAttributes: android.print.PrintAttributes?,
+                        cancellationSignal: android.os.CancellationSignal?,
+                        callback: LayoutResultCallback?,
+                        extras: Bundle?
+                    ) {
+                        if (cancellationSignal?.isCanceled == true) {
+                            callback?.onLayoutCancelled()
+                            return
+                        }
+                        val info = android.print.PrintDocumentInfo.Builder(file.name)
+                            .setContentType(android.print.PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
+                            .build()
+                        callback?.onLayoutFinished(info, true)
+                    }
+
+                    override fun onWrite(
+                        pages: Array<out android.print.PageRange>?,
+                        destination: android.os.ParcelFileDescriptor?,
+                        cancellationSignal: android.os.CancellationSignal?,
+                        callback: WriteResultCallback?
+                    ) {
+                         try {
+                            val input = java.io.FileInputStream(file.path)
+                            val output = java.io.FileOutputStream(destination?.fileDescriptor)
+                            input.copyTo(output)
+                            input.close()
+                            output.close()
+                            callback?.onWriteFinished(arrayOf(android.print.PageRange.ALL_PAGES))
+                        } catch (e: Exception) {
+                            callback?.onWriteFailed(e.message)
+                        }
+                    }
+                }
+                printManager.print(jobName, printAdapter, null)
+            } else if (file.type == "JPG" || file.type == "PNG") {
+                // Image Printing
+                 androidx.print.PrintHelper(this).apply {
+                    scaleMode = androidx.print.PrintHelper.SCALE_MODE_FIT
+                }.printBitmap(jobName, android.net.Uri.fromFile(File(file.path)))
+            } else {
+                Toast.makeText(this, "Printing not supported for this file type", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+             Toast.makeText(this, "Print Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun deleteFile(file: FileModel) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Delete File")
+            .setMessage("Are you sure you want to delete ${file.name}?")
+            .setPositiveButton("Delete") { _, _ ->
+                val f = File(file.path)
+                if (f.delete()) {
+                    Toast.makeText(this, "File Deleted", Toast.LENGTH_SHORT).show()
+                    scanFiles()
+                } else {
+                    Toast.makeText(this, "Could not delete file", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
 }
 
 data class FileModel(val name: String, val size: String, val type: String, val path: String, val dateModified: Long)
 
-class FileAdapter(private val onClick: (FileModel) -> Unit) : RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
+class FileAdapter(
+    private val onClick: (FileModel) -> Unit,
+    private val onMoreClick: (android.view.View, FileModel) -> Unit
+) : RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
     
     private var files = listOf<FileModel>()
 
@@ -179,12 +290,17 @@ class FileAdapter(private val onClick: (FileModel) -> Unit) : RecyclerView.Adapt
             val dateFormat = java.text.SimpleDateFormat("MMM dd, yyyy HH:mm", java.util.Locale.getDefault())
             val dateStr = dateFormat.format(java.util.Date(file.dateModified))
             binding.tvFileSize.text = "${file.size} • $dateStr"
+            
+            // Main click -> Open
             binding.root.setOnClickListener { onClick(file) }
+            
+            // More click -> Menu
+            binding.btnMore.setOnClickListener { onMoreClick(it, file) }
             
             // Icon
             when(file.type) {
                 "PDF" -> binding.ivIcon.setImageResource(R.drawable.ic_pdf_tool)
-                "XLS", "XLSX" -> binding.ivIcon.setImageResource(R.drawable.ic_scan_doc) // Using scan icon as placeholder for xls
+                "XLS", "XLSX" -> binding.ivIcon.setImageResource(R.drawable.ic_scan_doc) 
                 "DOC", "DOCX" -> binding.ivIcon.setImageResource(R.drawable.ic_upload)
                 else -> binding.ivIcon.setImageResource(R.drawable.ic_scan_doc)
             }

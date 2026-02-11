@@ -113,6 +113,8 @@ dependencies {
     
     // OCR - ML Kit Text Recognition
     implementation("com.google.mlkit:text-recognition:16.0.0")
+    implementation("com.google.mlkit:digital-ink-recognition:18.0.0")
+    implementation("com.google.mlkit:translate:17.0.2")
     
     // Camera - CameraX
     implementation("androidx.camera:camera-camera2:1.3.1")

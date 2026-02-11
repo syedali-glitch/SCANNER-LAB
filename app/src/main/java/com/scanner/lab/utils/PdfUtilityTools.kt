@@ -283,6 +283,30 @@ object PdfUtilityTools {
         outputFile
     }
 
+    /**
+     * Reorder Pages
+     */
+    fun reorderPdf(
+        inputPath: String,
+        outputPath: String,
+        newOrder: List<Int> // List of 1-based page numbers in desired order
+    ): Result<File> = ErrorHandler.safe("ReorderPdf") {
+        val reader = PdfReader(inputPath)
+        val document = Document()
+        val outputFile = File(outputPath)
+        val copy = PdfCopy(document, FileOutputStream(outputFile))
+        
+        document.open()
+        
+        newOrder.forEach { pageNum ->
+            copy.addPage(copy.getImportedPage(reader, pageNum))
+        }
+        
+        document.close()
+        reader.close()
+        outputFile
+    }
+
     data class PdfMetadata(
         val title: String,
         val author: String,

@@ -243,19 +243,19 @@ class PdfToolsActivity : BaseActivity() {
 
     private fun showOrganizeDialog(uri: Uri) {
          val input = android.widget.EditText(this).apply { 
-             hint = "Page numbers to remove (e.g., 1,3,5)"
-             inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+             hint = "New Order (e.g., 2,1,3)"
+             inputType = android.text.InputType.TYPE_CLASS_TEXT
          }
          androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Remove Pages")
-            .setMessage("Enter comma-separated page numbers to DELETE.")
+            .setTitle("Reorder Pages")
+            .setMessage("Enter the new page sequence (comma-separated).\nOnly include pages you want to keep.")
             .setView(input)
-            .setPositiveButton("Remove") { _, _ ->
+            .setPositiveButton("Reorder") { _, _ ->
                 val text = input.text.toString()
                 if (text.isNotEmpty()) {
                     try {
                         val pages = text.split(",").map { it.trim().toInt() }
-                        performOrganize(uri, pages)
+                        performReorder(uri, pages)
                     } catch (e: Exception) {
                         Toast.makeText(this, "Invalid Format", Toast.LENGTH_SHORT).show()
                     }
@@ -265,23 +265,23 @@ class PdfToolsActivity : BaseActivity() {
             .show()
     }
 
-    private fun performOrganize(uri: Uri, pagesToRemove: List<Int>) {
+    private fun performReorder(uri: Uri, newOrder: List<Int>) {
         binding.progressBar.visibility = View.VISIBLE
-        binding.tvProgressStatus.text = "Organizing..."
+        binding.tvProgressStatus.text = "Reordering..."
         
         CoroutineScope(Dispatchers.IO).launch {
              try {
                 val cacheFile = ScopedStorageHelper.copyUriToCache(this@PdfToolsActivity, uri, "pdf")!!
-                val fileName = "Organized_${System.currentTimeMillis()}.pdf"
+                val fileName = "Reordered_${System.currentTimeMillis()}.pdf"
                 val outputUri = ScopedStorageHelper.createDocumentUri(this@PdfToolsActivity, fileName)!!
                 val tempOut = ScopedStorageHelper.createCacheFile(this@PdfToolsActivity, "pdf")
                 
-                PdfUtilityTools.removePages(cacheFile.absolutePath, tempOut.absolutePath, pagesToRemove)
+                PdfUtilityTools.reorderPdf(cacheFile.absolutePath, tempOut.absolutePath, newOrder)
                 
                 contentResolver.openOutputStream(outputUri)?.use { tempOut.inputStream().copyTo(it) }
                 ScopedStorageHelper.finalizeFile(this@PdfToolsActivity, outputUri)
                 
-                withContext(Dispatchers.Main) { Toast.makeText(this@PdfToolsActivity, "Organized PDF Saved!", Toast.LENGTH_LONG).show() }
+                withContext(Dispatchers.Main) { Toast.makeText(this@PdfToolsActivity, "Reordered PDF Saved!", Toast.LENGTH_LONG).show() }
              } catch (e: Exception) {
                  withContext(Dispatchers.Main) { Toast.makeText(this@PdfToolsActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show() }
              } finally {

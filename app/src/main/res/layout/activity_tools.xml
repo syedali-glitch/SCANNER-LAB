@@ -99,6 +99,17 @@
                 <Space android:layout_width="16dp" android:layout_height="wrap_content" />
                 <include layout="@layout/item_tool_card" android:id="@+id/toolShadowRemoval" />
             </LinearLayout>
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolAnnotation" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                 <!-- Placeholder -->
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
+            </LinearLayout>
 
             <!-- SECTION 2: INTELLIGENT OCR -->
             <TextView
@@ -118,7 +129,18 @@
                 android:layout_marginBottom="16dp">
                 <include layout="@layout/item_tool_card" android:id="@+id/toolOcr" />
                 <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolTranslator" />
+            </LinearLayout>
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
                 <include layout="@layout/item_tool_card" android:id="@+id/toolExcel" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                 <!-- Placeholder -->
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
             </LinearLayout>
 
             <LinearLayout 
@@ -232,6 +254,17 @@
                 <include layout="@layout/item_tool_card" android:id="@+id/toolSignature" />
                 <Space android:layout_width="16dp" android:layout_height="wrap_content" />
                 <include layout="@layout/item_tool_card" android:id="@+id/toolPrivateSpace" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolAntiCounterfeit" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <!-- Placeholder for symmetry -->
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
             </LinearLayout>
 
             <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginBottom="32dp"/>

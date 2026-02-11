@@ -40,6 +40,18 @@ class ToolsActivity : BaseActivity() {
     private val magicPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri -> 
         uri?.let { showImageProcessingDialog(it, com.scanner.lab.utils.ImageProcessor.FilterMode.MAGIC_V2, "Magic Filter") } 
     }
+    
+    private val securityPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri -> 
+        uri?.let { showImageProcessingDialog(it, com.scanner.lab.utils.ImageProcessor.FilterMode.SECURITY_PATTERN, "Anti-Counterfeit") } 
+    }
+    
+    private val annotationPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri -> 
+        uri?.let { 
+             val intent = Intent(this, com.scanner.lab.tools.AnnotationActivity::class.java)
+             intent.data = it
+             startActivity(intent)
+        } 
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,11 +101,14 @@ class ToolsActivity : BaseActivity() {
         setupTool(binding.toolPpt.root, "Scan to PPT", R.drawable.ic_upload, false) {
             showEngineInfo("Scan to PowerPoint", "Engine: Layout Analysis & XML Generation.\n\nStatus: Placeholder for v1.0.1.")
         }
-        setupTool(binding.toolHandwriting.root, "Handwriting", R.drawable.ic_file_viewer, false) {
-            showEngineInfo("Handwriting OCR", "Engine: ML Kit Digital Ink Recognition.\n\nStatus: Placeholder for v1.0.1.")
+        setupTool(binding.toolHandwriting.root, "Handwriting", R.drawable.ic_file_viewer, true) {
+            startActivity(Intent(this, com.scanner.lab.tools.HandwritingActivity::class.java))
         }
-        setupTool(binding.toolSearchablePdf.root, "Searchable PDF", R.drawable.ic_pdf_tool, false) {
-            showEngineInfo("Searchable PDF", "Engine: PDF/A Overlay (Text Layer).\n\nStatus: Placeholder for v1.0.1.")
+        setupTool(binding.toolSearchablePdf.root, "Searchable PDF", R.drawable.ic_pdf_tool, true) {
+             showEngineInfo("Searchable PDF", "Engine: PDF/A Overlay (Text Layer).\n\nStatus: Placeholder for v1.0.1.")
+        }
+        setupTool(findViewById(R.id.toolTranslator), "Translator", R.drawable.ic_file_viewer, true) {
+             startActivity(Intent(this, com.scanner.lab.tools.TranslatorActivity::class.java))
         }
 
         // --- Section 3: PDF Tools & Utilities ---
@@ -144,8 +159,11 @@ class ToolsActivity : BaseActivity() {
              intent.putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.BOOK.ordinal)
              startActivity(intent)
         }
-        setupTool(binding.toolFingerRemoval.root, "Finger Removal", R.drawable.ic_scan_doc, false) {
-             showEngineInfo("Finger Removal", "Engine: Inpainting (Navier-Stokes).\n\nStatus: Placeholder for v1.0.1.")
+        setupTool(binding.toolFingerRemoval.root, "Finger Removal", R.drawable.ic_scan_doc, true) {
+             startActivity(Intent(this, com.scanner.lab.tools.FingerRemovalActivity::class.java))
+        }
+        setupTool(findViewById(R.id.toolAnnotation), "Annotation", R.drawable.ic_file_viewer, true) {
+             annotationPicker.launch(arrayOf("image/*"))
         }
 
         // --- Section 5: Security & Management ---
@@ -155,6 +173,9 @@ class ToolsActivity : BaseActivity() {
         }
         setupTool(binding.toolPrivateSpace.root, "Private Space", R.drawable.ic_settings, true) {
              startActivity(Intent(this, com.scanner.lab.tools.PrivateSpaceActivity::class.java))
+        }
+        setupTool(binding.toolAntiCounterfeit.root, "Anti-Counterfeit", R.drawable.ic_lock, true) {
+             securityPicker.launch(arrayOf("image/*"))
         }
     }
     

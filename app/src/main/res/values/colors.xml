@@ -35,6 +35,7 @@
     <color name="ref_accent">@color/electric_sky</color>
     <color name="ref_text_on_accent">@color/obsidian_black</color>
     <color name="ref_surface_high">@color/midnight_grey</color> <!-- Lighter surface (Task Polish) -->
+    <color name="ref_stroke">@color/steel_border</color>
 
     <!-- Gradients (Mapped to closest Brand Accents + variations) -->
     <!-- Scanner (Teal/Sky vibe) -->

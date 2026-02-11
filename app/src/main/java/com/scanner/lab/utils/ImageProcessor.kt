@@ -132,6 +132,33 @@ object ImageProcessor {
                 // Return processed bitmap directly from removeShadows
                 return removeShadows(original)
             }
+            FilterMode.SECURITY_PATTERN -> {
+                // Overlay repeating "SECURE COPY" text
+                val filtered = original.copy(Bitmap.Config.ARGB_8888, true)
+                val c = Canvas(filtered)
+                val p = Paint().apply {
+                    color = android.graphics.Color.LTGRAY
+                    alpha = 60 // Low opacity
+                    textSize = height / 20f
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                    textAlign = Paint.Align.CENTER
+                }
+                
+                c.save()
+                c.rotate(-45f, width / 2f, height / 2f)
+                
+                val text = "SECURE COPY  "
+                val textWidth = p.measureText(text)
+                // Draw grid
+                for (y in -height until height * 2 step (p.textSize * 3).toInt()) {
+                    for (x in -width until width * 2 step (textWidth * 1.5).toInt()) {
+                        c.drawText(text, x.toFloat(), y.toFloat(), p)
+                    }
+                }
+                
+                c.restore()
+                return filtered
+            }
             FilterMode.ORIGINAL -> {
                 // No-op
             }
@@ -146,30 +173,19 @@ object ImageProcessor {
     
     /**
      * Remove Shadows using Background Estimation (Divisive Normalization)
-     * 1. Estimate background (heavy blur)
-     * 2. Divide Original by Background
      */
     private fun removeShadows(original: Bitmap): Bitmap {
-        // 1. Create Estimation (Downscale for speed & blur radius effective size)
-        val scaleFactor = 0.125f // 1/8th size
+        val scaleFactor = 0.125f
         val w = (original.width * scaleFactor).toInt().coerceAtLeast(10)
         val h = (original.height * scaleFactor).toInt().coerceAtLeast(10)
         
         val small = Bitmap.createScaledBitmap(original, w, h, true)
         
-        // 2. Heavy Blur (Box Blur approx)
-        // Repeat blur to approximate Gaussian
         fastBlur(small, 10) 
         fastBlur(small, 10)
         
         val background = Bitmap.createScaledBitmap(small, original.width, original.height, true)
         small.recycle()
-        
-        // 3. Pixel Math: Result = (Original / Background) * 255
-        // This flattens illumination.
-        // Doing this in Kotlin loop is slow for 12MP images.
-        // Optimization: Use a smaller target if original is huge, or accept the wait (run in IO).
-        // For v1.0, we iterate pixels. 
         
         val width = original.width
         val height = original.height
@@ -190,13 +206,10 @@ object ImageProcessor {
             val g = (p shr 8) and 0xFF
             val b = p and 0xFF
             
-            // Background intensity (using max channel or luminance? Max works well for white paper)
-            // Prevent divide by zero
             val bgR = ((bg shr 16) and 0xFF).coerceAtLeast(1)
             val bgG = ((bg shr 8) and 0xFF).coerceAtLeast(1)
             val bgB = (bg and 0xFF).coerceAtLeast(1)
             
-            // Division logic: New = Old * (255 / Background)
             val newR = (r * 255 / bgR).coerceAtMost(255)
             val newG = (g * 255 / bgG).coerceAtMost(255)
             val newB = (b * 255 / bgB).coerceAtMost(255)
@@ -208,20 +221,12 @@ object ImageProcessor {
         return output
     }
 
-    // Simple Stack Blur / Box Blur implementation
     private fun fastBlur(sentBitmap: Bitmap, radius: Int) {
-         // Optimization: Instead of expensive pixel loops, we use scaling as a blur approximation.
-         // This is sufficient for background estimation.
-         // 1. Scale down significantly (e.g. to 1/4 of this already small bitmap)
          val smallW = (sentBitmap.width / 4).coerceAtLeast(1)
          val smallH = (sentBitmap.height / 4).coerceAtLeast(1)
-         
          val tiny = Bitmap.createScaledBitmap(sentBitmap, smallW, smallH, true)
-         
-         // 2. Scale back up to original size (Bilinear filtering applies blur)
          val blurred = Bitmap.createScaledBitmap(tiny, sentBitmap.width, sentBitmap.height, true)
          
-         // Copy blurred pixels back to sentBitmap
          val canvas = Canvas(sentBitmap)
          canvas.drawBitmap(blurred, 0f, 0f, Paint())
          
@@ -234,6 +239,7 @@ object ImageProcessor {
         B_AND_W,
         MAGIC,
         MAGIC_V2,
-        SHADOW_REMOVER
+        SHADOW_REMOVER,
+        SECURITY_PATTERN
     }
 }

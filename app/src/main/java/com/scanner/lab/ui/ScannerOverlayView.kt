@@ -133,6 +133,32 @@ class ScannerOverlayView @JvmOverloads constructor(
         // Draw Center Spine
         canvas.drawLine(rect.centerX(), rect.top, rect.centerX(), rect.bottom, paintSpine)
         
+        // Draw Curve Guide (Visual Suggestion for Flattening)
+        val path = Path()
+        val curveDepth = 60f
+        
+        // Top Curves (Spine to Edges)
+        path.moveTo(rect.centerX(), rect.top)
+        path.quadTo(rect.left + rect.width() * 0.25f, rect.top + curveDepth, rect.left, rect.top)
+        
+        path.moveTo(rect.centerX(), rect.top)
+        path.quadTo(rect.right - rect.width() * 0.25f, rect.top + curveDepth, rect.right, rect.top)
+        
+        // Bottom Curves
+        path.moveTo(rect.centerX(), rect.bottom)
+        path.quadTo(rect.left + rect.width() * 0.25f, rect.bottom - curveDepth, rect.left, rect.bottom)
+        
+        path.moveTo(rect.centerX(), rect.bottom)
+        path.quadTo(rect.right - rect.width() * 0.25f, rect.bottom - curveDepth, rect.right, rect.bottom)
+        
+        val paintCurve = Paint(paintSpine).apply {
+             color = Color.parseColor("#FF4081") // Accent Pink
+             style = Paint.Style.STROKE
+             strokeWidth = 3f
+             pathEffect = null
+        }
+        canvas.drawPath(path, paintCurve)
+        
         // Draw Label
         val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
              color = Color.CYAN
@@ -140,7 +166,7 @@ class ScannerOverlayView @JvmOverloads constructor(
              textAlign = Paint.Align.CENTER
              setShadowLayer(4f, 0f, 0f, Color.BLACK)
         }
-        canvas.drawText("ALIGN BINDING TO CENTER", rect.centerX(), rect.top - 30f, textPaint)
+        canvas.drawText("ALIGN BINDING TO CENTER", rect.centerX(), rect.top - 40f, textPaint)
     }
 
     private fun drawPassportGuides(canvas: Canvas, rect: RectF) {
