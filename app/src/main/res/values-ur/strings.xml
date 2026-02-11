@@ -6,6 +6,7 @@
     <string name="main_title">Scanner Lab</string>
     <string name="qr_scanner">QR سکینر</string>
     <string name="document_scanner">دستاویز سکینر</string>
+    <string name="document_scanner_aio">اے آئی او دستاویز سکینر</string>
     <string name="file_converter">فائل کنورٹر</string>
     <string name="pdf_tools">PDF ٹولز</string>
     
