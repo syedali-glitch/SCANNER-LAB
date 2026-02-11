@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingStart="16dp"
-                android:text="Finger / Blemish Remover"
+                android:text="@string/tool_name_magic_eraser"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -76,7 +76,7 @@
              android:id="@+id/tvInstruction"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:text="Load an image to start"
+             android:text="@string/magic_eraser_instruction"
              android:textColor="@color/ref_text_secondary"
              android:layout_gravity="center"/>
     </FrameLayout>

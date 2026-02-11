@@ -104,6 +104,30 @@
             android:exported="false"
             android:label="Tools &amp; Engines"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.IntroActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ScannerLab" />
+
+        <activity
+            android:name=".tools.AnnotationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ScannerLab" />
+
+        <activity
+            android:name=".tools.HandwritingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ScannerLab" />
+
+        <activity
+            android:name=".tools.FingerRemovalActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ScannerLab" />
             
     </application>
 

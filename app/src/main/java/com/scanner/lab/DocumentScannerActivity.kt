@@ -14,6 +14,8 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.scanner.lab.converters.TextConverter
+import com.scanner.lab.converters.DocxConverter
+import com.scanner.lab.converters.ExcelGenerator
 import com.scanner.lab.databinding.ActivityDocumentScannerBinding
 import com.scanner.lab.ui.ScannerOverlayView
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +44,7 @@ class DocumentScannerActivity : BaseActivity() {
     // ID Card State
     private var currentScanMode = ScannerOverlayView.ScanMode.DOCUMENT
     private var idCardFrontBitmap: Bitmap? = null
+    private var isAioMode = false
     
     private val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     
@@ -57,6 +60,7 @@ class DocumentScannerActivity : BaseActivity() {
         // Determine Mode
         val modeOrdinal = intent.getIntExtra(EXTRA_SCAN_MODE, ScannerOverlayView.ScanMode.DOCUMENT.ordinal)
         currentScanMode = ScannerOverlayView.ScanMode.values().getOrElse(modeOrdinal) { ScannerOverlayView.ScanMode.DOCUMENT }
+        isAioMode = intent.getBooleanExtra("is_aio_mode", false)
 
         // Set Scanner Overlay
         binding.scannerOverlay.setScanMode(currentScanMode)
@@ -281,10 +285,213 @@ class DocumentScannerActivity : BaseActivity() {
         matrix.postRotate(image.imageInfo.rotationDegrees.toFloat())
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
+
+    // --- Smart Save AIO Flow ---
+    private fun showSmartSaveSheet() {
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        val sheetView = layoutInflater.inflate(R.layout.layout_bottom_sheet_save_format, null)
+        dialog.setContentView(sheetView)
+
+        // 1. PDF
+        sheetView.findViewById<View>(R.id.btnFormatPdf)?.setOnClickListener {
+            dialog.dismiss()
+            processSmartSave("PDF")
+        }
+        
+        // 2. Word
+        sheetView.findViewById<View>(R.id.btnFormatWord)?.setOnClickListener {
+            dialog.dismiss()
+            processSmartSave("WORD")
+        }
+        
+        // 3. Excel
+        sheetView.findViewById<View>(R.id.btnFormatExcel)?.setOnClickListener {
+            dialog.dismiss()
+            processSmartSave("EXCEL")
+        }
+        
+        // 4. Text
+        sheetView.findViewById<View>(R.id.btnFormatText)?.setOnClickListener {
+            dialog.dismiss()
+            processSmartSave("TEXT")
+        }
+        
+        // 5. Image
+        sheetView.findViewById<View>(R.id.btnFormatImage)?.setOnClickListener {
+            dialog.dismiss()
+            processSmartSave("IMAGE")
+        }
+        
+        dialog.show()
+    }
     
-    @Suppress("ALL")
+    private fun processSmartSave(format: String) {
+        binding.progressLayout.visibility = View.VISIBLE
+        setButtonsEnabled(false)
+        
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Pre-process bitmaps if needed (Magic Filter)
+                val processedBitmaps = preprocessBitmaps()
+                val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+                
+                var savedFileUri: android.net.Uri? = null
+                var mimeType = "application/pdf"
+                
+                when (format) {
+                    "PDF" -> {
+                        val fileName = "Scan_$timestamp.pdf"
+                        savedFileUri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(this@DocumentScannerActivity, fileName, "application/pdf")
+                        if (savedFileUri != null) {
+                            val pageUris = saveBitmapsToCache(processedBitmaps)
+                            com.scanner.lab.converters.NativePdfGenerator.generatePdf(this@DocumentScannerActivity, pageUris, savedFileUri).getOrThrow()
+                        }
+                        mimeType = "application/pdf"
+                    }
+                    "WORD" -> {
+                         val fileName = "Scan_$timestamp.docx"
+                         savedFileUri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(this@DocumentScannerActivity, fileName, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                         if (savedFileUri != null) {
+                             val pageUris = saveBitmapsToCache(processedBitmaps)
+                             // Convert Uris to Paths
+                             val imagePaths = pageUris.mapNotNull { com.scanner.lab.utils.ScopedStorageHelper.copyUriToCache(this@DocumentScannerActivity, it, "jpg")?.absolutePath }
+                             val tempDoc = com.scanner.lab.utils.ScopedStorageHelper.createCacheFile(this@DocumentScannerActivity, "docx")
+                             DocxConverter.imagesToDocx(imagePaths, tempDoc.absolutePath).getOrThrow()
+                             // Copy to final
+                             contentResolver.openOutputStream(savedFileUri)?.use { out ->
+                                 java.io.FileInputStream(tempDoc).copyTo(out)
+                             }
+                         }
+                         mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    }
+                    "EXCEL" -> {
+                        val fileName = "Scan_$timestamp.xlsx"
+                        mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        savedFileUri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(this@DocumentScannerActivity, fileName, mimeType)
+                        
+                        if (savedFileUri != null) {
+                            // Run OCR
+                            val texts = runOcrOnBitmaps(processedBitmaps)
+                            contentResolver.openOutputStream(savedFileUri)?.use { out ->
+                                ExcelGenerator.generateExcel(this@DocumentScannerActivity, texts, out).getOrThrow()
+                            }
+                        }
+                    }
+                    "TEXT" -> {
+                        val fileName = "Scan_$timestamp.txt"
+                         mimeType = "text/plain"
+                        savedFileUri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(this@DocumentScannerActivity, fileName, mimeType)
+                        
+                        if (savedFileUri != null) {
+                             // Run OCR
+                            val texts = runOcrOnBitmaps(processedBitmaps)
+                            val fullText = texts.joinToString("\n\n--- Page Break ---\n\n")
+                            contentResolver.openOutputStream(savedFileUri)?.use { out ->
+                                out.write(fullText.toByteArray())
+                            }
+                        }
+                    }
+                    "IMAGE" -> {
+                        // Save to Gallery (All images)
+                        mimeType = "image/jpeg"
+                        // We will save all, but only share the last one or create a zip? 
+                        // User request: "save to local directory". Usually for "Image" it means save to gallery.
+                        // Let's save all to gallery and share the last one (simplification) OR share multiple if supported.
+                        // For now, let's implement saving all to gallery.
+                        val uris = saveBitmapsToGallery(processedBitmaps)
+                        if (uris.isNotEmpty()) savedFileUri = uris.last() // Share the last one for now to keep single stream logic
+                        // If we want to share multiple, we need ArrayList<Uri> intent.
+                        // Let's stick to single file logic for now or Zip? "Image" format usually implies "Save as JPGs".
+                        // Let's assume user wants to share the collection.
+                        if (uris.size > 1) {
+                            // If multiple, maybe just toast "Saved to Gallery" and share the first?
+                            // Implementing robust multi-share is complex here. Let's start with saving to gallery.
+                        }
+                    }
+                }
+
+                if (savedFileUri != null) {
+                    com.scanner.lab.utils.ScopedStorageHelper.finalizeFile(this@DocumentScannerActivity, savedFileUri)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@DocumentScannerActivity, "Saved Successfully!", Toast.LENGTH_SHORT).show()
+                        shareFile(savedFileUri, mimeType)
+                        finish()
+                    }
+                } else {
+                     throw Exception("Save Failed")
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@DocumentScannerActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    binding.progressLayout.visibility = View.GONE
+                    setButtonsEnabled(true)
+                }
+            }
+        }
+    }
+    
+    private suspend fun preprocessBitmaps(): List<Bitmap> {
+        return capturedBitmaps.map { bitmap ->
+            val isEnhancedMode = (currentScanMode == ScannerOverlayView.ScanMode.DOCUMENT || currentScanMode == ScannerOverlayView.ScanMode.BOOK)
+            if (isEnhancedMode) {
+                 com.scanner.lab.utils.ImageProcessor.applyFilter(bitmap, com.scanner.lab.utils.ImageProcessor.FilterMode.MAGIC)
+            } else {
+                bitmap
+            }
+        }
+    }
+    
+    private fun saveBitmapsToCache(bitmaps: List<Bitmap>): List<android.net.Uri> {
+        val uris = mutableListOf<android.net.Uri>()
+        bitmaps.forEach { bmp ->
+            val file = com.scanner.lab.utils.ScopedStorageHelper.createCacheFile(this, "jpg")
+            FileOutputStream(file).use { out -> bmp.compress(Bitmap.CompressFormat.JPEG, 90, out) }
+            uris.add(com.scanner.lab.utils.ScopedStorageHelper.getUriForFile(this, file))
+        }
+        return uris
+    }
+    
+    // Save to Public Gallery
+    private fun saveBitmapsToGallery(bitmaps: List<Bitmap>): List<android.net.Uri> {
+         val uris = mutableListOf<android.net.Uri>()
+         bitmaps.forEach { bmp ->
+             val uri = com.scanner.lab.utils.ScopedStorageHelper.saveToGallery(this, bmp)
+             if (uri != null) uris.add(uri)
+         }
+         return uris
+    }
+
+    private suspend fun runOcrOnBitmaps(bitmaps: List<Bitmap>): List<String> {
+        val texts = mutableListOf<String>()
+        bitmaps.forEach { bmp ->
+            try {
+                val input = InputImage.fromBitmap(bmp, 0)
+                val result = com.google.android.gms.tasks.Tasks.await(textRecognizer.process(input))
+                texts.add(result.text)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return texts
+    }
+
+    private fun shareFile(uri: android.net.Uri, mimeType: String) {
+        val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+            type = mimeType
+            putExtra(android.content.Intent.EXTRA_STREAM, uri)
+            addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        startActivity(android.content.Intent.createChooser(shareIntent, "Share via..."))
+    }
+
     private fun saveDocument() {
         if (capturedBitmaps.isEmpty()) return
+
+        if (isAioMode) {
+            showSmartSaveSheet()
+            return
+        }
         
         binding.progressLayout.visibility = View.VISIBLE
         setButtonsEnabled(false)

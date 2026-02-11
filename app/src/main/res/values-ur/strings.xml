@@ -100,4 +100,36 @@
     <string name="url_warning_message">یہ لنک آپ کے براؤزر میں کھلے گا۔ کیا آپ جاری رکھنا چاہتے ہیں؟</string>
     <string name="open">کھولیں</string>
 
+    <!-- Intro Screen Extras -->
+    <string name="intro_title_id_card">آئی ڈی کارڈ موڈ</string>
+    <string name="intro_desc_id_card">آئی ڈی کارڈ کے دونوں اطراف کی تصویر آسانی سے لیں۔ ایپ خود بخود انہیں ایک ہی A4 صفحے پر جوڑ دے گی۔</string>
+    <string name="intro_title_passport">پاسپورٹ موڈ</string>
+    <string name="intro_desc_passport">اپنے پاسپورٹ کے معلوماتی صفحے کو سکین کریں۔ ایپ خود بخود نیچے موجود کوڈ کو پڑھ لے گی۔</string>
+    
+    <!-- Tool Categories -->
+    <string name="tool_cat_convert">فائلیں تبدیل کریں</string>
+    <string name="tool_subcat_from_image">تصویر سے</string>
+    <string name="tool_subcat_from_pdf">پی ڈی ایف سے</string>
+    <string name="tool_cat_pdf_utils">PDF ٹولز اور یوٹیلیٹیز</string>
+    <string name="tool_cat_specialized">خصوصی موڈز</string>
+    <string name="tool_cat_security">سیکیورٹی اور مینجمنٹ</string>
+
+    <!-- Detailed Tool Names -->
+    <string name="tool_name_ocr">آف لائن OCR</string>
+    <string name="tool_name_excel">تصویر سے ایکسل</string>
+    <string name="tool_name_word">تصویر سے ورڈ</string>
+    <string name="tool_name_ppt">تصویر سے PPT</string>
+    <string name="tool_name_handwriting">ہاتھ کی تحریر</string>
+    <string name="tool_name_searchable_pdf">سرچ ایبل PDF</string>
+    <string name="tool_name_translator">آف لائن مترجم</string>
+    <string name="tool_name_signature">ای سگنچر</string>
+    <string name="tool_name_private_space">پرائیویٹ اسپیس</string>
+    <string name="tool_name_anti_counterfeit">اینٹی کاؤنٹر فیٹ</string>
+    <string name="tool_name_annotation">تشریح</string>
+    <string name="tool_name_id_card">آئی ڈی کارڈ موڈ</string>
+    <string name="tool_name_passport">پاسپورٹ موڈ</string>
+    <string name="tool_name_book">بک موڈ</string>
+    <string name="tool_name_magic_eraser">میجک ایریزر</string>
+    <string name="magic_eraser_desc">اسکین سے انگلیوں یا دیگر چیزوں کو مٹائیں</string>
+    <string name="magic_eraser_instruction">مٹانے والی چیز کے اوپر پینٹ کریں</string>
 </resources>

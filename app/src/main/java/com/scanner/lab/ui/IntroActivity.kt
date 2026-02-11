@@ -29,7 +29,17 @@ class IntroActivity : BaseActivity() {
         val title = intent.getStringExtra(EXTRA_TITLE) ?: "Feature"
         val desc = intent.getStringExtra(EXTRA_DESC) ?: "Description"
         val iconRes = intent.getIntExtra(EXTRA_ICON, com.scanner.lab.R.drawable.ic_scan_doc)
-        val targetIntent = intent.getParcelableExtra<Intent>(EXTRA_TARGET_INTENT)
+        
+        val targetIntent = if (android.os.Build.VERSION.SDK_INT >= 33) {
+            intent.getParcelableExtra(EXTRA_TARGET_INTENT, Intent::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra<Intent>(EXTRA_TARGET_INTENT)
+        }
+
+        if (targetIntent == null) {
+            android.util.Log.e("IntroActivity", "Target Intent is NULL!")
+        }
 
         binding.tvTitle.text = title
         binding.tvDescription.text = desc

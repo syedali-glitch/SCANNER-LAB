@@ -97,5 +97,36 @@
     <string name="url_warning_title">Security Warning</string>
     <string name="url_warning_message">This link will open in your external browser. Are you sure you want to proceed?</string>
     <string name="open">Open</string>
+    <!-- Intro Screen Extras -->
+    <string name="intro_title_id_card">ID Card Mode</string>
+    <string name="intro_desc_id_card">Capture both sides of an ID card seamlessly. The app will automatically stitch them onto a single A4 page for easy printing.</string>
+    <string name="intro_title_passport">Passport Mode</string>
+    <string name="intro_desc_passport">Scan your passport\'s information page. The app will automatically read the code at the bottom.</string>
+    
+    <!-- Tool Categories -->
+    <string name="tool_cat_convert">Convert Files</string>
+    <string name="tool_subcat_from_image">From Image</string>
+    <string name="tool_subcat_from_pdf">From PDF</string>
+    <string name="tool_cat_pdf_utils">PDF Tools &amp; Utilities</string>
+    <string name="tool_cat_specialized">Specialized Modes</string>
+    <string name="tool_cat_security">Security &amp; Management</string>
 
+    <!-- Detailed Tool Names -->
+    <string name="tool_name_ocr">Offline OCR</string>
+    <string name="tool_name_excel">Image to Excel</string>
+    <string name="tool_name_word">Image to Word</string>
+    <string name="tool_name_ppt">Image to PPT</string>
+    <string name="tool_name_handwriting">Handwriting</string>
+    <string name="tool_name_searchable_pdf">Searchable PDF</string>
+    <string name="tool_name_translator">Offline Translator</string>
+    <string name="tool_name_signature">E-Signature</string>
+    <string name="tool_name_private_space">Private Space</string>
+    <string name="tool_name_anti_counterfeit">Anti-Counterfeit</string>
+    <string name="tool_name_annotation">Annotation</string>
+    <string name="tool_name_id_card">ID Card Mode</string>
+    <string name="tool_name_passport">Passport Mode</string>
+    <string name="tool_name_book">Book Mode</string>
+    <string name="tool_name_magic_eraser">Magic Eraser</string>
+    <string name="magic_eraser_desc">Erase fingers or objects from scans</string>
+    <string name="magic_eraser_instruction">Paint over the object you want to erase</string>
 </resources>

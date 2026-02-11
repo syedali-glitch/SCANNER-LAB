@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="120dp"
-    android:layout_height="160dp"
+    android:layout_width="110dp"
+    android:layout_height="140dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
     app:cardBackgroundColor="@color/ref_surface_high"
@@ -24,7 +24,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_scan_doc"
             android:background="#22FFFFFF"
-            android:padding="24dp"
+            android:padding="16dp"
             app:tint="@color/ref_text_secondary"/>
 
         <!-- Filename -->

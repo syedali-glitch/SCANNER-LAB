@@ -123,4 +123,45 @@ object ScopedStorageHelper {
         }
         return name
     }
+
+    /**
+     * Save Bitmap directly to Gallery
+     */
+    fun saveToGallery(context: Context, bitmap: android.graphics.Bitmap): Uri? {
+        val filename = "IMG_${System.currentTimeMillis()}.jpg"
+        var imageUri: Uri? = null
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/PlainLabsScanner")
+                put(MediaStore.MediaColumns.IS_PENDING, 1)
+            }
+        }
+
+        val resolver = context.contentResolver
+        val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        return try {
+            imageUri = resolver.insert(collection, contentValues)
+            imageUri?.let { uri ->
+                resolver.openOutputStream(uri)?.use { out ->
+                    bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, out)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    contentValues.clear()
+                    contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0)
+                    resolver.update(uri, contentValues, null, null)
+                }
+                uri
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 }

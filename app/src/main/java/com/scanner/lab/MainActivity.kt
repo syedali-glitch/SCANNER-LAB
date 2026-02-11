@@ -71,7 +71,7 @@ class MainActivity : BaseActivity() {
         binding.adView.loadAd(adRequest)
         
         setupUI()
-        setupGestures()
+        // setupGestures() // Removed as cardScannerHub is gone
         requestPermissionsIfNeeded()
     }
     
@@ -103,31 +103,9 @@ class MainActivity : BaseActivity() {
         binding.rvRecentScans.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
         binding.rvRecentScans.adapter = recentAdapter
         
-        // --- Quick Start ---
-        binding.btnQuickScan.setOnClickListener {
-             it.performHapticFeedback()
-             checkCameraPermissionAndLaunch {
-                startActivity(Intent(this, DocumentScannerActivity::class.java))
-            }
-        }
-        
-        binding.btnQuickId.setOnClickListener {
-             it.performHapticFeedback()
-             checkCameraPermissionAndLaunch {
-                val targetIntent = Intent(this, DocumentScannerActivity::class.java).apply {
-                    putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.ID_CARD.ordinal)
-                }
-                val intent = Intent(this, com.scanner.lab.ui.IntroActivity::class.java).apply {
-                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TITLE, "ID Card Mode")
-                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_DESC, "Capture both sides of an ID card seamlessly.")
-                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_ICON, R.drawable.ic_tool_id_card)
-                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TARGET_INTENT, targetIntent)
-                }
-                startActivity(intent)
-            }
-        }
-        
-        binding.btnQuickQr.setOnClickListener {
+        // --- Scanner Hub (Top) ---
+        // 1. QR Code
+        binding.root.findViewById<android.view.View>(R.id.btnHubQr)?.setOnClickListener {
              it.performHapticFeedback()
              checkCameraPermissionAndLaunch {
                 val intent = Intent(this, QRScannerActivity::class.java)
@@ -136,16 +114,86 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        // --- Main Cards & Shortcuts ---
+        // 2. Barcode
+        binding.root.findViewById<android.view.View>(R.id.btnHubBarcode)?.setOnClickListener {
+             it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                val intent = Intent(this, QRScannerActivity::class.java)
+                intent.putExtra("SCAN_MODE", "BARCODE")
+                startActivity(intent)
+            }
+        }
 
-        // Scanner Hub (Large Card) -> defaults to Doc Scanner
-        binding.cardScannerHub.setOnClickListener {
+        // 3. Document
+        binding.root.findViewById<android.view.View>(R.id.btnHubDoc)?.setOnClickListener {
+             it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                val intent = Intent(this, DocumentScannerActivity::class.java)
+                intent.putExtra("is_aio_mode", true)
+                startActivity(intent)
+            }
+        }
+
+        // --- Quick Tools ---
+        // 1. Doc Scan
+        binding.btnQuickDoc.setOnClickListener {
             it.performHapticFeedback()
-            checkCameraPermissionAndLaunch {
+             checkCameraPermissionAndLaunch {
                 startActivity(Intent(this, DocumentScannerActivity::class.java))
             }
         }
 
+        // 2. QR Code
+        binding.btnQuickQr.setOnClickListener {
+            it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                val intent = Intent(this, QRScannerActivity::class.java)
+                intent.putExtra("SCAN_MODE", "QR")
+                startActivity(intent)
+            }
+        }
+
+        // 3. ID Card
+        binding.btnQuickId.setOnClickListener {
+             it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                val targetIntent = Intent(this, DocumentScannerActivity::class.java).apply {
+                    putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.ID_CARD.ordinal)
+                }
+                val intent = Intent(this, com.scanner.lab.ui.IntroActivity::class.java).apply {
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TITLE, getString(R.string.intro_title_id_card))
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_DESC, getString(R.string.intro_desc_id_card))
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_ICON, R.drawable.ic_tool_id_card)
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TARGET_INTENT, targetIntent)
+                }
+                startActivity(intent)
+            }
+        }
+
+        // 4. Passport
+        binding.btnQuickPassport.setOnClickListener {
+             it.performHapticFeedback()
+             checkCameraPermissionAndLaunch {
+                val targetIntent = Intent(this, DocumentScannerActivity::class.java).apply {
+                    putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.PASSPORT.ordinal)
+                }
+                val intent = Intent(this, com.scanner.lab.ui.IntroActivity::class.java).apply {
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TITLE, getString(R.string.intro_title_passport))
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_DESC, getString(R.string.intro_desc_passport))
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_ICON, R.drawable.ic_tool_passport)
+                    putExtra(com.scanner.lab.ui.IntroActivity.EXTRA_TARGET_INTENT, targetIntent)
+                }
+                startActivity(intent)
+            }
+        }
+
+        // 5. E-Sign
+        binding.btnQuickSign.setOnClickListener {
+             it.performHapticFeedback()
+             startActivity(Intent(this, com.scanner.lab.tools.SignatureActivity::class.java))
+        }
+
+        // Main Cards
         
         // File Converter Card
         binding.cardConverter.setOnClickListener {
@@ -159,14 +207,6 @@ class MainActivity : BaseActivity() {
         binding.cardFileViewer.setOnClickListener {
             it.performHapticFeedback()
             startActivity(Intent(this, FileViewerActivity::class.java))
-        }
-
-        // PDF Tools Card
-        binding.cardPdfTools.setOnClickListener {
-            it.performHapticFeedback()
-            if (com.scanner.lab.utils.UserPremiums.checkOrShowUpsell(this)) {
-                startActivity(Intent(this, PdfToolsActivity::class.java))
-            }
         }
         
         setupBottomNav()
@@ -200,21 +240,12 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    /*
     private fun setupGestures() {
         // Add swipe gestures to cards
-        GestureHandler(this, binding.cardScannerHub)
-            .setOnSwipeRight {
-                // Swipe on scanner hub -> open history? or just camera
-                 checkCameraPermissionAndLaunch {
-                    startActivity(Intent(this, DocumentScannerActivity::class.java))
-                }
-            }
-            .setOnDoubleTap {
-                binding.cardScannerHub.animatePulse()
-            }
-        
-        // Keep gesture logic simple for now
+        // Removed cardScannerHub
     }
+    */
     
     private fun checkCameraPermissionAndLaunch(onGranted: () -> Unit) {
         when {
@@ -320,7 +351,7 @@ class MainActivity : BaseActivity() {
         try {
             startActivity(intent)
         } catch (e: Exception) {
-            Toast.makeText(this, "No app found to open this file", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Cannot open file", Toast.LENGTH_SHORT).show()
         }
     }
 }
