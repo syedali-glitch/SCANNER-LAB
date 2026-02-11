@@ -8,6 +8,11 @@ import androidx.appcompat.app.AlertDialog
 import com.scanner.lab.databinding.ActivityToolsBinding
 import com.scanner.lab.databinding.ItemToolCardBinding
 
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 /**
  * Stage 2: Tools & Engines
  * Central hub for all 17 scanning utilities.
@@ -15,6 +20,26 @@ import com.scanner.lab.databinding.ItemToolCardBinding
 class ToolsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityToolsBinding
+
+    // ... (pickers)
+
+    // ... (onCreate)
+
+    // ... (setupUI)
+
+    // ... (setupBottomNav)
+
+
+    
+
+    // IMAGE PICKERS for Tools
+    private val shadowPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri -> 
+        uri?.let { showImageProcessingDialog(it, com.scanner.lab.utils.ImageProcessor.FilterMode.SHADOW_REMOVER, "Shadow Removal") } 
+    }
+    
+    private val magicPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri -> 
+        uri?.let { showImageProcessingDialog(it, com.scanner.lab.utils.ImageProcessor.FilterMode.MAGIC_V2, "Magic Filter") } 
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +63,6 @@ class ToolsActivity : BaseActivity() {
 
     private fun setupUI() {
         // --- Section 1: Core Scanning ---
-        // Pass the ROOT view of the included layout
         setupTool(binding.toolAutoEdge.root, "Auto-Edge", R.drawable.ic_scan_doc, true) {
             startActivity(Intent(this, DocumentScannerActivity::class.java))
         }
@@ -46,10 +70,10 @@ class ToolsActivity : BaseActivity() {
             startActivity(Intent(this, DocumentScannerActivity::class.java))
         }
         setupTool(binding.toolMagicFilter.root, "Magic Filter", R.drawable.ic_scan_doc, true) {
-            showEngineInfo("Magic Color Filter", "Engine: Adaptive Thresholding + CLAHE.\n\nStatus: Ready for Integration.")
+            magicPicker.launch(arrayOf("image/*"))
         }
-        setupTool(binding.toolShadowRemoval.root, "Shadow Remover", R.drawable.ic_scan_doc, false) {
-            showEngineInfo("Shadow & Glare Removal", "Engine: Illumination Correction Map.\n\nStatus: Placeholder for v1.0.1.")
+        setupTool(binding.toolShadowRemoval.root, "Shadow Remover", R.drawable.ic_scan_doc, true) {
+            shadowPicker.launch(arrayOf("image/*"))
         }
 
         // --- Section 2: Intelligent OCR ---
@@ -72,30 +96,146 @@ class ToolsActivity : BaseActivity() {
             showEngineInfo("Searchable PDF", "Engine: PDF/A Overlay (Text Layer).\n\nStatus: Placeholder for v1.0.1.")
         }
 
-        // --- Section 3: Specialized Modes ---
-        setupTool(binding.toolIdCard.root, "ID Card Mode", R.drawable.ic_scan_doc, false) {
-            showEngineInfo("ID Card Mode", "Engine: Canvas Composition (Front + Back).\n\nStatus: Placeholder for v1.0.1.")
+        // --- Section 3: PDF Tools & Utilities ---
+        setupTool(binding.toolPdfMerge.root, "Merge PDF", R.drawable.ic_pdf_tool, true) {
+             val intent = Intent(this, PdfToolsActivity::class.java)
+             intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_MERGE)
+             startActivity(intent)
         }
-        setupTool(binding.toolPassport.root, "Passport (MRZ)", R.drawable.ic_scan_doc, false) {
-            showEngineInfo("Passport Reader", "Engine: MRZ Parser (ICAO 9303).\n\nStatus: Placeholder for v1.0.1.")
+        setupTool(binding.toolPdfSplit.root, "Split PDF", R.drawable.ic_pdf_tool, true) {
+             val intent = Intent(this, PdfToolsActivity::class.java)
+             intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_SPLIT)
+             startActivity(intent)
         }
-        setupTool(binding.toolBookMode.root, "Book Mode", R.drawable.ic_scan_doc, false) {
-             showEngineInfo("Book Curve Correction", "Engine: 3D Cylindrical Projection.\n\nStatus: Placeholder for v1.0.1.")
+        setupTool(binding.toolPdfCompress.root, "Compress PDF", R.drawable.ic_pdf_tool, true) {
+             val intent = Intent(this, PdfToolsActivity::class.java)
+             intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_COMPRESS)
+             startActivity(intent)
+        }
+        setupTool(binding.toolPdfWatermark.root, "Watermark", R.drawable.ic_pdf_tool, true) {
+             val intent = Intent(this, PdfToolsActivity::class.java)
+             intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_WATERMARK)
+             startActivity(intent)
+        }
+        setupTool(binding.toolPdfOrganize.root, "Organize Pages", R.drawable.ic_pdf_tool, true) {
+             val intent = Intent(this, PdfToolsActivity::class.java)
+             intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_ORGANIZE)
+             startActivity(intent)
+        }
+        setupTool(binding.toolPdfPassword.root, "PDF Password", R.drawable.ic_lock, true) {
+             val intent = Intent(this, PdfToolsActivity::class.java)
+             intent.putExtra(PdfToolsActivity.EXTRA_OPEN_TOOL, PdfToolsActivity.TOOL_PASSWORD)
+             startActivity(intent)
+        }
+
+        // --- Section 4: Specialized Modes ---
+        setupTool(binding.toolIdCard.root, "ID Card Mode", R.drawable.ic_scan_doc, true) {
+            val intent = Intent(this, DocumentScannerActivity::class.java)
+            intent.putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.ID_CARD.ordinal)
+            startActivity(intent)
+        }
+        setupTool(binding.toolPassport.root, "Passport (MRZ)", R.drawable.ic_scan_doc, true) {
+            val intent = Intent(this, DocumentScannerActivity::class.java)
+            intent.putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.PASSPORT.ordinal)
+            startActivity(intent)
+        }
+        setupTool(binding.toolBookMode.root, "Book Mode", R.drawable.ic_scan_doc, true) {
+             val intent = Intent(this, DocumentScannerActivity::class.java)
+             intent.putExtra(DocumentScannerActivity.EXTRA_SCAN_MODE, com.scanner.lab.ui.ScannerOverlayView.ScanMode.BOOK.ordinal)
+             startActivity(intent)
         }
         setupTool(binding.toolFingerRemoval.root, "Finger Removal", R.drawable.ic_scan_doc, false) {
              showEngineInfo("Finger Removal", "Engine: Inpainting (Navier-Stokes).\n\nStatus: Placeholder for v1.0.1.")
         }
 
-        // --- Section 4: Security ---
-        setupTool(binding.toolEncryption.root, "PDF Encrypt", R.drawable.ic_pdf_tool, true) {
-            startActivity(Intent(this, PdfToolsActivity::class.java))
+        // --- Section 5: Security & Management ---
+        // Encryption moved to PDF Tools section
+        setupTool(binding.toolSignature.root, "E-Signature", R.drawable.ic_file_viewer, true) {
+            startActivity(Intent(this, com.scanner.lab.tools.SignatureActivity::class.java))
         }
-        setupTool(binding.toolSignature.root, "E-Signature", R.drawable.ic_file_viewer, false) {
-            showEngineInfo("E-Signature", "Engine: Bezier Curve Vector Path.\n\nStatus: Placeholder for v1.0.1.")
+        setupTool(binding.toolPrivateSpace.root, "Private Space", R.drawable.ic_settings, true) {
+             startActivity(Intent(this, com.scanner.lab.tools.PrivateSpaceActivity::class.java))
         }
-        setupTool(binding.toolPrivateSpace.root, "Private Space", R.drawable.ic_settings, false) {
-             showEngineInfo("Private Space", "Engine: AES-256 Storage & Biometrics.\n\nStatus: Placeholder for v1.0.1.")
+    }
+    
+    private fun showImageProcessingDialog(uri: android.net.Uri, filterMode: com.scanner.lab.utils.ImageProcessor.FilterMode, title: String) {
+
+        // Ensure dialog layout exists or create it? 
+        // We might not have 'dialog_image_preview'. Let's check or create a simple view programmatically if needed.
+        // For safety, I'll allow the agent to create the layout if missing, but let's assume I need to create it.
+        // I will use a simple ImageView construction here to avoid crashing if layout is missing.
+        
+        val context = this
+        val layout = android.widget.LinearLayout(context).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(32, 32, 32, 32)
+            gravity = android.view.Gravity.CENTER
         }
+        val imageView = android.widget.ImageView(context).apply {
+            layoutParams = android.widget.LinearLayout.LayoutParams(500, 700)
+            scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+        }
+        val progress = android.widget.ProgressBar(context).apply {
+            visibility = View.VISIBLE
+        }
+        layout.addView(imageView)
+        layout.addView(progress)
+        
+        val dialog = AlertDialog.Builder(context)
+            .setTitle(title)
+            .setView(layout)
+            .setPositiveButton("Save To Gallery") { _, _ ->
+                // Save logic (the bitmap is in tag or we re-process)
+                val processed = imageView.tag as? android.graphics.Bitmap
+                if (processed != null) {
+                    saveProcessedImage(processed, title)
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+            
+        dialog.show()
+        
+        // Async Process
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val cacheFile = com.scanner.lab.utils.ScopedStorageHelper.copyUriToCache(context, uri, "jpg")
+                val original = android.graphics.BitmapFactory.decodeFile(cacheFile?.absolutePath)
+                if (original != null) {
+                    val processed = com.scanner.lab.utils.ImageProcessor.applyFilter(original, filterMode)
+                    
+                    withContext(Dispatchers.Main) {
+                        imageView.setImageBitmap(processed)
+                        imageView.tag = processed
+                        progress.visibility = View.GONE
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+            }
+        }
+    }
+    
+    private fun saveProcessedImage(bitmap: android.graphics.Bitmap, toolName: String) {
+         lifecycleScope.launch(Dispatchers.IO) {
+             val timestamp = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.US).format(java.util.Date())
+             val fileName = "${toolName.replace(" ", "")}_$timestamp.jpg"
+             val uri = com.scanner.lab.utils.ScopedStorageHelper.createDocumentUri(this@ToolsActivity, fileName, "image/jpeg")
+             
+             if (uri != null) {
+                 contentResolver.openOutputStream(uri)?.use { out ->
+                     bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, out)
+                 }
+                 com.scanner.lab.utils.ScopedStorageHelper.finalizeFile(this@ToolsActivity, uri)
+                 
+                 withContext(Dispatchers.Main) {
+                     Toast.makeText(this@ToolsActivity, "Saved to Documents!", Toast.LENGTH_LONG).show()
+                 }
+             }
+         }
     }
 
     private fun setupTool(view: View, title: String, iconRes: Int, isReady: Boolean, onClick: () -> Unit) {

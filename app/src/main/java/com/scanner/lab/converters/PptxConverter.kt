@@ -126,6 +126,46 @@ object PptxConverter {
     }
     
     /**
+     * Images to PPTX (Embed images, one per slide)
+     */
+    fun imagesToPptx(
+        imagePaths: List<String>,
+        outputPptxPath: String
+    ): Result<File> = ErrorHandler.safe("ImagesToPptx") {
+        val outputFile = File(outputPptxPath)
+        
+        XMLSlideShow().use { pptx ->
+            
+            imagePaths.forEach { imagePath ->
+                val imageFile = File(imagePath)
+                if (imageFile.exists()) {
+                    val slide = pptx.createSlide()
+                    
+                    val pictureIndex = FileInputStream(imageFile).use { fis ->
+                         val format = if (imagePath.endsWith("png", true)) {
+                            org.apache.poi.sl.usermodel.PictureData.PictureType.PNG
+                        } else {
+                            org.apache.poi.sl.usermodel.PictureData.PictureType.JPEG
+                        }
+                        pptx.addPicture(fis, format)
+                    }
+                    
+                    val pictureShape = slide.createPicture(pictureIndex)
+                    // Center Picture: 720 x 540 default.
+                    // Let's make it fill most of the slide or center.
+                    // pictureShape.anchor = java.awt.Rectangle(40, 40, 640, 460) // AWT not available on Android
+                }
+            }
+            
+            FileOutputStream(outputFile).use { fos ->
+                pptx.write(fos)
+            }
+        }
+        
+        outputFile
+    }
+
+    /**
      * PPTX to Text (extract all slide content)
      */
     fun pptxToText(pptxPath: String): Result<String> = ErrorHandler.safe("PptxToText") {

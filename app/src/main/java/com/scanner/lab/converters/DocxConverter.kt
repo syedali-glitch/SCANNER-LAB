@@ -106,6 +106,53 @@ object DocxConverter {
     }
     
     /**
+     * Images to DOCX (Embed images into Word Doc, one per page/paragraph)
+     */
+    fun imagesToDocx(
+        imagePaths: List<String>,
+        outputDocxPath: String
+    ): Result<File> = ErrorHandler.safe("ImagesToDocx") {
+        val outputFile = File(outputDocxPath)
+        
+        XWPFDocument().use { document ->
+            
+            imagePaths.forEach { imagePath ->
+                val imageFile = File(imagePath)
+                if (imageFile.exists()) {
+                    val paragraph = document.createParagraph()
+                    val run = paragraph.createRun()
+                    
+                    FileInputStream(imageFile).use { fis ->
+                        // Detect format
+                        val format = if (imagePath.endsWith("png", true)) {
+                            org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_PNG
+                        } else {
+                            org.apache.poi.xwpf.usermodel.Document.PICTURE_TYPE_JPEG
+                        }
+                        
+                        // Add picture
+                        // We need to specify width/height in EMUs.
+                        // 1 inch = 914400 EMUs.
+                        val widthEmus = 5000000 
+                        val heightEmus = 6000000 
+                        
+                        run.addPicture(fis, format, imageFile.name, widthEmus, heightEmus)
+                    }
+                    
+                    // Add Page Break after image (except last?)
+                    paragraph.isPageBreak = true
+                }
+            }
+            
+            FileOutputStream(outputFile).use { fos ->
+                document.write(fos)
+            }
+        }
+        
+        outputFile
+    }
+
+    /**
      * DOCX to Text
      */
     fun docxToText(docxPath: String): Result<String> = ErrorHandler.safe("DocxToText") {

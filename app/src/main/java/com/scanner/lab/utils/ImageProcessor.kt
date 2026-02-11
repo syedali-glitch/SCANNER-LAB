@@ -86,10 +86,9 @@ object ImageProcessor {
 
         when (filterMode) {
             FilterMode.B_AND_W -> {
-                // High Contrast Grayscale (Thresholding-like)
+                // High Contrast Grayscale
                 colorMatrix.setSaturation(0f)
-                // Boost contrast
-                val scale = 1.5f
+                val scale = 1.3f // Reduced from 1.5 to preserve some detail
                 val translate = (-.5f * scale + .5f) * 255f
                 val contrastMatrix = ColorMatrix(floatArrayOf(
                     scale, 0f, 0f, 0f, translate,
@@ -100,12 +99,9 @@ object ImageProcessor {
                 colorMatrix.postConcat(contrastMatrix)
             }
             FilterMode.MAGIC -> {
-                // "Magic" Whiteboard enhancer: Boost saturation, slight contrast, whiten background
-                // 1. Slight Saturation Boost
-                colorMatrix.setSaturation(1.2f)
-                
-                // 2. Brightness/Contrast
-                val scale = 1.2f
+                // "Magic" Whiteboard enhancer
+                colorMatrix.setSaturation(1.1f) // Slight sat boost
+                val scale = 1.1f
                 val translate = (-.1f * scale + .1f) * 255f
                 val contrastMatrix = ColorMatrix(floatArrayOf(
                     scale, 0f, 0f, 0f, translate,
@@ -114,6 +110,27 @@ object ImageProcessor {
                     0f, 0f, 0f, 1f, 0f
                 ))
                 colorMatrix.postConcat(contrastMatrix)
+            }
+            FilterMode.MAGIC_V2 -> {
+                // Histogram Stretch (Simulated via Matrix for speed) + Saturation
+                colorMatrix.setSaturation(1.3f) 
+                // Aggressive contrast to pop text
+                val scale = 1.3f
+                val translate = (-.2f * scale + .2f) * 255f
+                val contrastMatrix = ColorMatrix(floatArrayOf(
+                    scale, 0f, 0f, 0f, translate,
+                    0f, scale, 0f, 0f, translate,
+                    0f, 0f, scale, 0f, translate,
+                    0f, 0f, 0f, 1f, 0f
+                ))
+                colorMatrix.postConcat(contrastMatrix)
+                
+                // Note: Real Histogram stretching requires pixel access (slow in Java/Kotlin).
+                // Use SHADOW_REMOVER for heavy lifting.
+            }
+            FilterMode.SHADOW_REMOVER -> {
+                // Return processed bitmap directly from removeShadows
+                return removeShadows(original)
             }
             FilterMode.ORIGINAL -> {
                 // No-op
@@ -126,10 +143,97 @@ object ImageProcessor {
 
         return bitmap
     }
+    
+    /**
+     * Remove Shadows using Background Estimation (Divisive Normalization)
+     * 1. Estimate background (heavy blur)
+     * 2. Divide Original by Background
+     */
+    private fun removeShadows(original: Bitmap): Bitmap {
+        // 1. Create Estimation (Downscale for speed & blur radius effective size)
+        val scaleFactor = 0.125f // 1/8th size
+        val w = (original.width * scaleFactor).toInt().coerceAtLeast(10)
+        val h = (original.height * scaleFactor).toInt().coerceAtLeast(10)
+        
+        val small = Bitmap.createScaledBitmap(original, w, h, true)
+        
+        // 2. Heavy Blur (Box Blur approx)
+        // Repeat blur to approximate Gaussian
+        fastBlur(small, 10) 
+        fastBlur(small, 10)
+        
+        val background = Bitmap.createScaledBitmap(small, original.width, original.height, true)
+        small.recycle()
+        
+        // 3. Pixel Math: Result = (Original / Background) * 255
+        // This flattens illumination.
+        // Doing this in Kotlin loop is slow for 12MP images.
+        // Optimization: Use a smaller target if original is huge, or accept the wait (run in IO).
+        // For v1.0, we iterate pixels. 
+        
+        val width = original.width
+        val height = original.height
+        val output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        
+        val pixels = IntArray(width * height)
+        val bgPixels = IntArray(width * height)
+        
+        original.getPixels(pixels, 0, width, 0, 0, width, height)
+        background.getPixels(bgPixels, 0, width, 0, 0, width, height)
+        background.recycle()
+        
+        for (i in pixels.indices) {
+            val p = pixels[i]
+            val bg = bgPixels[i]
+            
+            val r = (p shr 16) and 0xFF
+            val g = (p shr 8) and 0xFF
+            val b = p and 0xFF
+            
+            // Background intensity (using max channel or luminance? Max works well for white paper)
+            // Prevent divide by zero
+            val bgR = ((bg shr 16) and 0xFF).coerceAtLeast(1)
+            val bgG = ((bg shr 8) and 0xFF).coerceAtLeast(1)
+            val bgB = (bg and 0xFF).coerceAtLeast(1)
+            
+            // Division logic: New = Old * (255 / Background)
+            val newR = (r * 255 / bgR).coerceAtMost(255)
+            val newG = (g * 255 / bgG).coerceAtMost(255)
+            val newB = (b * 255 / bgB).coerceAtMost(255)
+            
+            pixels[i] = (0xFF shl 24) or (newR shl 16) or (newG shl 8) or newB
+        }
+        
+        output.setPixels(pixels, 0, width, 0, 0, width, height)
+        return output
+    }
+
+    // Simple Stack Blur / Box Blur implementation
+    private fun fastBlur(sentBitmap: Bitmap, radius: Int) {
+         // Optimization: Instead of expensive pixel loops, we use scaling as a blur approximation.
+         // This is sufficient for background estimation.
+         // 1. Scale down significantly (e.g. to 1/4 of this already small bitmap)
+         val smallW = (sentBitmap.width / 4).coerceAtLeast(1)
+         val smallH = (sentBitmap.height / 4).coerceAtLeast(1)
+         
+         val tiny = Bitmap.createScaledBitmap(sentBitmap, smallW, smallH, true)
+         
+         // 2. Scale back up to original size (Bilinear filtering applies blur)
+         val blurred = Bitmap.createScaledBitmap(tiny, sentBitmap.width, sentBitmap.height, true)
+         
+         // Copy blurred pixels back to sentBitmap
+         val canvas = Canvas(sentBitmap)
+         canvas.drawBitmap(blurred, 0f, 0f, Paint())
+         
+         tiny.recycle()
+         blurred.recycle()
+    }
 
     enum class FilterMode {
         ORIGINAL,
         B_AND_W,
-        MAGIC
+        MAGIC,
+        MAGIC_V2,
+        SHADOW_REMOVER
     }
 }

@@ -14,7 +14,7 @@ class ScannerOverlayView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     enum class ScanMode {
-        QR, BARCODE, DOCUMENT
+        QR, BARCODE, DOCUMENT, ID_CARD, PASSPORT, BOOK
     }
 
     private var scanMode = ScanMode.QR
@@ -32,6 +32,12 @@ class ScannerOverlayView @JvmOverloads constructor(
         style = Paint.Style.STROKE
         strokeWidth = 2f
         color = Color.parseColor("#80FFFFFF") // Semi-transparent white
+    }
+    private val paintSpine = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 4f
+        color = Color.CYAN
+        pathEffect = DashPathEffect(floatArrayOf(20f, 20f), 0f)
     }
 
     // Stealth Palette Overlays
@@ -53,11 +59,10 @@ class ScannerOverlayView @JvmOverloads constructor(
         val height = height.toFloat()
 
         // 1. Draw dimmer mask
-        // For DOCUMENT mode, we use a lighter mask or none, but 'usual market' often implies 
-        // focus on the grid. We will use a lighter mask for document to keep focus.
+        // For DOCUMENT mode and BOOK mode, we use a lighter mask to keep focus.
         val layerId = canvas.saveLayer(0f, 0f, width, height, null)
         
-        if (scanMode == ScanMode.DOCUMENT) {
+        if (scanMode == ScanMode.DOCUMENT || scanMode == ScanMode.BOOK) {
              canvas.drawColor(documentMaskColor)
         } else {
              canvas.drawColor(maskColor)
@@ -82,10 +87,19 @@ class ScannerOverlayView @JvmOverloads constructor(
                 rectW = width * 0.85f
                 rectH = width * 0.4f
             }
-            ScanMode.DOCUMENT -> {
-                // Document (Large Rectangle: 5/6 width, 3/4 height approx, essentially full screen padding)
+            ScanMode.DOCUMENT, ScanMode.BOOK -> {
+                // Document/Book (Large Rectangle: 5/6 width, 3/4 height approx, essentially full screen padding)
                 rectW = width * 0.9f
                 rectH = height * 0.85f
+            }
+            ScanMode.PASSPORT -> {
+                // Passport: Wide rectangle, slightly shorter than document (A aspect ratio)
+                rectW = width * 0.9f
+                rectH = width * 0.9f * 0.7f // Approx passport ratio
+            }
+            ScanMode.ID_CARD -> {
+                rectW = 0f
+                rectH = 0f
             }
         }
 
@@ -96,24 +110,62 @@ class ScannerOverlayView @JvmOverloads constructor(
 
         scanRect.set(left, top, right, bottom)
 
-        // 3. Clear the cutout (Cut the hole)
-        canvas.drawRoundRect(scanRect, 16f, 16f, paintClear)
-
-        // 4. Draw Corners
-        drawCorners(canvas, scanRect)
-
-        // 5. Draw Grid
-        if (scanMode == ScanMode.QR) {
-            drawGrid(canvas, scanRect, 8)
-        } else if (scanMode == ScanMode.DOCUMENT) {
-            // Market practice: 3x3 grid (Rule of Thirds)
-            drawGrid(canvas, scanRect, 3)
+        // Special Case: ID Card (Draws 2 slots, so we handle it separately essentially)
+        if (scanMode == ScanMode.ID_CARD) {
+            drawIdCardGuides(canvas, width, height)
         } else {
-            // For Barcode, center line
-             drawCenterLine(canvas, scanRect)
+             // 3. Clear the cutout (Cut the hole) for Single Rect
+            canvas.drawRoundRect(scanRect, 16f, 16f, paintClear)
+            // 4. Draw Corners
+            drawCorners(canvas, scanRect)
+            // 5. Draw Grid/Guides
+            if (scanMode == ScanMode.QR) drawGrid(canvas, scanRect, 8)
+            else if (scanMode == ScanMode.DOCUMENT) drawGrid(canvas, scanRect, 3)
+            else if (scanMode == ScanMode.PASSPORT) drawPassportGuides(canvas, scanRect)
+            else if (scanMode == ScanMode.BOOK) drawBookGuides(canvas, scanRect)
+            else drawCenterLine(canvas, scanRect)
         }
 
         canvas.restoreToCount(layerId)
+    }
+
+    private fun drawBookGuides(canvas: Canvas, rect: RectF) {
+        // Draw Center Spine
+        canvas.drawLine(rect.centerX(), rect.top, rect.centerX(), rect.bottom, paintSpine)
+        
+        // Draw Label
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+             color = Color.CYAN
+             textSize = 36f
+             textAlign = Paint.Align.CENTER
+             setShadowLayer(4f, 0f, 0f, Color.BLACK)
+        }
+        canvas.drawText("ALIGN BINDING TO CENTER", rect.centerX(), rect.top - 30f, textPaint)
+    }
+
+    private fun drawPassportGuides(canvas: Canvas, rect: RectF) {
+        // Draw the MRZ Zone (Bottom part of the rect)
+        val mrzHeight = rect.height() * 0.25f
+        val mrzRect = RectF(rect.left, rect.bottom - mrzHeight, rect.right, rect.bottom)
+        
+        val paintMrz = Paint(paintGrid).apply {
+            color = Color.YELLOW
+            style = Paint.Style.STROKE
+            strokeWidth = 4f
+            pathEffect = DashPathEffect(floatArrayOf(20f, 10f), 0f)
+        }
+        
+        canvas.drawRect(mrzRect, paintMrz)
+        
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            textSize = 36f
+            textAlign = Paint.Align.CENTER
+            setShadowLayer(4f, 0f, 0f, Color.BLACK)
+        }
+        
+        canvas.drawText("ALIGN PASSPORT HERE", rect.centerX(), rect.top - 30f, textPaint)
+        canvas.drawText("MRZ ZONE >>>", mrzRect.centerX(), mrzRect.centerY() + 10f, textPaint)
     }
 
     private fun drawCorners(canvas: Canvas, rect: RectF) {
@@ -152,6 +204,41 @@ class ScannerOverlayView @JvmOverloads constructor(
         }
     }
     
+    private fun drawIdCardGuides(canvas: Canvas, width: Float, height: Float) {
+        val cx = width / 2
+        val inputAspect = 1.58f // Standard ID Card ratio
+        
+        // We want the cards to be legible, so let's use a good portion of width (e.g., 70%)
+        val cardW = width * 0.7f
+        val cardH = cardW / inputAspect
+        
+        // Vertical spacing
+        val gap = 64f
+        val totalH = (cardH * 2) + gap
+        val startY = (height - totalH) / 2
+        
+        // Front Card
+        val frontRect = RectF(cx - cardW/2, startY, cx + cardW/2, startY + cardH)
+        canvas.drawRoundRect(frontRect, 16f, 16f, paintClear)
+        drawCorners(canvas, frontRect)
+        
+        // Back Card
+        val backRect = RectF(cx - cardW/2, frontRect.bottom + gap, cx + cardW/2, frontRect.bottom + gap + cardH)
+        canvas.drawRoundRect(backRect, 16f, 16f, paintClear)
+        drawCorners(canvas, backRect)
+        
+        // Labels (Text)
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            textSize = 40f
+            textAlign = Paint.Align.CENTER
+            setShadowLayer(4f, 0f, 0f, Color.BLACK)
+        }
+        
+        canvas.drawText("FRONT", frontRect.centerX(), frontRect.top - 20f, textPaint)
+        canvas.drawText("BACK", backRect.centerX(), backRect.top - 20f, textPaint)
+    }
+
     private fun drawCenterLine(canvas: Canvas, rect: RectF) {
         val cy = rect.centerY()
         val paintRed = Paint(paintGrid).apply { 

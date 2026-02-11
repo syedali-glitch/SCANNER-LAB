@@ -101,4 +101,26 @@ object ScopedStorageHelper {
             null
         }
     }
+    /**
+     * Get filename from Uri
+     */
+    fun getFileName(context: Context, uri: Uri): String? {
+        var name: String? = null
+        if (uri.scheme == "content") {
+            try {
+                context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val index = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                        if (index >= 0) name = cursor.getString(index)
+                    }
+                }
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+        if (name == null) {
+            name = uri.lastPathSegment
+        }
+        return name
+    }
 }

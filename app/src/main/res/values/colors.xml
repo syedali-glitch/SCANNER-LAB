@@ -32,6 +32,9 @@
     <color name="ref_text_secondary">@color/silver_glow</color>
     <color name="ref_chip_bg">@color/midnight_grey</color>
     <color name="ref_divider">@color/steel_border</color>
+    <color name="ref_accent">@color/electric_sky</color>
+    <color name="ref_text_on_accent">@color/obsidian_black</color>
+    <color name="ref_surface_high">@color/midnight_grey</color> <!-- Lighter surface (Task Polish) -->
 
     <!-- Gradients (Mapped to closest Brand Accents + variations) -->
     <!-- Scanner (Teal/Sky vibe) -->

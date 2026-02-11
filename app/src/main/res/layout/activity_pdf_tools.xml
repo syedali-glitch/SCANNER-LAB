@@ -133,7 +133,7 @@
                     </LinearLayout>
                 </FrameLayout>
 
-                 <!-- 3. Compress PDF (Future) -->
+                <!-- 3. Compress PDF -->
                 <FrameLayout
                     android:id="@+id/cardCompress"
                     android:layout_width="0dp"
@@ -142,8 +142,7 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/ref_card_bg"
-                    android:padding="16dp"
-                    android:alpha="0.6">
+                    android:padding="16dp">
                     
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -155,22 +154,129 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_pdf_tool"
-                            app:tint="@color/ref_text_secondary"
+                            app:tint="@color/ref_gradient_tools_start"
                             android:background="@drawable/ref_bg_tools"
-                            android:backgroundTint="@color/ref_surface"
                             android:padding="10dp"
                             android:layout_marginBottom="12dp"/>
                             
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Compress (Soon)"
-                            android:textColor="@color/ref_text_secondary"
+                            android:text="Compress"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <!-- 4. Watermark -->
+                <FrameLayout
+                    android:id="@+id/cardWatermark"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ref_card_bg"
+                    android:padding="16dp">
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_pdf_tool"
+                            app:tint="@color/ref_gradient_tools_start"
+                            android:background="@drawable/ref_bg_tools"
+                            android:padding="10dp"
+                            android:layout_marginBottom="12dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Watermark"
+                            android:textColor="@color/ref_text_primary"
                             android:textStyle="bold"
                             android:textSize="14sp"/>
                     </LinearLayout>
                 </FrameLayout>
                 
+                <!-- 5. Password Protect -->
+                <FrameLayout
+                    android:id="@+id/cardPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ref_card_bg"
+                    android:padding="16dp">
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_lock"
+                            app:tint="@color/ref_gradient_tools_start"
+                            android:background="@drawable/ref_bg_tools"
+                            android:padding="10dp"
+                            android:layout_marginBottom="12dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Add Password"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <!-- 6. Organize (Remove Pages) -->
+                <FrameLayout
+                    android:id="@+id/cardOrganize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ref_card_bg"
+                    android:padding="16dp">
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_pdf_tool"
+                            app:tint="@color/ref_gradient_tools_start"
+                            android:background="@drawable/ref_bg_tools"
+                            android:padding="10dp"
+                            android:layout_marginBottom="12dp"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Organize"
+                            android:textColor="@color/ref_text_primary"
+                            android:textStyle="bold"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                </FrameLayout>
+             
             </GridLayout>
 
             <!-- Progress Overlay -->

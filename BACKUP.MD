@@ -1,6 +1,6 @@
 # Scanner Lab - PROJECT BACKUP & SPECIFICATIONS
-Version: 1.0.1 (Debug)
-Last Updated: 2026-02-09
+Version: 1.4.1 (Release)
+Last Updated: 2026-02-10
 
 ## 1. Project Overview
 **Scanner Lab** is a high-performance Android utility suite designed for professional document processing. It adheres to an **Offline-First**, **Privacy-Centric** philosophy, processing all data locally on the device.
@@ -62,14 +62,14 @@ A breakdown of the implemented features and the "under-the-hood" logic that powe
 | **Auto-Edge Detection** | **ML Kit Vision**: Real-time contour detection to identify document boundaries. | ✅ Active |
 | **Perspective Correction** | **Matrix Transformation**: `setPolyToPoly` to de-warp captured images based on 4 corner points. | ✅ Active |
 | **Magic Color Filter** | **ColorMatrix**: Custom 4x5 matrix to boost saturation, contrast, and whiten backgrounds (Adaptive Thresholding). | ✅ Active |
-| **Shadow Removal** | *Illumination Correction Map*: Estimating light distribution and flattening browsing. | 🚧 Placeholder |
+| **Shadow Removal** | *Illumination Correction Map*: Background Estimation via Scale-Blur + Divisive Normalization. | ✅ Active |
 
 ### B. Intelligent OCR & Conversion
 | Feature | Engine / Logic | Status |
 | :--- | :--- | :--- |
 | **Offline OCR** | **ML Kit Text Recognition v2**: On-device LSTM model for high-accuracy text extraction. | ✅ Active |
 | **Scan to Excel** | **Apache POI (XSSF)**: Parcels extracted text/tables into `.xlsx` cells. | ✅ Active |
-| **Scan to Word** | **Apache POI (XWPF)**: Writes text paragraphs into `.docx` structure. | ✅ Active |
+| **Scan to Word** | **Apache POI (XWPF)**: Writes text paragraphs into `.docx` structure with embedded images. | ✅ Active |
 | **Handwriting** | *Digital Ink Recognition*: Specialized ML model for cursive/handwritten text. | 🚧 Placeholder |
 
 ### C. PDF Tools & Security
@@ -78,13 +78,15 @@ A breakdown of the implemented features and the "under-the-hood" logic that powe
 | **Native PDF Gen** | **Android PdfDocument**: Generates PDF pages directly from Bitmaps (Memory optimized). | ✅ Active |
 | **PDF Encryption** | **OpenPDF / Bouncy Castle**: AES-256 encryption for password protection. | ✅ Active |
 | **Merge/Split** | **OpenPDF**: Stream-based manipulation to stitch or separate PDF pages. | ✅ Active |
-| **Private Space** | *AES-Encrypted Storage*: Biometric-locked folder with file encryption. | 🚧 Placeholder |
+| **Private Space** | *AES-Encrypted Storage*: PIN-locked hidden folder with file encryption. | ✅ Active |
 
-### D. Specialized Modes (Stage 2)
+### D. Specialized Modes (Stage 2-7)
 | Feature | Engine / Logic | Status |
 | :--- | :--- | :--- |
-| **ID Card Mode** | *Canvas Composition*: Stitches two captures (Front/Back) onto a single A4 canvas. | 🚧 Placeholder |
-| **Passport Reader** | *MRZ Parser*: Extracts data from Machine Readable Zones (ICAO 9303 standard). | 🚧 Placeholder |
+| **ID Card Mode** | *Canvas Composition*: Stitches two captures (Front/Back) onto a single A4 canvas. | ✅ Active |
+| **Passport Reader** | *MRZ Parser*: Extracts data from Machine Readable Zones (ICAO 9303 standard). | ✅ Active |
+| **Book Mode** | *Page Splitter*: Auto-splits landscape captures into left/right pages. | ✅ Active |
+| **E-Signature** | *Canvas Drawing*: Transparent PNG generation with stroke smoothing. | ✅ Active |
 | **Finger Removal** | *Inpainting*: Uses Navier-Stokes or Telea algorithm to remove finger occlusions. | 🚧 Placeholder |
 
 ---

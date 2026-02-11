@@ -19,47 +19,56 @@
             android:padding="20dp">
 
             <!-- Header -->
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/ref_card_bg"
-                android:padding="24dp"
+                app:cardBackgroundColor="@color/ref_surface_high"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:strokeColor="#33475569"
+                app:strokeWidth="1dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="24dp">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_settings"
-                    android:padding="10dp"
-                    android:background="@drawable/ref_bg_tools"
-                    app:tint="@color/white"
-                    android:layout_marginEnd="16dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="24dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tools &amp; Engines"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/ref_text_primary" />
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_settings"
+                        android:padding="10dp"
+                        android:background="@drawable/ref_bg_tools"
+                        app:tint="@color/white"
+                        android:layout_marginEnd="16dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Professional Utilities"
-                        android:textSize="12sp"
-                        android:textColor="@color/ref_text_secondary"
-                        android:layout_marginTop="2dp" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tools &amp; Engines"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/ref_text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Professional Utilities"
+                            android:textSize="12sp"
+                            android:textColor="@color/ref_text_secondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- SECTION 1: CORE SCANNING ENGINE -->
             <TextView
@@ -132,7 +141,48 @@
                 <include layout="@layout/item_tool_card" android:id="@+id/toolSearchablePdf" />
             </LinearLayout>
 
-            <!-- SECTION 3: SPECIALIZED MODES -->
+            <!-- SECTION 3: PDF TOOLS & UTILITIES -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PDF Tools &amp; Utilities"
+                android:textColor="@color/ref_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPdfMerge" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPdfSplit" />
+            </LinearLayout>
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPdfCompress" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPdfWatermark" />
+            </LinearLayout>
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPdfOrganize" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPdfPassword" />
+            </LinearLayout>
+
+            <!-- SECTION 4: SPECIALIZED MODES -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -163,7 +213,7 @@
                 <include layout="@layout/item_tool_card" android:id="@+id/toolFingerRemoval" />
             </LinearLayout>
 
-            <!-- SECTION 4: SECURITY & MANAGEMENT -->
+            <!-- SECTION 5: SECURITY & MANAGEMENT -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,21 +229,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="16dp">
-                <include layout="@layout/item_tool_card" android:id="@+id/toolEncryption" />
-                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
                 <include layout="@layout/item_tool_card" android:id="@+id/toolSignature" />
+                <Space android:layout_width="16dp" android:layout_height="wrap_content" />
+                <include layout="@layout/item_tool_card" android:id="@+id/toolPrivateSpace" />
             </LinearLayout>
 
-            <LinearLayout 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="32dp">
-                <include layout="@layout/item_tool_card" android:id="@+id/toolPrivateSpace" />
-                 <!-- Spacer for grid alignment-->
-                 <Space android:layout_width="16dp" android:layout_height="wrap_content" />
-                 <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
-            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginBottom="32dp"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -29,7 +29,7 @@ class ConverterActivity : BaseActivity() {
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     
     private enum class ConversionType {
-        IMG_TO_EXCEL, IMG_TO_PDF, IMG_TO_WORD, PDF_TO_IMG, PDF_TO_TEXT, PDF_TO_WORD
+        IMG_TO_EXCEL, IMG_TO_PDF, IMG_TO_WORD, IMG_TO_PPT, PDF_TO_IMG, PDF_TO_TEXT, PDF_TO_WORD, PDF_TO_PPT
     }
     private var currentMode = ConversionType.IMG_TO_EXCEL
 
@@ -40,6 +40,7 @@ class ConverterActivity : BaseActivity() {
                 ConversionType.IMG_TO_EXCEL -> processImagesToExcel(uris)
                 ConversionType.IMG_TO_PDF -> processImagesToPdf(uris)
                 ConversionType.IMG_TO_WORD -> processImagesToWord(uris)
+                ConversionType.IMG_TO_PPT -> processImagesToPpt(uris)
                 else -> {}
             }
         }
@@ -52,6 +53,7 @@ class ConverterActivity : BaseActivity() {
                 ConversionType.PDF_TO_IMG -> processPdfToImage(it)
                 ConversionType.PDF_TO_TEXT -> processPdfToText(it)
                 ConversionType.PDF_TO_WORD -> processPdfToWord(it)
+                ConversionType.PDF_TO_PPT -> processPdfToPpt(it)
                 else -> {}
             }
         }
@@ -97,21 +99,33 @@ class ConverterActivity : BaseActivity() {
              checkProAndPickImages()
         }
         
-        // 4. PDF to Image
+        // 4. Image to PPT
+        binding.cardImgToPpt.setOnClickListener {
+             currentMode = ConversionType.IMG_TO_PPT
+             checkProAndPickImages()
+        }
+        
+        // 5. PDF to Image
         binding.cardPdfToImage.setOnClickListener {
              currentMode = ConversionType.PDF_TO_IMG
              checkProAndPickDocument("application/pdf")
         }
         
-        // 5. PDF to Text
+        // 6. PDF to Text
         binding.cardPdfToText.setOnClickListener {
              currentMode = ConversionType.PDF_TO_TEXT
              checkProAndPickDocument("application/pdf")
         }
         
-        // 6. PDF to Word
+        // 7. PDF to Word
         binding.cardPdfToWord.setOnClickListener {
              currentMode = ConversionType.PDF_TO_WORD
+             checkProAndPickDocument("application/pdf")
+        }
+        
+        // 8. PDF to PPT
+        binding.cardPdfToPpt.setOnClickListener {
+             currentMode = ConversionType.PDF_TO_PPT
              checkProAndPickDocument("application/pdf")
         }
     }
@@ -202,14 +216,16 @@ class ConverterActivity : BaseActivity() {
         showProgress("Converting to Word...")
         CoroutineScope(Dispatchers.IO).launch {
              try {
-                // 1. Extract Text
-                val extractedTexts = extractTextFromImages(uris)
-                val combinedText = extractedTexts.joinToString("\n\n")
-
-                if (combinedText.isBlank()) {
-                    throw Exception("No text detected in images")
+                // Prepare images as files
+                val imagePaths = mutableListOf<String>()
+                uris.forEach { uri ->
+                    ScopedStorageHelper.copyUriToCache(this@ConverterActivity, uri, "jpg")?.let {
+                        imagePaths.add(it.absolutePath)
+                    }
                 }
 
+                if (imagePaths.isEmpty()) throw Exception("No valid images found")
+                
                 // 2. Create File
                 val fileName = "Scan_Word_${System.currentTimeMillis()}.docx"
                 val outputUri = ScopedStorageHelper.createDocumentUri(
@@ -219,11 +235,8 @@ class ConverterActivity : BaseActivity() {
                 ) ?: throw Exception("File creation failed")
 
                 // 3. Write DOCX
-                // DocxConverter expects a File path or we can adapt it. 
-                // Since DocxConverter.textToDocx takes a String path, we need a temp file approach 
-                // OR we can update DocxConverter. For now, let's use a temp file and copy.
                 val tempFile = ScopedStorageHelper.createCacheFile(this@ConverterActivity, "docx")
-                com.scanner.lab.converters.DocxConverter.textToDocx(combinedText, tempFile.absolutePath).getOrThrow()
+                com.scanner.lab.converters.DocxConverter.imagesToDocx(imagePaths, tempFile.absolutePath).getOrThrow()
 
                 // Copy temp to uri
                 contentResolver.openOutputStream(outputUri)?.use { out ->
@@ -232,6 +245,45 @@ class ConverterActivity : BaseActivity() {
                 
                 ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
                 onSuccess("Word Doc Saved!")
+            } catch (e: Exception) {
+                onError(e.message)
+            }
+        }
+    }
+    
+    private fun processImagesToPpt(uris: List<Uri>) {
+        showProgress("Converting to PowerPoint...")
+        CoroutineScope(Dispatchers.IO).launch {
+             try {
+                // Prepare images as files
+                val imagePaths = mutableListOf<String>()
+                uris.forEach { uri ->
+                    ScopedStorageHelper.copyUriToCache(this@ConverterActivity, uri, "jpg")?.let {
+                        imagePaths.add(it.absolutePath)
+                    }
+                }
+
+                if (imagePaths.isEmpty()) throw Exception("No valid images found")
+                
+                // 2. Create File
+                val fileName = "Scan_Presentation_${System.currentTimeMillis()}.pptx"
+                val outputUri = ScopedStorageHelper.createDocumentUri(
+                    this@ConverterActivity, 
+                    fileName, 
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                ) ?: throw Exception("File creation failed")
+
+                // 3. Write PPTX
+                val tempFile = ScopedStorageHelper.createCacheFile(this@ConverterActivity, "pptx")
+                com.scanner.lab.converters.PptxConverter.imagesToPptx(imagePaths, tempFile.absolutePath).getOrThrow()
+
+                // Copy temp to uri
+                contentResolver.openOutputStream(outputUri)?.use { out ->
+                    java.io.FileInputStream(tempFile).copyTo(out)
+                }
+                
+                ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
+                onSuccess("PowerPoint Saved!")
             } catch (e: Exception) {
                 onError(e.message)
             }
@@ -307,7 +359,7 @@ class ConverterActivity : BaseActivity() {
                     ScopedStorageHelper.finalizeFile(this@ConverterActivity, u)
                 }
                 
-                // 2. Save to DOCX using DocxConverter.textToDocx logic (allows opening in viewer as requested)
+                // 2. Save to DOCX using DocxConverter.textToDocx
                 val docFileName = "Extracted_${System.currentTimeMillis()}.docx"
                 val docUri = ScopedStorageHelper.createDocumentUri(
                     this@ConverterActivity, docFileName, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -337,7 +389,7 @@ class ConverterActivity : BaseActivity() {
                 val pdfFile = ScopedStorageHelper.copyUriToCache(this@ConverterActivity, uri, "pdf") 
                     ?: throw Exception("Could not access PDF")
 
-                // Convert PDF to DOCX using DocxConverter
+                // Convert PDF to DOCX using DocxConverter (OCR based layout)
                 val tempDocFile = ScopedStorageHelper.createCacheFile(this@ConverterActivity, "docx")
                 com.scanner.lab.converters.DocxConverter.pdfToDocx(pdfFile.absolutePath, tempDocFile.absolutePath).getOrThrow()
 
@@ -355,6 +407,38 @@ class ConverterActivity : BaseActivity() {
                 ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
 
                 onSuccess("Word Document Saved!")
+            } catch (e: Exception) {
+                onError(e.message)
+            }
+        }
+    }
+    
+    private fun processPdfToPpt(uri: Uri) {
+         showProgress("Converting to PowerPoint...")
+        CoroutineScope(Dispatchers.IO).launch {
+             try {
+                // Copy PDF to cache
+                val pdfFile = ScopedStorageHelper.copyUriToCache(this@ConverterActivity, uri, "pdf") 
+                    ?: throw Exception("Could not access PDF")
+
+                // Convert PDF to PPTX using PptxConverter (Text based slides)
+                val tempPptFile = ScopedStorageHelper.createCacheFile(this@ConverterActivity, "pptx")
+                com.scanner.lab.converters.PptxConverter.pdfToPptx(pdfFile.absolutePath, tempPptFile.absolutePath).getOrThrow()
+
+                // Save Document
+                val fileName = "Converted_${System.currentTimeMillis()}.pptx"
+                val outputUri = ScopedStorageHelper.createDocumentUri(
+                    this@ConverterActivity, 
+                    fileName, 
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                ) ?: throw Exception("File creation failed")
+                
+                contentResolver.openOutputStream(outputUri)?.use { out ->
+                    java.io.FileInputStream(tempPptFile).copyTo(out)
+                }
+                ScopedStorageHelper.finalizeFile(this@ConverterActivity, outputUri)
+
+                onSuccess("PowerPoint Presentation Saved!")
             } catch (e: Exception) {
                 onError(e.message)
             }
