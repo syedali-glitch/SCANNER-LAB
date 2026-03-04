@@ -6,7 +6,7 @@
     <string name="main_title">Scanner Lab</string>
     <string name="qr_scanner">QR سکینر</string>
     <string name="document_scanner">دستاویز سکینر</string>
-    <string name="document_scanner_aio">اے آئی او دستاویز سکینر</string>
+    <string name="document_scanner_aio">تیز ترین دستاویز سکینر</string>
     <string name="file_converter">فائل کنورٹر</string>
     <string name="pdf_tools">PDF ٹولز</string>
     
@@ -120,7 +120,7 @@
     <string name="tool_name_excel">تصویر سے ایکسل</string>
     <string name="tool_name_word">تصویر سے ورڈ</string>
     <string name="tool_name_ppt">تصویر سے PPT</string>
-    <string name="tool_name_handwriting">ہاتھ کی تحریر</string>
+    <string name="tool_name_handwriting">سرپرائز فیچر</string>
     <string name="tool_name_searchable_pdf">سرچ ایبل PDF</string>
     <string name="tool_name_translator">آف لائن مترجم</string>
     <string name="tool_name_signature">ای سگنچر</string>
@@ -133,4 +133,6 @@
     <string name="tool_name_magic_eraser">میجک ایریزر</string>
     <string name="magic_eraser_desc">اسکین سے انگلیوں یا دیگر چیزوں کو مٹائیں</string>
     <string name="magic_eraser_instruction">مٹانے والی چیز کے اوپر پینٹ کریں</string>
+    <string name="surprise_feature_desc">جلد آ رہا ہے… جڑے رہیں!</string>
+
 </resources>

@@ -5,7 +5,7 @@
     <string name="main_title">Scanner Lab</string>
     <string name="qr_scanner">QR Scanner</string>
     <string name="document_scanner">Document Scanner</string>
-    <string name="document_scanner_aio">AIO DOC SCANNER</string>
+    <string name="document_scanner_aio">FASTEST DOC SCANNER</string>
     <string name="file_converter">File Converter</string>
     <string name="pdf_tools">PDF Tools</string>
     
@@ -117,7 +117,8 @@
     <string name="tool_name_excel">Image to Excel</string>
     <string name="tool_name_word">Image to Word</string>
     <string name="tool_name_ppt">Image to PPT</string>
-    <string name="tool_name_handwriting">Handwriting</string>
+    <string name="tool_name_handwriting">Surprise Feature</string>
+    <string name="surprise_feature_desc">Something big is coming... stay tuned!</string>
     <string name="tool_name_searchable_pdf">Searchable PDF</string>
     <string name="tool_name_translator">Offline Translator</string>
     <string name="tool_name_signature">E-Signature</string>

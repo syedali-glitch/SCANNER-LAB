@@ -8,8 +8,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
 import com.scanner.lab.databinding.ActivityMainBinding
 import com.scanner.lab.ui.GestureHandler
 
@@ -62,13 +60,6 @@ class MainActivity : BaseActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        
-        // Initialize AdMob
-        MobileAds.initialize(this) {}
-        
-        // Load banner ad
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
         
         setupUI()
         // setupGestures() // Removed as cardScannerHub is gone

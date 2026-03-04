@@ -94,8 +94,8 @@ class ToolsActivity : BaseActivity() {
             intent.putExtra(ConverterActivity.EXTRA_CONVERSION_MODE, ConverterActivity.MODE_IMG_TO_PPT)
             startActivity(intent)
         }
-        setupTool(binding.toolHandwriting.root, getString(R.string.tool_name_handwriting), "Read Scripts", R.drawable.ic_tool_ocr, R.color.ref_ai_purple, true) {
-            startActivity(Intent(this, com.scanner.lab.tools.HandwritingActivity::class.java))
+        setupTool(binding.toolHandwriting.root, getString(R.string.tool_name_handwriting), getString(R.string.surprise_feature_desc), R.drawable.ic_tool_magic, R.color.ref_ai_purple, true) {
+            Toast.makeText(this, "Surprise feature coming soon! Stay tuned.", Toast.LENGTH_SHORT).show()
         }
         // FIXED: Renamed to PDF to Text and Wired
         setupTool(binding.toolSearchablePdf.root, getString(R.string.tool_name_searchable_pdf), "PDF -> TXT", R.drawable.ic_tool_ocr, R.color.ref_office_green, true) {

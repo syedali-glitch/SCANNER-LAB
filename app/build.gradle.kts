@@ -20,7 +20,7 @@ android {
             useSupportLibrary = true
         }
         
-        resourceConfigurations += setOf("en")
+        resourceConfigurations += setOf("en", "ur")
     }
 
     buildTypes {
@@ -127,9 +127,6 @@ dependencies {
     // File Picker
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
-    
-    // Google Mobile Ads (AdMob)
-    implementation("com.google.android.gms:play-services-ads:22.6.0")
     
     // Testing
     testImplementation("junit:junit:4.13.2")

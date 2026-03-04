@@ -30,7 +30,7 @@ The application utilizes a dark, high-contrast aesthetic designed for prolonged 
 ### UX Principles
 1.  **Direct Action**: No hidden menus. All tools are accessible via the **Tools Hub** or **File Viewer** context actions.
 2.  **Visual Feedback**: Ripple effects on touch, loading spinners (`ProgressBar`) for async ops, and Toast confirmations.
-3.  **Offline Privacy**: All processing happens on-device. No data leaves the phone.
+3.  **100% Offline Privacy**: The application is strictly offline. All processing (OCR, Translation, Conversion) happens on-device with zero network connectivity. No data ever leaves the device.
 
 ---
 
