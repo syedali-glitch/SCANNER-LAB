@@ -131,4 +131,28 @@
     <string name="tool_name_magic_eraser">Magic Eraser</string>
     <string name="magic_eraser_desc">Erase fingers or objects from scans</string>
     <string name="magic_eraser_instruction">Paint over the object you want to erase</string>
+    <!-- MainActivity Hub Strings -->
+    <string name="hub_scan_convert_create">Scan • Convert • Create</string>
+    <string name="hub_scanner_hub">Scanner Hub</string>
+    <string name="hub_begin_scanning">Begin scanning from here ⬇</string>
+    <string name="hub_qr_code">QR Code</string>
+    <string name="hub_barcode">Barcode</string>
+    <string name="hub_quick_tools">Quick Tools</string>
+    <string name="hub_doc">Doc</string>
+    <string name="hub_qr">QR</string>
+    <string name="hub_id">ID</string>
+    <string name="hub_pass">Pass</string>
+    <string name="hub_sign">Sign</string>
+    <string name="hub_recent_scans">Recent Scans</string>
+    <string name="hub_convert_files">🔄  Convert Files</string>
+    <string name="hub_file_converter">File Converter</string>
+    <string name="hub_upload_select">Upload • Select Format • Download</string>
+    <string name="hub_view_edit">👁  View &amp; Edit Files</string>
+    <string name="hub_file_viewer">File Viewer</string>
+    <string name="hub_view_esign_annotate">View &amp; Edit • E-Sign • Annotate</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_history">History</string>
+    <string name="nav_tools">Tools</string>
+    <string name="nav_settings">Settings</string>
+    <string name="powered_by">Powered by PlainLabs</string>
 </resources>

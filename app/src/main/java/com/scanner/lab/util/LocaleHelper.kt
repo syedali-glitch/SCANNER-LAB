@@ -47,7 +47,7 @@ object LocaleHelper {
 
         val configuration = context.resources.configuration
         configuration.setLocale(locale)
-        configuration.setLayoutDirection(locale)
+        configuration.setLayoutDirection(Locale.ENGLISH) // Force LTR
 
         return context.createConfigurationContext(configuration)
     }
@@ -61,7 +61,7 @@ object LocaleHelper {
         val configuration = resources.configuration
         configuration.locale = locale
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLayoutDirection(locale)
+            configuration.setLayoutDirection(Locale.ENGLISH) // Force LTR
         }
 
         resources.updateConfiguration(configuration, resources.displayMetrics)

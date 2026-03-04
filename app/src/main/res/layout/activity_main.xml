@@ -56,7 +56,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Powered by PlainLabs"
+                        android:text="@string/powered_by"
                         android:textSize="12sp"
                         android:textStyle="italic"
                         android:textColor="@color/ref_text_secondary"
@@ -67,7 +67,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Scan • Convert • Create"
+                        android:text="@string/hub_scan_convert_create"
                         android:textSize="14sp"
                         android:textColor="@color/ref_text_secondary"
                         android:fontFamily="sans-serif-medium" />
@@ -109,7 +109,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Scanner Hub"
+                            android:text="@string/hub_scanner_hub"
                             android:textColor="@color/ref_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp"/>
@@ -117,7 +117,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Begin scanning from here ⬇"
+                            android:text="@string/hub_begin_scanning"
                             android:textColor="@color/ref_text_secondary"
                             android:textSize="12sp"
                             android:layout_marginStart="12dp"/>
@@ -152,7 +152,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="QR Code"
+                                android:text="@string/hub_qr_code"
                                 android:textSize="12sp"
                                 android:textColor="@color/ref_text_secondary"/>
                         </LinearLayout>
@@ -179,7 +179,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Barcode"
+                                android:text="@string/hub_barcode"
                                 android:textSize="12sp"
                                 android:textColor="@color/ref_text_secondary"/>
                         </LinearLayout>
@@ -220,7 +220,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quick Tools"
+        android:text="@string/hub_quick_tools"
         android:textColor="@color/ref_text_primary"
         android:textStyle="bold"
         android:textSize="16sp"
@@ -255,7 +255,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Doc"
+                android:text="@string/hub_doc"
                 android:textSize="10sp"
                 android:textColor="@color/white"
                 android:singleLine="true"/>
@@ -283,7 +283,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="QR"
+                android:text="@string/hub_qr"
                 android:textSize="10sp"
                 android:textColor="@color/white"
                 android:singleLine="true"/>
@@ -311,7 +311,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID"
+                android:text="@string/hub_id"
                 android:textSize="10sp"
                 android:textColor="@color/white"
                 android:singleLine="true"/>
@@ -339,7 +339,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pass"
+                android:text="@string/hub_pass"
                 android:textSize="10sp"
                 android:textColor="@color/white"
                 android:singleLine="true"/>
@@ -366,7 +366,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign"
+                android:text="@string/hub_sign"
                 android:textSize="10sp"
                 android:textColor="@color/white"
                 android:singleLine="true"/>
@@ -379,7 +379,7 @@
                 android:id="@+id/tvRecentHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recent Scans"
+                android:text="@string/hub_recent_scans"
                 android:textColor="@color/ref_text_primary"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -398,7 +398,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🔄  Convert Files"
+                android:text="@string/hub_convert_files"
                 android:textColor="@color/ref_text_primary"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -437,7 +437,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="File Converter"
+                            android:text="@string/hub_file_converter"
                             android:textColor="@color/ref_text_primary"
                             android:textStyle="bold"
                             android:textSize="18sp" 
@@ -446,7 +446,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Upload • Select Format • Download"
+                            android:text="@string/hub_upload_select"
                             android:textColor="@color/ref_text_secondary"
                             android:textSize="12sp"
                             android:layout_marginBottom="8dp"/>
@@ -502,7 +502,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="👁  View &amp; Edit Files"
+                android:text="@string/hub_view_edit"
                 android:textColor="@color/ref_text_primary"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -541,7 +541,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="File Viewer"
+                            android:text="@string/hub_file_viewer"
                             android:textColor="@color/ref_text_primary"
                             android:textStyle="bold"
                             android:textSize="18sp" 
@@ -550,7 +550,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View &amp; Edit • E-Sign • Annotate"
+                            android:text="@string/hub_view_esign_annotate"
                             android:textColor="@color/ref_text_secondary"
                             android:textSize="12sp"
                             android:layout_marginBottom="8dp"/>
@@ -644,7 +644,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Home"
+                android:text="@string/nav_home"
+                android:gravity="center"
                 android:textSize="10sp"
                 android:textColor="#E0E0E0"
                 android:layout_marginTop="4dp"
@@ -673,7 +674,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="History"
+                android:text="@string/nav_history"
+                android:gravity="center"
                 android:textSize="10sp"
                 android:textColor="#E0E0E0"
                 android:layout_marginTop="4dp"/>
@@ -701,7 +703,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tools"
+                android:text="@string/nav_tools"
+                android:gravity="center"
                 android:textSize="10sp"
                 android:textColor="#E0E0E0"
                 android:layout_marginTop="4dp"/>
@@ -729,7 +732,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
+                android:text="@string/nav_settings"
+                android:gravity="center"
                 android:textSize="10sp"
                 android:textColor="#E0E0E0"
                 android:layout_marginTop="4dp"/>

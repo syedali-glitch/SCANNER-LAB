@@ -135,4 +135,28 @@
     <string name="magic_eraser_instruction">مٹانے والی چیز کے اوپر پینٹ کریں</string>
     <string name="surprise_feature_desc">جلد آ رہا ہے… جڑے رہیں!</string>
 
+    <!-- MainActivity Hub Strings -->
+    <string name="hub_scan_convert_create">سکین کریں • تبدیل کریں • بنائیں</string>
+    <string name="hub_scanner_hub">سکینر ہب</string>
+    <string name="hub_begin_scanning">یہاں سے سکیننگ شروع کریں ⬇</string>
+    <string name="hub_qr_code">کیو آر کوڈ</string>
+    <string name="hub_barcode">بارکوڈ</string>
+    <string name="hub_quick_tools">فوری ٹولز</string>
+    <string name="hub_doc">دستاویز</string>
+    <string name="hub_qr">کیو آر</string>
+    <string name="hub_id">شناختی کارڈ</string>
+    <string name="hub_pass">پاسپورٹ</string>
+    <string name="hub_sign">دستخط</string>
+    <string name="hub_recent_scans">حالیہ سکین</string>
+    <string name="hub_convert_files">🔄 فائلیں تبدیل کریں</string>
+    <string name="hub_file_converter">فائل کنورٹر</string>
+    <string name="hub_upload_select">اپلوڈ کریں • فارمیٹ منتخب کریں • ڈاؤنلوڈ کریں</string>
+    <string name="hub_view_edit">👁 فائلیں دیکھیں اور ترمیم کریں</string>
+    <string name="hub_file_viewer">فائل ویور</string>
+    <string name="hub_view_esign_annotate">دیکھیں اور ترمیم کریں • ای سائن • تشریح</string>
+    <string name="nav_home">ہوم</string>
+    <string name="nav_history">ہسٹری</string>
+    <string name="nav_tools">ٹولز</string>
+    <string name="nav_settings">ترتیبات</string>
+    <string name="powered_by">PlainLabs کی جانب سے تیار کردہ</string>
 </resources>
