@@ -101,7 +101,7 @@ dependencies {
     implementation("org.apache.pdfbox:fontbox:2.0.29")
     
     // PDF Tools - OpenPDF (LGPL/MPL Local PDF manipulation)
-    implementation("com.github.librepdf:openpdf:1.3.30")
+    implementation("com.github.librepdf:openpdf:1.3.38")
     // Office Documents - Apache POI
     implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5")

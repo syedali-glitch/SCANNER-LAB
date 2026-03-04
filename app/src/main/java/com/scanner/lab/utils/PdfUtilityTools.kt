@@ -252,7 +252,7 @@ object PdfUtilityTools {
             userPass.toByteArray(),
             ownerPass.toByteArray(),
             PdfWriter.ALLOW_PRINTING,
-            PdfWriter.ENCRYPTION_AES_128
+            PdfWriter.ENCRYPTION_AES_256_V3
         )
         
         stamper.close()
