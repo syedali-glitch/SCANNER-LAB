@@ -130,6 +130,12 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ScannerLab" />
+
+        <activity
+            android:name=".PdfEditorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ScannerLab" />
             
     </application>
 

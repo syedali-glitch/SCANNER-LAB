@@ -39,6 +39,7 @@ class PdfToolsActivity : BaseActivity() {
     private val watermarkPicker = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let { showWatermarkDialog(it) } }
     private val passwordPicker = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let { showPasswordDialog(it) } }
     private val organizePicker = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let { showOrganizeDialog(it) } }
+    private val editPicker = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let { launchPdfEditor(it) } }
 
     companion object {
         const val EXTRA_OPEN_TOOL = "open_tool"
@@ -48,6 +49,7 @@ class PdfToolsActivity : BaseActivity() {
         const val TOOL_WATERMARK = "watermark"
         const val TOOL_PASSWORD = "password"
         const val TOOL_ORGANIZE = "organize"
+        const val TOOL_EDIT = "edit"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +83,7 @@ class PdfToolsActivity : BaseActivity() {
                     TOOL_WATERMARK -> watermarkPicker.launch(arrayOf("application/pdf"))
                     TOOL_PASSWORD -> passwordPicker.launch(arrayOf("application/pdf"))
                     TOOL_ORGANIZE -> organizePicker.launch(arrayOf("application/pdf"))
+                    TOOL_EDIT -> editPicker.launch(arrayOf("application/pdf"))
                 }
             }
         }
@@ -117,6 +120,11 @@ class PdfToolsActivity : BaseActivity() {
         binding.cardOrganize.setOnClickListener {
              if (UserPremiums.isPro) organizePicker.launch(arrayOf("application/pdf"))
              else Toast.makeText(this, "Pro Feature: Organization Locked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.cardEditPdf.setOnClickListener {
+             if (UserPremiums.isPro) editPicker.launch(arrayOf("application/pdf"))
+             else Toast.makeText(this, "Pro Feature: Editing Locked", Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -318,9 +326,6 @@ class PdfToolsActivity : BaseActivity() {
                     ?: throw Exception("Could not create output file")
                     
                 // 3. Perform Merge (Using OpenPDF via PdfUtilityTools)
-                // PdfUtilityTools.mergePdfs takes paths and returns File.
-                // We need to bridge this.
-                // Create a temp output file first
                 val tempOutputFile = ScopedStorageHelper.createCacheFile(this@PdfToolsActivity, "pdf")
                 
                 val result = PdfUtilityTools.mergePdfs(
@@ -329,7 +334,6 @@ class PdfToolsActivity : BaseActivity() {
                 )
                 
                 if (result.isSuccess) {
-                    // 4. Write success file to target Uri
                     contentResolver.openOutputStream(outputUri)?.use { out ->
                         tempOutputFile.inputStream().copyTo(out)
                     }
@@ -365,15 +369,11 @@ class PdfToolsActivity : BaseActivity() {
         
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // 1. Copy source to cache
                 val cacheFile = ScopedStorageHelper.copyUriToCache(this@PdfToolsActivity, uri, "pdf")
                     ?: throw Exception("Could not cache file")
                     
-                // 2. Create Output Dir (Use a temp dir for splitting results)
                 val tempDir = File(cacheDir, "split_temp").apply { mkdirs() }
                 
-                // 3. Perform Split (Using OpenPDF)
-                // Returns list of files
                 val result = PdfUtilityTools.splitPdf(
                     cacheFile.absolutePath,
                     tempDir.absolutePath
@@ -381,8 +381,6 @@ class PdfToolsActivity : BaseActivity() {
                 
                 if (result.isSuccess) {
                     val files = result.getOrNull() ?: emptyList()
-                    
-                    // 4. Save each file to Documents
                     var savedCount = 0
                     files.forEachIndexed { index, file ->
                         val fileName = "Split_${index + 1}_${file.name}"
@@ -403,7 +401,6 @@ class PdfToolsActivity : BaseActivity() {
                     throw Exception("Split failed in engine")
                 }
                 
-                // Cleanup
                 cacheFile.delete()
                 tempDir.deleteRecursively()
                 
@@ -417,5 +414,12 @@ class PdfToolsActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun launchPdfEditor(uri: Uri) {
+        val intent = Intent(this, PdfEditorActivity::class.java).apply {
+            data = uri
+        }
+        startActivity(intent)
     }
 }

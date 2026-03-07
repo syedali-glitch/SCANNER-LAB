@@ -314,4 +314,45 @@ object PdfUtilityTools {
         val pageCount: Int,
         val fileSize: Long
     )
+
+    data class TextOverlay(
+        val text: String,
+        val x: Float,
+        val y: Float,
+        val fontSize: Float = 14f,
+        val colorHex: String = "#000000",
+        val pageNumber: Int // 1-based
+    )
+
+    /**
+     * Apply multiple text overlays to an existing PDF
+     */
+    fun applyTextOverlays(
+        inputPath: String,
+        outputPath: String,
+        overlays: List<TextOverlay>
+    ): Result<File> = ErrorHandler.safe("ApplyTextOverlays") {
+        val reader = PdfReader(inputPath)
+        val outputFile = File(outputPath)
+        val stamper = PdfStamper(reader, FileOutputStream(outputFile))
+        
+        overlays.forEach { overlay ->
+            val canvas = stamper.getOverContent(overlay.pageNumber)
+            
+            val red = Integer.valueOf(overlay.colorHex.substring(1, 3), 16)
+            val green = Integer.valueOf(overlay.colorHex.substring(3, 5), 16)
+            val blue = Integer.valueOf(overlay.colorHex.substring(5, 7), 16)
+            
+            val font = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)
+            canvas.beginText()
+            canvas.setRGBColorFill(red, green, blue)
+            canvas.setFontAndSize(font, overlay.fontSize)
+            canvas.showTextAligned(Element.ALIGN_LEFT, overlay.text, overlay.x, overlay.y, 0f)
+            canvas.endText()
+        }
+        
+        stamper.close()
+        reader.close()
+        outputFile
+    }
 }
