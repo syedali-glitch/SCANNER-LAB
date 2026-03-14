@@ -75,9 +75,7 @@ object AntiReverseEngineering {
     }
 
     private fun showFunnyMessageAndExit(activity: Activity) {
-        val message = "Hold on there, Mr. Hacker! \uD83D\uDD75\uFE0F\u200D\u2642\uFE0F\n\n" +
-                "Error 404: Source code not found...\n\n" +
-                "Just kidding. But seriously, this app is protected by highly advanced, definitely-nowhere-near-stack-overflow alien technology \uD83D\uDEFC.\n\n" +
+        val message = "This app is protected by highly advanced, definitely-nowhere-near-stack-overflow alien technology \uD83D\uDEFC.\n\n" +
                 "Put down the decompiler and step away slowly!"
 
         try {
