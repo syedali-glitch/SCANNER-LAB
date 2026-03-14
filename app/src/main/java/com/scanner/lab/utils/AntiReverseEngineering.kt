@@ -83,7 +83,7 @@ object AntiReverseEngineering {
                 .setTitle("\uD83D\uDEA8 Security Alert!")
                 .setMessage(message)
                 .setCancelable(false)
-                .setPositiveButton("I surrender \uD83D\uDE4C") { _, _ ->
+                .setPositiveButton("[ I surrender \uD83D\uDE4C ]") { _, _ ->
                     exitApp()
                 }
                 .show()
